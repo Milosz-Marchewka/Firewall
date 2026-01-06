@@ -12,7 +12,6 @@ const AbilitySchema = new mongoose.Schema({
 
 // enormous ahh schema
 const gameSchema = new mongoose.Schema({
-    versionKey: false,
     url: {type: String, required: true, unique: true},
     status: {
         type: String, 
@@ -20,14 +19,15 @@ const gameSchema = new mongoose.Schema({
         default: "waiting"
     },
     defender: {
-        id: {type: mongoose.Schema.Types.ObjectId, required: true},
+        // storing socket id. note - temporary for 'complete it' sake
+        id: {type: String, default: null},
         stats: {
             integrity: {type: Number, default: 20}
         },
         abilities: [AbilitySchema]
     },
     attacker: {
-        id: {type: mongoose.Schema.Types.ObjectId, required: true},
+        id: {type: String, default: null},
         stats: {
             persistence: {type: Number, default: 20}
         },
