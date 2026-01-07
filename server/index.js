@@ -8,7 +8,9 @@ import createIo from './src/websocket/io.js';
 
 // express, mongo and dotenv setup
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: process.env.URL_BASE ?? '*',
+}));
 app.use(express.json());
 dotenv.config();
 connectDB(process.env.URI);
