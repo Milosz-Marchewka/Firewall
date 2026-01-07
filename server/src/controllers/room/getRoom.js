@@ -10,7 +10,7 @@ export const getRoom = async (req, res)=>{
         if(!room){
             return res.status(404).send("Room not found.");
         } else {
-            res.status(200).json({room});
+            res.status(200).json({room}); 
         }
     } catch(err){
         res.status(500).send("Error retrieving room.");
