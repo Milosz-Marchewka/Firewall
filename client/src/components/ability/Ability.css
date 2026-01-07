@@ -1,0 +1,28 @@
+.rarity-1{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(194, 194, 194, 0.8) 100%);
+}
+.rarity-2{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(116, 255, 135, 0.8) 100%);
+}
+.rarity-3{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(0, 94, 202, 0.8) 100%);
+}
+.rarity-4{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(144, 0, 173, 0.8) 100%);
+}
+.rarity-5{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(206, 0, 0, 0.8) 100%);
+}
+.rarity-6{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(204, 184, 0, 0.8) 100%);
+}
+.rarity-7{
+    background: #000000;
+    background: linear-gradient(151deg,rgba(0, 0, 0, 0.1) 60%, rgba(194, 194, 194, 0.8) 100%);
+}

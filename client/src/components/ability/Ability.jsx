@@ -1,4 +1,5 @@
 import useState from "react";
+import "./Ability.css";
 import damageIcon from './../../assets/damageIcon.png';
 import cooldownIcon from './../../assets/cooldownIcon.png';
 import change_default_passwords from "./../../assets/change_default_passwords.png";
@@ -28,7 +29,7 @@ const abilityImages = {
 const Ability = ({data, unlocked = true}) => {
 
     return(
-        <div className="flex bg-black/20 w-full text-white font-jersey pr-1 pl-2">
+        <div className={`flex w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data.rarity.toFixed(0)}`}>
             <div className="flex-1 flex items-center justify-center">
                 <img src={abilityImages[data?.name.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
             </div>
