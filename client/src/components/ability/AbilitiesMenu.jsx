@@ -2,8 +2,7 @@ import useState from "react";
 import Ability from "./Ability.jsx"
 
 const AbilitiesMenu = ({type}) => {
-    
-    const abilities = [
+    const attackerAbilities = [
     {
         name: "Password guess",
         description: "Attempt to guess the password of the target system.",
