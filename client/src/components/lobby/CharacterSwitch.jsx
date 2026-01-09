@@ -24,7 +24,7 @@ const CharacterSwitch = () => {
         border-3 border-black/50">
             <div className="flex items-center justify-center text-red-400 
                 border-b-zinc-800
-                border-b-3 hover:border-b-red-400 cursor-pointer hover:bg-zinc-700/50 
+                border-b-3 hover:border-b-red-400 hover:bg-zinc-700/50 
                 hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)]"
                 ref={attackerRef}
                 onClick={()=>charSelected("attacker")}>
@@ -32,7 +32,7 @@ const CharacterSwitch = () => {
             </div>
             <div className="flex items-center justify-center text-sky-400 
                 border-b-zinc-800
-                border-b-3 hover:border-b-sky-400 cursor-pointer hover:bg-zinc-700/50
+                border-b-3 hover:border-b-sky-400 hover:bg-zinc-700/50
                 hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)]"
                 ref={deffenderRef}
                 onClick={()=>charSelected("defender")}>

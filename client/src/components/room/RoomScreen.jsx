@@ -1,6 +1,7 @@
 import { useEffect, useState, } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { socket } from '../../socket.js';
+import DraftScreen from '../draft/DraftScreen.jsx';
 
 const RoomScreen = () => {
     const { token } = useParams();
@@ -78,11 +79,7 @@ const RoomScreen = () => {
 
     return (
         <div className="screen bg-neutral-700">
-            <div>Room: {token}</div>
-            <div>Status: {status}</div>
-            <div>Role: {role ?? '—'}</div>
-            <div>Players: {players ?? '—'}</div>
-            <button onClick={handleLeave}>Leave</button>
+            <DraftScreen/>
         </div>
     );
 };

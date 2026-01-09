@@ -50,15 +50,15 @@ const abilityImages = {
     "secure deserialization patterns": secure_deserialization_patterns,
     "secrets management": secrets_management,
 };
-const Ability = ({data = null, unlocked = true}) => {
+const Ability = ({data = null, unlocked = true, ...props}) => {
 
     return(
         <>
             {
                 data !== null ?
-                <div className={`flex w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data.rarity.toFixed(0)}`}>
+                <div className={`flex w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)}`} {...props}>
                     <div className="flex-1 flex items-center justify-center">
-                        <img src={abilityImages[data?.name.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
+                        <img src={abilityImages[data?.name?.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
                     </div>
                     <div className="flex-2 py-2">
                         <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
@@ -67,7 +67,7 @@ const Ability = ({data = null, unlocked = true}) => {
                                 <img src={damageIcon} alt="damage" className="ml-auto pixelart"/>
                             </div>
                             <div className="text-left text-2xl">
-                                {data?.effect.value}
+                                {data?.effect?.value}
                             </div>
                             <div>
                                 <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart"/>

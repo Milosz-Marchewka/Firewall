@@ -7,8 +7,8 @@ export const createRoom = async (req, res)=>{
 
         const room = new Game({
             url: roomUrl,
-            defender: {},
-            attacker: {}
+            defender: { id: null },
+            attacker: { id: null }
         });
 
         await room.save();

@@ -18,8 +18,8 @@ export const quickPlay = async (req, res) => {
         const roomUrl = createURL(`${URL_BASE}/room`);
         const room = new Game({
             url: roomUrl,
-            defender: {},
-            attacker: {}
+            defender: { id: null },
+            attacker: { id: null }
         });
 
         await room.save();

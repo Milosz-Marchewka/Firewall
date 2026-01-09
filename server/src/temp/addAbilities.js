@@ -213,6 +213,16 @@ const defendermoves = [
     rarity: 1,
     effect: { kind: "heal", value: 1 }
   },
+  { 
+    name: "Strong password policy enforcement", 
+    description: "Implementing and enforcing a strong password policy.", 
+    cooldown: 2, 
+    rarity: 1, 
+    effect: { 
+      kind: "heal", 
+      value: 1 
+    } 
+  },
   {
     name: "Multi-factor authentication (MFA)",
     description: "Implementing MFA to add an extra layer of security to user accounts.",

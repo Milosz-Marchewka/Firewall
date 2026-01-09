@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
 @import "tailwindcss";
 
-*{
+
+body, html{
   box-sizing: border-box;
+  cursor: url("./assets/Jeelh-Cursor-Light/Normal%20Select%20Light.cur"), auto;
+}
+
+a, button, [role="button"], .cursor-pointer, .hoverable {
+  cursor: url("./assets/Jeelh-Cursor-Light/Select%20Light.cur"), pointer !important;
 }
 
 .screen{

@@ -89,6 +89,40 @@ export default function createIo(httpServer) {
 
                 // Slot was taken by a competing join.
                 if (!updated) {
+                    // Retry once with the latest DB state (the other slot might still be free).
+                    const latest = await Game.findById(game._id);
+                    const retryRole = latest?.attacker?.id == null
+                        ? 'attacker'
+                        : (latest?.defender?.id == null ? 'defender' : null);
+
+                    if (retryRole && retryRole !== role) {
+                        const retried = await Game.findOneAndUpdate(
+                            { _id: game._id, [`${retryRole}.id`]: null },
+                            { $set: { [`${retryRole}.id`]: socket.id } },
+                            { new: true }
+                        );
+
+                        if (retried) {
+                            socket.data.role = retryRole;
+                            const playersAfterRetry = countPlayers(retried);
+                            io.to(roomId).emit('room-state', { roomId, players: playersAfterRetry });
+                            io.to(roomId).emit('player-joined', { roomId, role: retryRole });
+
+                            const bothJoinedRetry = retried.attacker?.id != null && retried.defender?.id != null;
+                            if (bothJoinedRetry && retried.status !== 'in_progress') {
+                                await Game.updateOne(
+                                    { _id: retried._id, status: { $ne: 'in_progress' } },
+                                    { $set: { status: 'in_progress' } }
+                                );
+                                io.to(roomId).emit('room-ready', { roomId });
+                            }
+
+                            const response = { ok: true, roomId, players: playersAfterRetry, role: retryRole };
+                            if (typeof ack === 'function') return ack(response);
+                            return;
+                        }
+                    }
+
                     socket.leave(roomId);
                     const response = { ok: false, error: 'full' };
                     if (typeof ack === 'function') return ack(response);
