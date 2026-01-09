@@ -519,7 +519,7 @@ const AbilitiesMenu = ({type}) => {
         <div className={`w-[40%] overflow-hidden h-full ${type == 'attacker' ? 'bg-red-600/50' : 'bg-sky-400/50'} text-center pt-7`}>
             <h1 className="mb-7 text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
             <div className="w-full grid grid-cols-2 gap-2 px-5 h-full overflow-y-scroll">
-                {abilities.map((item, index) => (
+                {attackerAbilities.map((item, index) => (
                     <Ability key={index} data={item} unlocked/>
                 ))}
             </div>
