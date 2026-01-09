@@ -1,0 +1,8 @@
+
+.activeDeckAttacker{
+    background-color: var(--color-red-400);
+}
+
+.activeDeckDefender{
+    background-color: var(--color-sky-400);
+}
