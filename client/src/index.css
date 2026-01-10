@@ -26,22 +26,22 @@ a, button, [role="button"], .cursor-pointer, .hoverable {
 }
 
 
-body {
+body{
   --sb-track-color: #00000000;
   --sb-thumb-color: #00000070;
-  --sb-size: 14px;
+  --sb-size: 4px;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: var(--sb-size)
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: var(--sb-track-color);
   border-radius: 3px;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
   border-radius: 3px;
   

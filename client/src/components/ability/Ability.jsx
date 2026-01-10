@@ -1,5 +1,8 @@
 import useState from "react";
 import "./Ability.css";
+import {useDraggable} from '@dnd-kit/core';
+import { useDroppable } from "@dnd-kit/core";
+
 import damageIcon from './../../assets/damageIcon.png';
 import cooldownIcon from './../../assets/cooldownIcon.png';
 import account_lockout_after_failures from "./../../assets/account_lockout_after_failures.png";
@@ -50,18 +53,23 @@ const abilityImages = {
     "secure deserialization patterns": secure_deserialization_patterns,
     "secrets management": secrets_management,
 };
-const Ability = ({data = null, unlocked = true, ...props}) => {
+const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
+    const {attributes, listeners, setNodeRef} = useDraggable({
+        id: id,
+    });
+
 
     return(
         <>
             {
                 data !== null ?
-                <div className={`flex w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)}`} {...props}>
+                <div className={`ability flex h-32 w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)} hover:z-300`} {...props}
+                ref={setNodeRef} {...listeners} {...attributes}>
                     <div className="flex-1 flex items-center justify-center">
                         <img src={abilityImages[data?.name?.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
                     </div>
                     <div className="flex-2 py-2">
-                        <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
+                        <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.id} {data?.name}</h2>
                         <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
                             <div>
                                 <img src={damageIcon} alt="damage" className="ml-auto pixelart"/>
