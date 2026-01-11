@@ -50,7 +50,7 @@ const PlayButtons = () => {
                 return { token, ack };
             };
 
-            // Retry a couple times to smooth out races with deletion/full rooms.
+            // retry logic (sometimes rooms get full/not found/mistakenly full)
             let lastAck = null;
             for (let attempt = 0; attempt < 3; attempt += 1) {
                 const { token, ack } = await tryJoin();

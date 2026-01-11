@@ -5,6 +5,7 @@ import PlayButtons from "./PlayButtons.jsx";
 import Deck from "./Deck.jsx";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Ability from "../ability/Ability.jsx";
+import Character from "./Character.jsx";
 
 export const CharacterContext = createContext();
 
@@ -127,6 +128,7 @@ const [abilities, setAbilities] = useState([
                     </DragOverlay>
                 </DndContext>
             </CharacterContext.Provider>
+            <Character/>
         </div>
     );
 }
