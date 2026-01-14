@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { createRoom, getRoom, quickPlay } from '../controllers/room/index.js';
+import { getAbilities } from '../controllers/abilities/getAbilities.js';
 const gameRoutes = Router();
 
 gameRoutes.post("/room", createRoom);
-gameRoutes.post("/quickplay", quickPlay);
 gameRoutes.get("/room/:url", getRoom);
+gameRoutes.post("/quickplay", quickPlay);
+gameRoutes.get("/abilities", getAbilities)
 
 export default gameRoutes;

@@ -66,9 +66,12 @@ export default function createIo(httpServer) {
                     return;
                 }
 
-                const role = game.attacker?.id == null
-                    ? 'attacker'
-                    : (game.defender?.id == null ? 'defender' : null);
+                let role;
+                if(game.attacker?.id == null && game.defender?.id == null){
+                    role = Math.random() < 0.5 ? 'attacker' : 'defender';
+                } else {
+                    role = game.attacker?.id == null ? 'attacker' : (game.defender?.id == null ? 'defender' : null);
+                }
 
                 if (!role) {
                     const response = { ok: false, error: 'full' };
@@ -91,9 +94,12 @@ export default function createIo(httpServer) {
                 if (!updated) {
                     // Retry once with the latest DB state (the other slot might still be free).
                     const latest = await Game.findById(game._id);
-                    const retryRole = latest?.attacker?.id == null
-                        ? 'attacker'
-                        : (latest?.defender?.id == null ? 'defender' : null);
+                    let retryRole;
+                    if(latest.attacker?.id == null && latest.defender?.id == null){
+                        retryRole = Math.random() < 0.5 ? 'attacker' : 'defender';
+                    } else {
+                        retryRole = latest.attacker?.id == null ? 'attacker' : (latest.defender?.id == null ? 'defender' : null);
+                    }
 
                     if (retryRole && retryRole !== role) {
                         const retried = await Game.findOneAndUpdate(

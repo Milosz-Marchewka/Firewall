@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { connectDB } from './src/db/Connection.js';
 import gameRoutes from './src/routes/GameRoutes.js';
 import createIo from './src/websocket/io.js';
+import { add } from './src/temp/addAbilities.js';
 
 // express, mongo and dotenv setup
 const app = express();

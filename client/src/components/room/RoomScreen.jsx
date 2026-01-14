@@ -2,6 +2,7 @@ import { useEffect, useState, } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { socket } from '../../socket.js';
 import DraftScreen from '../draft/DraftScreen.jsx';
+import WaitingScreen from './WaitingScreen.jsx';
 
 const RoomScreen = () => {
     const { token } = useParams();
@@ -32,7 +33,9 @@ const RoomScreen = () => {
 
                 setRole(ack.role ?? null);
                 setPlayers(ack.players ?? null);
-                setStatus('joined');
+                setTimeout(()=>{
+                    setStatus(ack.players === 2 ? 'draft' : 'joining');
+                }, 1500);
             });
         };
 
@@ -44,8 +47,10 @@ const RoomScreen = () => {
         };
 
         const onRoomReady = () => {
-            if (isCancelled) return;
-            setStatus('ready');
+            setTimeout(()=>{
+                if (isCancelled) return;
+                setStatus('draft');
+            }, 1500);
         };
 
         socket.on('room-state', onRoomState);
@@ -78,8 +83,8 @@ const RoomScreen = () => {
     }
 
     return (
-        <div className="screen bg-neutral-700">
-            <DraftScreen/>
+        <div className="screen flex justify-center items-center bg-neutral-700">
+            {status === "joining" ? <WaitingScreen role={role} players={players} /> : <DraftScreen role={role} setStatus={setStatus}/>}
         </div>
     );
 };
