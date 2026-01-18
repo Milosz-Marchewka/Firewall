@@ -19,7 +19,7 @@ const Deck = ({deck, activeId}) => {
             deckRef.current.classList.add("activeDeckDefender");
             deckRef.current.classList.remove("activeDeckAttacker");
         }
-    },char)
+    },[char])
 
     return(
         <div className=" w-1/3 h-fit  p-3 border-3 border-black/50 shadow-[5px_5px_0px_rgb(0_0_0)] flex flex-col gap-2" ref={deckRef}>

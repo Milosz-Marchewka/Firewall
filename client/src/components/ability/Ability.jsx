@@ -55,7 +55,7 @@ const abilityImages = {
 };
 const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
-        id: id,
+        id: data.code,
     });
 
 
@@ -69,7 +69,7 @@ const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
                         <img src={abilityImages[data?.name?.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
                     </div>
                     <div className="flex-2 py-2">
-                        <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.id} {data?.name}</h2>
+                        <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
                         <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
                             <div>
                                 <img src={damageIcon} alt="damage" className="ml-auto pixelart"/>
