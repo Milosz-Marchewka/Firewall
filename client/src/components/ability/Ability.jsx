@@ -28,6 +28,12 @@ import transport_layer_security_handling from "./../../assets/transport_layer_se
 import secure_password_reset_flows from "./../../assets/secure_password_reset_flows.png";
 import secure_deserialization_patterns from "./../../assets/secure_deserialization_patterns.png";
 import secrets_management from "./../../assets/secrets_management.png";
+import server_side_request_forgery from "./../../assets/server-side_request_forgery.png";
+import sandbox_escape from "./../../assets/sandbox_escape.png";
+import privilege_escalation_via_misconfiguration from "./../../assets/privilege_escalation_via_misconfiguration.png";
+import man_in_the_browser_attack from "./../../assets/man-in-the-browser_attack.png";
+import man_in_the_middle_attack from "./../../assets/man-in-the-middle_attack.png";
+import kernel_privilege_escalation from "./../../assets/kernel_privilege_escalation.png";
 
 const abilityImages = {
     "account lockout after failures": account_lockout_after_failures,
@@ -52,6 +58,12 @@ const abilityImages = {
     "secure password reset flows": secure_password_reset_flows,
     "secure deserialization patterns": secure_deserialization_patterns,
     "secrets management": secrets_management,
+    "server-side_request_forgery": server_side_request_forgery,
+    "sandbox_escape": sandbox_escape,
+    "privilege_escalation_via_misconfiguration": privilege_escalation_via_misconfiguration,
+    "man-in-the-browser_attack": man_in_the_browser_attack,
+    "man-in-the-middle_attack": man_in_the_middle_attack,
+    "kernel_privilege_escalation": kernel_privilege_escalation,
 };
 const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
@@ -66,7 +78,7 @@ const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
                 <div className={`ability flex h-32 w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)} hover:z-300`} {...props}
                 ref={setNodeRef} {...listeners} {...attributes}>
                     <div className="flex-1 flex items-center justify-center">
-                        <img src={abilityImages[data?.name?.toLowerCase()]} alt="photo" className="w-32 pixelart"/>
+                        <img src={abilityImages[data?.code]} alt="photo" className="w-32 pixelart"/>
                     </div>
                     <div className="flex-2 py-2">
                         <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
