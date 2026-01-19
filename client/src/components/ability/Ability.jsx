@@ -34,37 +34,86 @@ import privilege_escalation_via_misconfiguration from "./../../assets/privilege_
 import man_in_the_browser_attack from "./../../assets/man-in-the-browser_attack.png";
 import man_in_the_middle_attack from "./../../assets/man-in-the-middle_attack.png";
 import kernel_privilege_escalation from "./../../assets/kernel_privilege_escalation.png";
+import advanced_phishing_with_mfa_bypass from "./../../assets/advanced_phishing_with_mfa_bypass.png";
+import apt_style_long_term_intrusion from "./../../assets/apt-style_long-term_intrusion.png";
+import basic_brute_force_attack from "./../../assets/basic_brute-force_attack.png";
+import basic_sql_injection from "./../../assets/basic_sql_injection.png";
+import browse_open_directories from "./../../assets/browse_open_directories.png";
+import command_injection from "./../../assets/command_injection.png";
+import connect_via_unsecured_wifi from "./../../assets/connect_via_unsecured_wi-fi.png";
+import credential_stuffing from "./../../assets/credential_stuffing.png";
+import email_spoofing from "./../../assets/email_spoofing.png";
+import file_extension_bypass from "./../../assets/file_extension_bypass.png";
+import firmware_attack from "./../../assets/firmware_attack.png";
+import memory_corruption_exploit from "./../../assets/memory_corruption_exploit.png";
+import password_guess from "./../../assets/password_guess.png";
+import session_fixation from "./../../assets/session_fixation.png";
+import stored_xss_attack from "./../../assets/stored_xss_attack.png";
+import supply_chain_compromise from "./../../assets/supply-chain_compromise.png";
+import typosquat_their_domain from "./../../assets/typosquat_their_domain.png";
+import url_parameter_tampering from "./../../assets/url_parameter_tampering.png";
+import content_security_policy from "./../../assets/content_security_policy.png";
+import cross_site_request_forgery_tokens from "./../../assets/cross-site_request_forgery_tokens.png";
+import file_upload_validation from "./../../assets/file_upload_validation.png";
+import jwt_signing_and_validation from "./../../assets/jwt_signing_and_validation.png";
+import parametrized_queries from "./../../assets/parametrized_queries.png";
+
 
 const abilityImages = {
-    "account lockout after failures": account_lockout_after_failures,
-    "basic firewall rules": basic_firewall_rules,
-    "captcha implementation": captcha_implementation,
-    "change default passwords": change_default_passwords,
-    "client-side and server-side validation": client_side_and_server_side_validation,
-    "cybersecurity training": cybersecurity_training,
-    "disabling directory listing": disabling_directory_listing,
-    "email spam filtering": email_spam_filtering,
-    "https enforcement": https_enforcement,
-    "input length validation": input_length_validation,
-    "least-privilege principle": least_privilege_principle,
-    "multi-factor authentication (mfa)": multi_factor_authentication,
-    "password hashing with salt": password_hashing_with_salt,
-    "role-based access control": role_based_access_control,
-    "secure session cookies": secure_session_cookies,
-    "software updates and patching": software_updates_and_patching,
-    "strong password policy enforcement": strong_password_policy_enforcement,
-    "user privilege separation": user_privilege_separation,
-    "transport layer security handling": transport_layer_security_handling,
-    "secure password reset flows": secure_password_reset_flows,
-    "secure deserialization patterns": secure_deserialization_patterns,
-    "secrets management": secrets_management,
+    "account_lockout_after_failures": account_lockout_after_failures,
+    "basic_firewall_rules": basic_firewall_rules,
+    "captcha_implementation": captcha_implementation,
+    "change_default_passwords": change_default_passwords,
+    "client-side_and_server-side_validation": client_side_and_server_side_validation,
+    "cybersecurity_training": cybersecurity_training,
+    "disabling_directory_listing": disabling_directory_listing,
+    "email_spam_filtering": email_spam_filtering,
+    "https_enforcement": https_enforcement,
+    "input_length_validation": input_length_validation,
+    "least-privilege_principle": least_privilege_principle,
+    "multi-factor_authentication_mfa": multi_factor_authentication,
+    "password_hashing_with_salt": password_hashing_with_salt,
+    "role-based_access_control": role_based_access_control,
+    "secure_session_cookies": secure_session_cookies,
+    "software_updates_and_patching": software_updates_and_patching,
+    "strong_password_policy_enforcement": strong_password_policy_enforcement,
+    "user_privilege_separation": user_privilege_separation,
+    "transport_layer_security_handling": transport_layer_security_handling,
+    "secure_password_reset_flows": secure_password_reset_flows,
+    "secure_deserialization_patterns": secure_deserialization_patterns,
+    "secrets_management": secrets_management,
     "server-side_request_forgery": server_side_request_forgery,
     "sandbox_escape": sandbox_escape,
     "privilege_escalation_via_misconfiguration": privilege_escalation_via_misconfiguration,
     "man-in-the-browser_attack": man_in_the_browser_attack,
     "man-in-the-middle_attack": man_in_the_middle_attack,
     "kernel_privilege_escalation": kernel_privilege_escalation,
-};
+    "advanced_phishing_with_mfa_bypass": advanced_phishing_with_mfa_bypass,
+    "apt-style_long-term_intrusion": apt_style_long_term_intrusion,
+    "basic_brute-force_attack": basic_brute_force_attack,
+    "basic_sql_injection": basic_sql_injection,
+    "browse_open_directories": browse_open_directories,
+    "command_injection": command_injection,
+    "connect_via_unsecured_wi-fi": connect_via_unsecured_wifi,
+    "credential_stuffing": credential_stuffing,
+    "email_spoofing": email_spoofing,
+    "file_extension_bypass": file_extension_bypass,
+    "firmware_attack": firmware_attack,
+    "memory_corruption_exploit": memory_corruption_exploit,
+    "password_guess": password_guess,
+    "session_fixation": session_fixation,
+    "stored_xss_attack": stored_xss_attack,
+    "supply-chain_compromise": supply_chain_compromise,
+    "typosquat_their_domain": typosquat_their_domain,
+    "url_parameter_tampering": url_parameter_tampering,
+    "content_security_policy": content_security_policy,
+    "cross-site_request_forgery_tokens": cross_site_request_forgery_tokens,
+    "file_upload_validation": file_upload_validation,
+    "jwt_signing_and_validation": jwt_signing_and_validation,
+    "parametrized_queries": parametrized_queries,
+
+}
+
 const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
         id: data.code,
