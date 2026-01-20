@@ -140,7 +140,7 @@ const abilityImages = {
 
 }
 
-const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
+const Ability = ({data = null, unlocked = true, type = "damage", id = 0, ...props}) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
         id: data.code,
     });

@@ -48,3 +48,17 @@ export const extractRoomToken = (value) => {
 
     return trimmed;
 };
+
+export const validateUsername = (username) => {
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    return usernameRegex.test(username);
+}
+export const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+export const validatePassword = (password) => {
+    // >8, one letter, one number, one special
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordRegex.test(password);
+}

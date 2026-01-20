@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CharacterContext } from "./LobbyScreen";
 import { extractToken } from "../../utils/utils";
-import { API_BASE, socket } from "../../socket";
+import { socket } from "../../socket";
 import "./CharacterSwitch.css";
 
 const PlayButtons = () => {
@@ -27,7 +27,7 @@ const PlayButtons = () => {
             if (!socket.connected) socket.connect();
 
             const tryJoin = async () => {
-                const response = await fetch(`${API_BASE}/api/quickplay`, {
+                const response = await fetch(`/api/quickplay`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 });
