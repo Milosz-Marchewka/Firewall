@@ -57,6 +57,18 @@ import cross_site_request_forgery_tokens from "./../../assets/cross-site_request
 import file_upload_validation from "./../../assets/file_upload_validation.png";
 import jwt_signing_and_validation from "./../../assets/jwt_signing_and_validation.png";
 import parametrized_queries from "./../../assets/parametrized_queries.png";
+import basic_logging_and_auditing from "./../../assets/basic_logging_and_auditing.png";
+import behavioral_anomaly_detection from "./../../assets/behavioral_anomaly_detection.png";
+import intrusion_detection_system from "./../../assets/intrusion_detection_system.png";
+import security_headers from "./../../assets/security_headers.png";
+import server_side_request_forgery_protections from "./../../assets/server-side_request_forgery_protections.png";
+import formal_verification_of_critical_components from "./../../assets/formal_verification_of_critical_components.png";
+import inccodeent_response_playbooks from "./../../assets/inccodeent_response_playbooks.png";
+import kernel_hardening from "./../../assets/kernel_hardening.png";
+import sandboxing_untrusted_code from "./../../assets/sandboxing_untrusted_code.png";
+import secure_boot_chains from "./../../assets/secure_boot_chains.png";
+import supply_chain_security_valcodeation from "./../../assets/supply-chain_security_valcodeation.png";
+import threat_intelligence_integration from "./../../assets/threat_intelligence_integration.png";
 
 
 const abilityImages = {
@@ -111,6 +123,20 @@ const abilityImages = {
     "file_upload_validation": file_upload_validation,
     "jwt_signing_and_validation": jwt_signing_and_validation,
     "parametrized_queries": parametrized_queries,
+    "basic_logging_and_auditing": basic_logging_and_auditing,
+    "behavioral_anomaly_detection": behavioral_anomaly_detection,
+    "intrusion_detection_system": intrusion_detection_system,
+    "security_headers": security_headers,
+    "server-side_request_forgery_protections": server_side_request_forgery_protections,
+    "formal_verification_of_critical_components": formal_verification_of_critical_components,
+    "inccodeent_response_playbooks": inccodeent_response_playbooks,
+    "kernel_hardening": kernel_hardening,
+    "sandboxing_untrusted_code": sandboxing_untrusted_code,
+    "secure_boot_chains": secure_boot_chains,
+    "supply-chain_security_valcodeation": supply_chain_security_valcodeation,
+    "threat_intelligence_integration": threat_intelligence_integration,
+
+
 
 }
 
