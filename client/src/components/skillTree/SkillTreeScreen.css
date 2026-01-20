@@ -1,0 +1,56 @@
+td:not(:first-child){
+    padding: 5px;
+    text-align: center;
+    vertical-align: top;
+    background-color: oklch(21.779% 0.00002 271.152);
+}
+
+th:not(:first-child){
+    background-color: var(--color-sky-600);
+    font-weight: normal;
+    padding: 5px 10px;
+}
+
+td:first-child{
+    text-transform: uppercase;
+    font-size: 30px;
+    text-align: center;
+    height: fit-content;
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    transform: rotate(180deg);
+}
+
+.skilltree-rarity-1 > td:first-child{
+    color: rgba(194, 194, 194, 0.2);
+    border-right: 2px solid rgba(194, 194, 194, 0.2);
+}
+
+.skilltree-rarity-2 > td:first-child{
+    color: rgba(116, 255, 135, 0.2);
+    border-right: 2px solid rgba(116, 255, 135, 0.2);
+}
+
+.skilltree-rarity-3 > td:first-child{
+    color: rgba(0, 94, 202, 0.2);
+    border-right: 2px solid rgba(0, 94, 202, 0.2);
+}
+
+.skilltree-rarity-4 > td:first-child{
+    color: rgba(144, 0, 173, 0.2);
+    border-right: 2px solid rgba(144, 0, 173, 0.2);
+}
+
+.skilltree-rarity-5 > td:first-child{
+    color: rgba(206, 0, 0, 0.2);
+    border-right: 2px solid rgba(206, 0, 0, 0.2);
+}
+
+.skilltree-rarity-6 > td:first-child{
+    color: rgba(204, 184, 0, 0.2);
+    border-right: 2px solid rgba(204, 184, 0, 0.2);
+}
+
+td > div + div {
+  margin-top: 8px;
+}

@@ -135,9 +135,6 @@ const abilityImages = {
     "secure_boot_chains": secure_boot_chains,
     "supply-chain_security_valcodeation": supply_chain_security_valcodeation,
     "threat_intelligence_integration": threat_intelligence_integration,
-
-
-
 }
 
 const Ability = ({data = null, unlocked = true, id = 0, ...props}) => {
