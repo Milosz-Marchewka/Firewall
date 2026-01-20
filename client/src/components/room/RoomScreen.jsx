@@ -1,8 +1,9 @@
-import { useEffect, useState, } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { socket } from '../../socket.js';
 import DraftScreen from '../draft/DraftScreen.jsx';
 import WaitingScreen from './WaitingScreen.jsx';
+import BattleScreen from '../battle/BattleScreen.jsx';
 
 const RoomScreen = () => {
     const { token } = useParams();
@@ -12,6 +13,7 @@ const RoomScreen = () => {
     const [players, setPlayers] = useState(null);
 
     const navigate = useNavigate();
+    const leaveTimerRef = useRef(null);
 
     useEffect(() => {
         let isCancelled = false;
@@ -63,6 +65,49 @@ const RoomScreen = () => {
         };
     }, [token]);
 
+    // Important: if the user navigates away (browser back button, route change),
+    // explicitly leave the room + disconnect the socket so the server frees the slot.
+    useEffect(() => {
+        // Cancel any scheduled leave (React StrictMode mounts/unmounts effects in dev).
+        if (leaveTimerRef.current != null) {
+            clearTimeout(leaveTimerRef.current);
+            leaveTimerRef.current = null;
+        }
+
+        const doLeaveNow = () => {
+            try {
+                if (socket.connected) {
+                    socket.emit('leave-room', token);
+                }
+            } catch {
+                // ignore
+            }
+
+            try {
+                socket.disconnect();
+            } catch {
+                // ignore
+            }
+        };
+
+        const scheduleLeave = () => {
+            if (leaveTimerRef.current != null) return;
+            // Small delay prevents React StrictMode "fake unmount" from instantly leaving.
+            leaveTimerRef.current = setTimeout(() => {
+                leaveTimerRef.current = null;
+                doLeaveNow();
+            }, 50);
+        };
+
+        // pagehide triggers on back/forward cache and tab close in many browsers.
+        window.addEventListener('pagehide', doLeaveNow);
+
+        return () => {
+            window.removeEventListener('pagehide', doLeaveNow);
+            scheduleLeave();
+        };
+    }, [token]);
+
     const handleLeave = () => {
         if (!socket.connected) {
             navigate('/');
@@ -70,6 +115,7 @@ const RoomScreen = () => {
         }
 
         socket.emit('leave-room', token, () => {
+            socket.disconnect();
             navigate('/');
         });
     }
@@ -84,7 +130,7 @@ const RoomScreen = () => {
 
     return (
         <div className="screen flex justify-center items-center bg-neutral-700">
-            {status === "joining" ? <WaitingScreen role={role} players={players} /> : <DraftScreen role={role} setStatus={setStatus}/>}
+            {status === "joining" ? <WaitingScreen role={role} players={players} /> : status === "draft" ? <DraftScreen role={role} setStatus={setStatus}/> : <BattleScreen token={token} role={role} />}
         </div>
     );
 };
