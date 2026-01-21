@@ -2,15 +2,9 @@ import { useEffect } from "react";
 import SkillTreeAbility from "./SkillTreeAbility";
 import "./SkillTreeScreen.css";
 
-const SkillTreeScreen = ({abilities, isShowed, setIsShowed}) => {
-
-    useEffect(()=>{
-        console.log(isShowed);
-        console.log(setIsShowed);
-    },[isShowed]);
+const SkillTreeScreen = ({role, abilities, isShowed, setIsShowed}) => {
 
     const handleClick = () => {
-        console
         setIsShowed(prev => false);
     }
 
@@ -34,7 +28,7 @@ const SkillTreeScreen = ({abilities, isShowed, setIsShowed}) => {
                                     <td>Tier {index+1}</td>
                                     <td>
                                         {
-                                            abilities.map((item, i)=>{
+                                            abilities?.map((item, i)=>{
                                                 if(item.category == "Identity & Access" && item.rarity == index+1)
                                                     return <SkillTreeAbility data={item}/>
                                             })
@@ -42,7 +36,7 @@ const SkillTreeScreen = ({abilities, isShowed, setIsShowed}) => {
                                     </td>
                                     <td>
                                         {
-                                            abilities.map((item, i)=>{
+                                            abilities?.map((item, i)=>{
                                                 if(item.category == "Application security" && item.rarity == index+1)
                                                     return <SkillTreeAbility data={item}/>
                                             })
@@ -50,7 +44,7 @@ const SkillTreeScreen = ({abilities, isShowed, setIsShowed}) => {
                                     </td>
                                     <td>
                                         {
-                                            abilities.map((item, i)=>{
+                                            abilities?.map((item, i)=>{
                                                 if(item.category == "Infrastructure" && item.rarity == index+1)
                                                     return <SkillTreeAbility data={item}/>
                                             })
@@ -58,7 +52,7 @@ const SkillTreeScreen = ({abilities, isShowed, setIsShowed}) => {
                                     </td>
                                     <td>
                                         {
-                                            abilities.map((item, i)=>{
+                                            abilities?.map((item, i)=>{
                                                 if(item.category == "SOC & Monitoring" && item.rarity == index+1)
                                                     return <SkillTreeAbility data={item}/>
                                             })

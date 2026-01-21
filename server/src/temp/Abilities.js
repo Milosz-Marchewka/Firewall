@@ -4,6 +4,7 @@ const AbilitySchema = new mongoose.Schema({
   role: {type: String, enum: ['attacker', 'defender']},
   code: {type: String},
   name: {type: String},
+  category: {type: String},
   description: {type: String},
   cooldown: {type: Number, min: 0},
   rarity: {type: Number, min: 1},

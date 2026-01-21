@@ -150,7 +150,7 @@ const releaseSocketFromRoom = async (io, socket, roomId) => {
 export default function createIo(httpServer) {
     const io = new Server(httpServer, {
         cors: {
-            origin: process.env.URL_BASE ?? '*',
+            origin: '*',
             methods: ['GET', 'POST']
         }
     });
@@ -382,6 +382,7 @@ export default function createIo(httpServer) {
                 const bothDone = payload.attackerDone && payload.defenderDone;
                 if (bothDone) {
                     io.to(roomId).emit('draft-complete', {});
+                    socket.data.startTime = new Date();
                 }
 
                 const response = { ok: true, ...payload, bothDone };
@@ -593,6 +594,8 @@ export default function createIo(httpServer) {
                 const defenderHp = game.defender.stats.integrity ?? 0;
                 if (attackerHp <= 0 || defenderHp <= 0) {
                     game.status = 'finished';
+                    game.winner = attackerHp <= 0 ? "defender" : "attacker";
+                    game.timeElapsed = Math.floor(((Math.abs(new Date() - socket.data?.startTime))/1000)/60);
                 } else {
                     // Advance turn
                     let next = opponentRole(role);

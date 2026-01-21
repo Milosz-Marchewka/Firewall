@@ -4,6 +4,9 @@ import {useDraggable} from '@dnd-kit/core';
 import { useDroppable } from "@dnd-kit/core";
 
 import damageIcon from './../../assets/damageIcon.png';
+import healIcon from './../../assets/healIcon.png';
+import freezeIcon from './../../assets/freezeIcon.png';
+
 import cooldownIcon from './../../assets/cooldownIcon.png';
 import account_lockout_after_failures from "./../../assets/account_lockout_after_failures.png";
 import basic_firewall_rules from "./../../assets/basic_firewall_rules.png";
@@ -72,6 +75,9 @@ import threat_intelligence_integration from "./../../assets/threat_intelligence_
 
 
 const abilityImages = {
+    "damage": damageIcon,
+    "heal": healIcon,
+    "freeze": freezeIcon,
     "account_lockout_after_failures": account_lockout_after_failures,
     "basic_firewall_rules": basic_firewall_rules,
     "captcha_implementation": captcha_implementation,
@@ -147,7 +153,7 @@ const Ability = ({data = null, unlocked = true, type = "damage", id = 0, ...prop
         <>
             {
                 data !== null ?
-                <div className={`ability flex h-32 w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)} hover:z-300`} {...props}
+                <div className={`ability flex h-32 w-full text-white font-jersey pr-1 pl-2 rounded-sm shadow-[3px_3px_0px_rgb(0_0_0_/_0.4)] rarity-${data?.rarity?.toFixed(0)} hover:z-300 unselectable`} {...props}
                 ref={setNodeRef} {...listeners} {...attributes}>
                     <div className="flex-1 flex items-center justify-center">
                         <img src={abilityImages[data?.code]} alt="photo" className="w-32 pixelart"/>
@@ -156,13 +162,15 @@ const Ability = ({data = null, unlocked = true, type = "damage", id = 0, ...prop
                         <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
                         <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
                             <div>
-                                <img src={damageIcon} alt="damage" className="ml-auto pixelart"/>
+                                {
+                                    <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className="ml-auto pixelart w-[30px]"/>
+                                }
                             </div>
                             <div className="text-left text-2xl">
                                 {data?.effect?.value}
                             </div>
                             <div>
-                                <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart"/>
+                                <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart w-[30px]"/>
                             </div>
                             <div className="text-left text-2xl">
                                 {data?.cooldown}

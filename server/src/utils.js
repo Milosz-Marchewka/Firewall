@@ -1,8 +1,6 @@
 import crypto from 'node:crypto';
 
 const URL_LENGTH = 10;
-// Frontend base URL used to build linkable room URLs.
-// Example: http://localhost:5173
 export const URL_BASE = process.env.URL_BASE ?? 'http://localhost:5173';
 export const ROLES = ['attacker', 'defender'];
 

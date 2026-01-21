@@ -51,6 +51,8 @@ const gameSchema = new mongoose.Schema({
         enum: ['defender', 'attacker'],
         default: 'attacker'
     },
+    timeElapsed: {type: Number},
+    winner: {type: String, enum: ["attacker", "defender"], default: null},
     log: [
         {
             turn: {type: Number},

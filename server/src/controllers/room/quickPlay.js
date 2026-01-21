@@ -24,7 +24,7 @@ export const quickPlay = async (req, res) => {
 
         await room.save();
         return res.status(200).json({ roomUrl, reused: false });
-    } catch {
-        return res.status(500).send("Error creating or finding room.");
+    } catch (e) {
+        return res.status(500).send("test");
     }
 };

@@ -14,6 +14,6 @@ export const createRoom = async (req, res)=>{
         await room.save();
         res.status(200).json({roomUrl});
     } catch (err){
-        res.status(500).send("Error creating room.");
+        res.status(500).send(err.message);
     }
 }

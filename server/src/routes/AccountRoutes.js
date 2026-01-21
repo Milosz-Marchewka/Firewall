@@ -2,6 +2,7 @@ import { Router } from 'express';
 import requireAuth from '../controllers/accounts/requireAuth.js';
 import signup from '../controllers/accounts/signup.js';
 import login from '../controllers/accounts/login.js';
+import addtoLevel from '../controllers/accounts/addToLevel.js';
 
 const accountRoutes = Router();
 
@@ -10,5 +11,6 @@ accountRoutes.get("/auth", requireAuth, (req, res)=>{
 });
 accountRoutes.post("/signup", signup);
 accountRoutes.post("/login", login);
+accountRoutes.post("/level", addtoLevel);
 
 export default accountRoutes;

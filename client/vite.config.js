@@ -13,8 +13,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     proxy: {
-      "/api": "http://localhost:5000",
+      "/api": "http://192.168.8.40:5000",
     },
-    allowedHosts: ["localhost", "noncollapsible-froggy-gregoria.ngrok-free.dev"],
   }
 })

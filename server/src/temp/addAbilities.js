@@ -260,6 +260,7 @@ const defendermoves = [
   // --- codeentity & Access Defense (4) ---
   {
     role: "defender",
+    category: "Identity & Access",
     code: "change_default_passwords",
     name: "Change default passwords",
     description: "Replace default passwords with strong, unique ones.",
@@ -269,252 +270,269 @@ const defendermoves = [
   },
   { 
     role: "defender",
+    category: "Identity & Access",
     code: "strong_password_policy_enforcement",
-    name: "Strong password policy enforcement", 
+    name: "Strong password policy", 
     description: "Implementing and enforcing a strong password policy.", 
     cooldown: 2, 
-    rarity: 1, 
-    effect: { 
-      kind: "heal", 
-      value: 1 
-    } 
+    rarity: 2, 
+    effect: { kind: "heal", value: 1 } 
   },
   {
     role: "defender",
-    code: "multi-factor_authentication_mfa",
-    name: "Multi-factor authentication (MFA)",
-    description: "Implementing MFA to add an extra layer of security to user accounts.",
-    cooldown: 4, // priced up for freeze
-    rarity: 3,
-    effect: { kind: "freeze", value: 1 }
-  },
-  {
-    role: "defender",
+    category: "Identity & Access",
     code: "account_lockout_after_failures",
-    name: "Account lockout after failures",
+    name: "Account lockout",
     description: "Lock accounts after a set number of failed login attempts.",
-    cooldown: 4, // priced up for freeze
+    cooldown: 4,
     rarity: 2,
     effect: { kind: "freeze", value: 1 }
   },
   {
     role: "defender",
+    category: "Identity & Access",
+    code: "captcha_implementation",
+    name: "CAPTCHA implementation",
+    description: "Using CAPTCHAs to prevent automated attacks.",
+    cooldown: 4,
+    rarity: 2,
+    effect: { kind: "freeze", value: 1 }
+  },
+  {
+    role: "defender",
+    category: "Identity & Access",
+    code: "multi-factor_authentication_mfa",
+    name: "MFA",
+    description: "Multi-factor authentication for extra security.",
+    cooldown: 4,
+    rarity: 3,
+    effect: { kind: "freeze", value: 1 }
+  },
+  {
+    role: "defender",
+    category: "Identity & Access",
     code: "secure_session_cookies",
     name: "Secure session cookies",
-    description: "Using secure flags and attributes for session cookies to protect them from theft.",
+    description: "Using secure flags and attributes for cookies.",
     cooldown: 3,
     rarity: 3,
     effect: { kind: "heal", value: 2 }
   },
 
-  // --- Input & App Defense (6) ---
+  // --- Application security ---
   {
     role: "defender",
+    category: "Application security",
     code: "input_length_validation",
     name: "Input length validation",
-    description: "Validating the length of user inputs to prevent buffer overflows.",
-    cooldown: 2,
-    rarity: 2,
-    effect: { kind: "damage", value: 1 }
-  },
-  {
-    role: "defender",
-    code: "parametrized_queries",
-    name: "Parametrized queries",
-    description: "Using parametrized queries to prevent SQL injection attacks.",
-    cooldown: 2,
-    rarity: 2,
-    effect: { kind: "damage", value: 1 }
-  },
-  {
-    role: "defender",
-    code: "cross-site_request_forgery_tokens",
-    name: "Cross-site request forgery tokens",
-    description: "Using CSRF tokens to protect against CSRF attacks.",
-    cooldown: 3,
-    rarity: 3,
-    effect: { kind: "damage", value: 2 }
-  },
-  {
-    role: "defender",
-    code: "content_security_policy",
-    name: "Content Security Policy",
-    description: "Implementing CSP to prevent cross-site scripting attacks.",
-    cooldown: 3,
-    rarity: 4,
-    effect: { kind: "damage", value: 2 }
-  },
-  {
-    role: "defender",
-    code: "file_upload_validation",
-    name: "File upload validation",
-    description: "Validating uploaded files to prevent malicious content.",
-    cooldown: 3,
-    rarity: 3,
-    effect: { kind: "damage", value: 2 }
-  },
-  {
-    role: "defender",
-    code: "jwt_signing_and_validation",
-    name: "JWT signing and validation",
-    description: "Using strong signing algorithms and validating JWTs to ensure their integrity.",
-    cooldown: 3,
-    rarity: 4,
-    effect: { kind: "damage", value: 2 }
-  },
-
-  // --- Network Defense & Transport (4) ---
-  {
-    role: "defender",
-    code: "basic_firewall_rules",
-    name: "Basic firewall rules",
-    description: "Implementing basic firewall rules to control incoming and outgoing network traffic.",
+    description: "Validating user inputs to prevent overflows.",
     cooldown: 2,
     rarity: 1,
     effect: { kind: "damage", value: 1 }
   },
   {
     role: "defender",
-    code: "transport_layer_security_handling",
-    name: "Transport Layer security handling",
-    description: "Properly implementing TLS to secure data in transit.",
-    cooldown: 2,
-    rarity: 2,
-    effect: { kind: "heal", value: 1 }
-  },
-  {
-    role: "defender",
-    code: "server-side_request_forgery_protections",
-    name: "Server-Side Request Forgery protections",
-    description: "Implementing measures to prevent SSRF attacks.",
-    cooldown: 4,
-    rarity: 5,
-    effect: { kind: "damage", value: 3 }
-  },
-  {
-    role: "defender",
-    code: "security_headers",
-    name: "Security headers",
-    description: "Implementing security headers to protect against common web vulnerabilities.",
-    cooldown: 3,
-    rarity: 4,
-    effect: { kind: "damage", value: 2 }
-  },
-
-  // --- Detection & Response (5) ---
-  {
-    role: "defender",
-    code: "basic_logging_and_auditing",
-    name: "Basic logging and auditing",
-    description: "Implementing logging and auditing to monitor system activity and detect potential security inccodeents.",
+    category: "Application security",
+    code: "parametrized_queries",
+    name: "Parametrized queries",
+    description: "Using queries to prevent SQL injection.",
     cooldown: 2,
     rarity: 2,
     effect: { kind: "damage", value: 1 }
   },
   {
     role: "defender",
-    code: "intrusion_detection_system",
-    name: "Intrusion Detection System",
-    description: "Deploying codeS to monitor network traffic for suspicious activity.",
-    cooldown: 5,
-    rarity: 5,
+    category: "Application security",
+    code: "cross-site_request_forgery_tokens",
+    name: "CSRF tokens",
+    description: "Using tokens to protect against CSRF attacks.",
+    cooldown: 3,
+    rarity: 3,
     effect: { kind: "damage", value: 2 }
   },
   {
     role: "defender",
-    code: "behavioral_anomaly_detection",
-    name: "Behavioral anomaly detection",
-    description: "Using behavioral analytics to codeentify unusual user or system behavior.",
-    cooldown: 5,
-    rarity: 5,
+    category: "Application security",
+    code: "file_upload_validation",
+    name: "File upload validation",
+    description: "Validating uploaded files for malicious content.",
+    cooldown: 3,
+    rarity: 3,
     effect: { kind: "damage", value: 2 }
   },
   {
     role: "defender",
-    code: "inccodeent_response_playbooks",
-    name: "Inccodeent response playbooks",
-    description: "Developing and following inccodeent response playbooks to effectively handle security inccodeents.",
-    cooldown: 4,
-    rarity: 5,
-    effect: { kind: "damage", value: 4 }
+    category: "Application security",
+    code: "content_security_policy",
+    name: "Content Security Policy",
+    description: "Implementing CSP to prevent XSS attacks.",
+    cooldown: 3,
+    rarity: 4,
+    effect: { kind: "damage", value: 2 }
   },
   {
     role: "defender",
-    code: "threat_intelligence_integration",
-    name: "Threat intelligence integration",
-    description: "Incorporating threat intelligence feeds to stay informed about emerging threats and vulnerabilities.",
+    category: "Application security",
+    code: "jwt_signing_and_validation",
+    name: "JWT signing & validation",
+    description: "Ensuring integrity of JSON Web Tokens.",
+    cooldown: 3,
+    rarity: 4,
+    effect: { kind: "damage", value: 2 }
+  },
+  {
+    role: "defender",
+    category: "Application security",
+    code: "server-side_request_forgery_protections",
+    name: "SSRF protections",
+    description: "Preventing Server-Side Request Forgery.",
     cooldown: 4,
-    rarity: 6,
+    rarity: 5,
     effect: { kind: "damage", value: 3 }
   },
 
-  // --- System Hardening (4) ---
+  // --- Infrastructure ---
   {
     role: "defender",
+    category: "Infrastructure",
+    code: "basic_firewall_rules",
+    name: "Basic firewall rules",
+    description: "Control incoming and outgoing network traffic.",
+    cooldown: 2,
+    rarity: 1,
+    effect: { kind: "damage", value: 1 }
+  },
+  {
+    role: "defender",
+    category: "Infrastructure",
+    code: "transport_layer_security_handling",
+    name: "TLS handling",
+    description: "Properly implementing TLS for data in transit.",
+    cooldown: 2,
+    rarity: 2,
+    effect: { kind: "heal", value: 1 }
+  },
+  {
+    role: "defender",
+    category: "Infrastructure",
     code: "user_privilege_separation",
     name: "User privilege separation",
-    description: "Separating user privileges to limit access and reduce the impact of potential breaches.",
+    description: "Limit access to reduce breach impact.",
     cooldown: 3,
     rarity: 3,
     effect: { kind: "heal", value: 2 }
   },
   {
     role: "defender",
-    code: "kernel_hardening",
-    name: "Kernel hardening",
-    description: "Strengthening the operating system kernel to prevent exploitation and unauthorized access.",
-    cooldown: 5,
-    rarity: 6,
-    effect: { kind: "heal", value: 4 }
+    category: "Infrastructure",
+    code: "security_headers",
+    name: "Security headers",
+    description: "Headers to protect against web vulnerabilities.",
+    cooldown: 3,
+    rarity: 4,
+    effect: { kind: "damage", value: 2 }
   },
   {
     role: "defender",
+    category: "Infrastructure",
     code: "secure_boot_chains",
     name: "Secure boot chains",
-    description: "Ensuring the integrity of the boot process to prevent unauthorized firmware or software from loading.",
+    description: "Ensuring integrity of the boot process.",
     cooldown: 4,
-    rarity: 6,
+    rarity: 5,
     effect: { kind: "heal", value: 3 }
   },
   {
     role: "defender",
+    category: "Infrastructure",
     code: "sandboxing_untrusted_code",
-    name: "Sandboxing untrusted code",
-    description: "Running untrusted code in isolated environments to limit its access and potential damage.",
+    name: "Sandboxing code",
+    description: "Isolated environments for untrusted code.",
     cooldown: 4,
     rarity: 5,
     effect: { kind: "damage", value: 3 }
   },
-
-  // --- Supply Chain & Assurance (2) ---
   {
     role: "defender",
-    code: "supply-chain_security_valcodeation",
-    name: "Supply-chain security valcodeation",
-    description: "Verifying the security of third-party software and hardware before integration.",
+    category: "Infrastructure",
+    code: "kernel_hardening",
+    name: "Kernel hardening",
+    description: "Strengthening the OS against exploitation.",
     cooldown: 5,
-    rarity: 7,
+    rarity: 6,
+    effect: { kind: "heal", value: 4 }
+  },
+
+  // --- SOC & Monitoring ---
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "basic_logging_and_auditing",
+    name: "Basic logging & auditing",
+    description: "Monitor system activity to detect incidents.",
+    cooldown: 2,
+    rarity: 1,
+    effect: { kind: "damage", value: 1 }
+  },
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "intrusion_detection_system",
+    name: "Intrusion Detection (IDS)",
+    description: "Monitor network traffic for suspicious activity.",
+    cooldown: 5,
+    rarity: 4,
+    effect: { kind: "damage", value: 2 }
+  },
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "behavioral_anomaly_detection",
+    name: "Behavioral detection",
+    description: "Identify unusual user or system behavior.",
+    cooldown: 5,
+    rarity: 5,
+    effect: { kind: "damage", value: 2 }
+  },
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "inccodeent_response_playbooks",
+    name: "Incident response playbooks",
+    description: "Standard procedures for security incidents.",
+    cooldown: 4,
+    rarity: 5,
     effect: { kind: "damage", value: 4 }
   },
   {
     role: "defender",
-    code: "formal_verification_of_critical_components",
-    name: "Formal verification of critical components",
-    description: "Using formal methods to mathematically prove the correctness and security of critical system components.",
-    cooldown: 5,
-    rarity: 7,
-    effect: { kind: "heal", value: 5 }
+    category: "SOC & Monitoring",
+    code: "threat_intelligence_integration",
+    name: "Threat intelligence",
+    description: "Staying informed about emerging threats.",
+    cooldown: 4,
+    rarity: 6,
+    effect: { kind: "damage", value: 3 }
   },
-
-  // --- Utility Control (extra freeze to hit 4 total) ---
   {
     role: "defender",
-    code:"captcha_implementation",
-    name: "CAPTCHA implementation",
-    description: "Using CAPTCHAs to prevent automated attacks.",
-    cooldown: 4, // priced up for freeze
-    rarity: 2,
-    effect: { kind: "freeze", value: 1 }
+    category: "SOC & Monitoring",
+    code: "supply-chain_security_valcodeation",
+    name: "Supply-chain security",
+    description: "Verifying third-party security.",
+    cooldown: 5,
+    rarity: 6,
+    effect: { kind: "damage", value: 4 }
+  },
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "formal_verification_of_critical_components",
+    name: "Formal verification",
+    description: "Mathematical proof of component security.",
+    cooldown: 5,
+    rarity: 6,
+    effect: { kind: "heal", value: 5 }
   }
 ];
 
@@ -536,8 +554,8 @@ const defendermoves = [
 
 export const add = async () => {
   try{
-    await Ability.deleteMany({});
-    console.log(await Ability.insertMany([...attackermoves, ...defendermoves]) ? true : false);
+    await Ability.deleteMany({role: "defender"});
+    console.log(await Ability.insertMany([...defendermoves]) ? true : false);
   } catch(e){
     console.log(e.message);
   }

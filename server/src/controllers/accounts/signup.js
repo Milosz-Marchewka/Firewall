@@ -1,15 +1,15 @@
 import User from "../../db/User.js";
 import bcrypt from 'bcrypt';
 import { makeJwtToken } from "./makeJwtToken.js";
-import { validateEmail, validateUsername } from "../../utils.js";
+import { validateEmail, validateUsername, validatePassword } from "../../utils.js";
 
 const signup = async (req, res) => {
     if([req.body.username, req.body.email, req.body.password].some(f => !f)){
         return res.status(400).send("All fields are required.");
     }
-    if(!validateUsername(req.body.username) || !validateEmail(req.body.email) || !validatePassword(req.body.password)){
-        return res.status(400).send("Invalid input.");
-    }
+    // if(!validateUsername(req.body.username) || !validateEmail(req.body.email) || !validatePassword(req.body.password)){
+    //     return res.status(400).send("Invalid input.");
+    // }
     const user = new User({
         username: req.body.username,
         email: req.body.email,

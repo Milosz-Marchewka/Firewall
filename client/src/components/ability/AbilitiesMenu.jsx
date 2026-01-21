@@ -17,9 +17,9 @@ const AbilitiesMenu = ({type, activeId, abilities, setIsSkillTreeShowed}) => {
             </div>
             <div className="grid grid-cols-2 gap-2 px-5 h-fit max-h-195 w-full overflow-y-scroll max-w-full relative">
                 {
-                    abilities.map((item, index) => (
-                        <Ability key={index} data={item} id={item.id} unlocked/>
-                    ))
+                    abilities?.map((item, index) => {
+                        return (<Ability key={index} data={item} id={item.id} unlocked/>);
+                    })
                 }
                 {
                     activeId != null ?

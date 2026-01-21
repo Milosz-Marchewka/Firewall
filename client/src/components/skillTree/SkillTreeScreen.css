@@ -22,33 +22,33 @@ td:first-child{
 }
 
 .skilltree-rarity-1 > td:first-child{
-    color: rgba(194, 194, 194, 0.2);
-    border-right: 2px solid rgba(194, 194, 194, 0.2);
+    color: rgba(194, 194, 194, 0.5);
+    border-right: 2px solid rgba(194, 194, 194, 0.5);
 }
 
 .skilltree-rarity-2 > td:first-child{
-    color: rgba(116, 255, 135, 0.2);
-    border-right: 2px solid rgba(116, 255, 135, 0.2);
+    color: rgba(116, 255, 135, 0.5);
+    border-right: 2px solid rgba(116, 255, 135, 0.5);
 }
 
 .skilltree-rarity-3 > td:first-child{
-    color: rgba(0, 94, 202, 0.2);
-    border-right: 2px solid rgba(0, 94, 202, 0.2);
+    color: rgba(0, 94, 202, 0.5);
+    border-right: 2px solid rgba(0, 94, 202, 0.5);
 }
 
 .skilltree-rarity-4 > td:first-child{
-    color: rgba(144, 0, 173, 0.2);
-    border-right: 2px solid rgba(144, 0, 173, 0.2);
+    color: rgba(144, 0, 173, 0.5);
+    border-right: 2px solid rgba(144, 0, 173, 0.5);
 }
 
 .skilltree-rarity-5 > td:first-child{
-    color: rgba(206, 0, 0, 0.2);
-    border-right: 2px solid rgba(206, 0, 0, 0.2);
+    color: rgba(206, 0, 0, 0.5);
+    border-right: 2px solid rgba(206, 0, 0, 0.5);
 }
 
 .skilltree-rarity-6 > td:first-child{
-    color: rgba(204, 184, 0, 0.2);
-    border-right: 2px solid rgba(204, 184, 0, 0.2);
+    color: rgba(204, 184, 0, 0.5);
+    border-right: 2px solid rgba(204, 184, 0, 0.5);
 }
 
 td > div + div {

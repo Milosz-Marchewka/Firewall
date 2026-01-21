@@ -1,5 +1,8 @@
 
 import damageIcon from './../../assets/damageIcon.png';
+import healIcon from './../../assets/healIcon.png';
+import freezeIcon from './../../assets/freezeIcon.png';
+
 import cooldownIcon from './../../assets/cooldownIcon.png';
 import account_lockout_after_failures from "./../../assets/account_lockout_after_failures.png";
 import basic_firewall_rules from "./../../assets/basic_firewall_rules.png";
@@ -68,6 +71,9 @@ import threat_intelligence_integration from "./../../assets/threat_intelligence_
 
 
 const abilityImages = {
+    "damage": damageIcon,
+    "heal": healIcon,
+    "freeze": freezeIcon,
     "account_lockout_after_failures": account_lockout_after_failures,
     "basic_firewall_rules": basic_firewall_rules,
     "captcha_implementation": captcha_implementation,
@@ -146,13 +152,15 @@ const SkillTreeAbility = ({data}) => {
             </div>
             <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
                     <div>
-                        <img src={damageIcon} alt="damage" className="ml-auto pixelart"/>
+                        {
+                            <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className="ml-auto pixelart w-[30px]"/>
+                        }
                     </div>
                     <div className="text-left text-2xl">
                         {data?.effect?.value}
                     </div>
                     <div>
-                        <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart"/>
+                        <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart w-[30px]"/>
                     </div>
                     <div className="text-left text-2xl">
                         {data?.cooldown}
@@ -163,3 +171,6 @@ const SkillTreeAbility = ({data}) => {
 }
 
 export default SkillTreeAbility
+
+// level 1 = 1exp
+// level n = Math.ceil(1.25(n-1))
