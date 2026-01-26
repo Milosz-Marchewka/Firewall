@@ -27,7 +27,7 @@ const PlayButtons = () => {
             if (!socket.connected) socket.connect();
 
             const tryJoin = async () => {
-                const response = await fetch(`http://localhost:5000/api/quickplay`, {
+                const response = await fetch(`/api/quickplay`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 });

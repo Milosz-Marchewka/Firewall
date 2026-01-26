@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ()=>{
+const Login = ({setUser})=>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -17,8 +17,11 @@ const Login = ()=>{
 
             if(!req.ok){
                 console.error("Login failed:", await req.text());
+                return;
             }
 
+            const userData = await req.json();
+            setUser(userData);
             navigate("/");
         } catch(e){
             console.error("Login error:", e);

@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 app.use(cors({
-    origin: '*',
+    origin: "*",
     credentials: true
 }));
 app.use(express.json());
@@ -25,6 +25,6 @@ const PORT = 5000;
 const httpServer = createServer(app);
 const io = createIo(httpServer);
 app.set('io', io);
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`App running on port ${PORT}`);
 });

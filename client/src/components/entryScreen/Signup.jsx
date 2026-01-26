@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signup = ()=>{
+const Signup = ({setUser})=>{
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,8 +20,11 @@ const Signup = ()=>{
 
             if(!req.ok){
                 console.error("Signup failed:", await req.text());
+                return;
             }
 
+            const userData = await req.json();
+            setUser(userData);
             navigate("/");
         } catch(e){
             console.error("Signup error:", e);

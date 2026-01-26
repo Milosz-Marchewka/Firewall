@@ -37,13 +37,16 @@ svg{
 }
 
 .font-jersey{
-    font-family: "Jersey 15", sans-serif;
+  font-family: "Jersey 15", sans-serif;
 }
 
 .pixelart {
   image-rendering: pixelated;
 }
 
+.mirrored{
+  transform: scaleX(1);
+}
 
 body{
   --sb-track-color: #00000000;

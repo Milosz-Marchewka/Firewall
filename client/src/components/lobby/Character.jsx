@@ -1,18 +1,17 @@
-import skeleton from '../../assets/skeleton.mp4';
+import hacker from '../../assets/hacker.png';
+import defender from '../../assets/hacker.png';
 import { useRef, useEffect } from 'react';
 
-const Character = ()=>{
-    const videoRef = useRef(null);
+const roles = {
+    attacker: hacker,
+    defender: defender,
+}
 
-    useEffect(() => {
-        if (videoRef.current) {
-        videoRef.current.volume = 0.3; // value between 0 and 1
-        }
-    }, []);
+const Character = ({role="attacker"})=>{
 
     return(
-        <div className='h-3/4 w-1/3 flex justify-center items-center absolute right-5 top-15'>
-            <video ref={videoRef} src={skeleton} autoPlay loop playsInline controls></video>
+        <div className='absolute h-4/5 w-4/5 mb-12 flex justify-center items-center'>
+            <img src={roles[role]} alt="Player" className="w-full pixelart mirrored"/>
         </div>
     )
 }

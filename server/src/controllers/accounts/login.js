@@ -30,6 +30,8 @@ const login = async (req, res)=>{
         delete safeUser.password;
         delete safeUser.__v;
 
+        console.log(safeUser);
+        
         return res.status(200).send(safeUser);
     } catch (error) {
         return res.status(500).send("Server error.");
