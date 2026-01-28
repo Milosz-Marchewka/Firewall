@@ -4,13 +4,6 @@ td:not(:first-child){
     vertical-align: top;
     background-color: oklch(21.779% 0.00002 271.152);
 }
-
-th:not(:first-child){
-    background-color: var(--color-sky-600);
-    font-weight: normal;
-    padding: 5px 10px;
-}
-
 td:first-child{
     text-transform: uppercase;
     font-size: 30px;
@@ -54,3 +47,16 @@ td:first-child{
 td > div + div {
   margin-top: 8px;
 }
+
+.abilityKind-damage{
+    background-color: oklch(70.216% 0.18922 22.207 / 0.2);
+}
+.abilityKind-heal{
+    background-color: oklch(84.21% 0.22607 129.858 / 0.2);
+}
+.abilityKind-freeze{
+    background-color: oklch(78.9% 0.154 211.53 / 0.2);
+}
+
+
+.locked{}

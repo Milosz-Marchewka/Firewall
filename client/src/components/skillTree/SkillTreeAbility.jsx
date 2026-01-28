@@ -140,29 +140,29 @@ const abilityImages = {
 }
 
 
-const SkillTreeAbility = ({data}) => {
+const SkillTreeAbility = ({data, owned}) => {
     return(
-        <div className={`ability flex h-32 w-full bg-neutral-800 text-white font-jersey pr-1 pl-2 rounded-sm`}>
-            <div className="flex-1 flex items-center justify-center">
+        <div className={`ability flex h-32 w-full bg-neutral-800 text-white font-jersey rounded-sm ml-1 ${owned} ${owned ? data.role == "attacker" ? "bg-red-400/80" : "bg-sky-400/80" : ""}`}>
+            <div className="flex-2 flex items-center justify-center">
                 <img src={abilityImages[data?.code]} alt="photo" className="w-32 pixelart"/>
             </div>
-            <div className="flex-2 py-2 flex flex-col">
-                <h2 className="text-[24px] leading-5 text-shadow-lg text-left">{data?.name}</h2>
-                <p className='flex-1 text-left'>{data?.description}</p>
+            <div className="flex-5 py-2 flex flex-col pl-2">
+                <h2 className="text-[24px] leading-5 text-shadow-lg text-left mb-1">{data?.name}</h2>
+                <p className='flex-1 text-left leading-none'>{data?.description}</p>
             </div>
-            <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
+            <div className={`grid grid-cols-2 grid-row-2 text-lg pl-2 items-center abilityKind-${data.effect.kind} h-full justify-items-center ml-1`}>
                     <div>
                         {
-                            <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className="ml-auto pixelart w-[30px]"/>
+                            <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className="ml-auto pixelart w-7.5"/>
                         }
                     </div>
-                    <div className="text-left text-2xl">
+                    <div className="text-left text-2xl w-full pl-1">
                         {data?.effect?.value}
                     </div>
                     <div>
-                        <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart w-[30px]"/>
+                        <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart w-7.5"/>
                     </div>
-                    <div className="text-left text-2xl">
+                    <div className="text-left text-2xl w-full pl-1">
                         {data?.cooldown}
                 </div>
             </div>

@@ -21,7 +21,7 @@ const CharacterSwitch = () => {
     return(
         <div className="grid grid-cols-2 bg-zinc-800 text-center w-full
         shadow-[5px_5px_0px_rgb(0_0_0)] box-border self-start
-        border-3 border-black/50">
+        border-3 border-black/50 hoverable">
             <div className="flex items-center justify-center text-red-400 
                 border-b-zinc-800
                 border-b-3 hover:border-b-red-400 hover:bg-zinc-700/50 

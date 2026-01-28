@@ -1,11 +1,10 @@
 import Ability from "./Ability.jsx"
-import { DragOverlay } from "@dnd-kit/core";
 import AbilityBin from "./AbilityBin.jsx";
+import { useEffect, useState } from "react";
 
-const AbilitiesMenu = ({type, activeId, abilities, setIsSkillTreeShowed}) => {
+const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, deck}) => {
 
     const handleClick = () => {
-        console.log("aaa");
         setIsSkillTreeShowed(prev =>true);
     }
 
@@ -15,10 +14,10 @@ const AbilitiesMenu = ({type, activeId, abilities, setIsSkillTreeShowed}) => {
                 <div className="absolute text-4xl left-5 top-10 pointer" onClick={() => {handleClick()}}>🌳</div>
                 <h1 className="mx-auto mb-7 text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
             </div>
-            <div className="grid grid-cols-2 gap-2 px-5 h-fit max-h-195 w-full overflow-y-scroll max-w-full relative">
+            <div className="grid grid-cols-2 gap-2 px-5 pb-1 h-fit max-h-195 w-full overflow-y-scroll max-w-full relative">
                 {
-                    abilities?.map((item, index) => {
-                        return (<Ability key={index} data={item} id={item.id} unlocked/>);
+                    ownedAbilities?.filter((item) => (item.role === type && (deck.filter((value, _) => (item.code == value?.code)).length == 0))).map((item, index) => {
+                        return (<Ability key={index} data={item} unlocked/>);
                     })
                 }
                 {

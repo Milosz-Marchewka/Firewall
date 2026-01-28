@@ -1,5 +1,5 @@
 import hacker from '../../assets/hacker.png';
-import defender from '../../assets/hacker.png';
+import defender from '../../assets/cybersecurity_specialist.png';
 import { useRef, useEffect } from 'react';
 
 const roles = {
@@ -7,10 +7,10 @@ const roles = {
     defender: defender,
 }
 
-const Character = ({role="attacker"})=>{
+const Character = ({role="attacker", className})=>{
 
     return(
-        <div className='absolute h-4/5 w-4/5 mb-12 flex justify-center items-center'>
+        <div className={`absolute h-4/5 w-4/5 mb-12 flex justify-center items-center ${className}`}>
             <img src={roles[role]} alt="Player" className="w-full pixelart mirrored"/>
         </div>
     )

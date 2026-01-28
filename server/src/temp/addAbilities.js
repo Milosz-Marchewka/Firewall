@@ -11,8 +11,9 @@ import Ability from "./Abilities.js";
 // ==========================
 const attackermoves = [
   // --- Credential & codeentity Attacks (4) ---
-  {
+   {
     role: "attacker",
+    category: "Credentials & Identity",
     code: "password_guess",
     name: "Password guess",
     description: "Attempt to guess the password of the target system.",
@@ -22,231 +23,229 @@ const attackermoves = [
   },
   {
     role: "attacker",
+    category: "Credentials & Identity",
     code: "credential_stuffing",
     name: "Credential stuffing",
-    description: "Reusing leaked credentials to gain unauthorized access.",
+    description: "Reusing leaked credentials to gain access.",
     cooldown: 2,
-    rarity: 4,
+    rarity: 2,
     effect: { kind: "damage", value: 3 }
   },
   {
     role: "attacker",
+    category: "Credentials & Identity",
     code: "basic_brute-force_attack",
-    name: "Basic brute-force attack",
-    description: "Systematically trying all possible combinations to crack a password.",
+    name: "Brute-force",
+    description: "Systematically trying combinations to crack passwords.",
     cooldown: 3,
     rarity: 4,
     effect: { kind: "damage", value: 4 }
   },
   {
     role: "attacker",
+    category: "Credentials & Identity",
     code: "advanced_phishing_with_mfa_bypass",
-    name: "Advanced phishing with MFA bypass",
-    description: "Using sophisticated phishing techniques to trick users into revealing multi-factor authentication codes.",
-    cooldown: 5, // priced up for freeze(2)
+    name: "MFA Bypass Phishing",
+    description: "Sophisticated phishing to trick users into revealing MFA codes.",
+    cooldown: 5,
     rarity: 6,
     effect: { kind: "freeze", value: 2 }
   },
-
-  // --- Input & Web Exploits (6) ---
+ 
+  // --- Exploits & Persistence ---
   {
     role: "attacker",
+    category: "Exploits & Persistence",
     code: "url_parameter_tampering",
-    name: "URL parameter tampering",
+    name: "URL Tampering",
     description: "Manipulate URL parameters to exploit vulnerabilities.",
     cooldown: 2,
-    rarity: 2,
+    rarity: 1,
     effect: { kind: "damage", value: 2 }
   },
   {
     role: "attacker",
+    category: "Exploits & Persistence",
     code: "basic_sql_injection",
-    name: "Basic SQL injection",
-    description: "Injecting malicious SQL queries to manipulate the database.",
+    name: "SQL Injection",
+    description: "Injecting malicious queries to manipulate databases.",
     cooldown: 3,
+    rarity: 3,
+    effect: { kind: "damage", value: 4 }
+  },
+  {
+    role: "attacker",
+    category: "Exploits & Persistence",
+    code: "file_extension_bypass",
+    name: "Extension Bypass",
+    description: "Exploiting upload validation to plant malicious files.",
+    cooldown: 4,
     rarity: 4,
     effect: { kind: "damage", value: 4 }
   },
   {
     role: "attacker",
+    category: "Exploits & Persistence",
     code: "command_injection",
-    name: "Command injection",
-    description: "Injecting malicious commands to be executed by the host operating system.",
+    name: "Command Injection",
+    description: "Injecting commands to be executed by the host OS.",
     cooldown: 4,
-    rarity: 6,
+    rarity: 5,
     effect: { kind: "damage", value: 5 }
   },
   {
     role: "attacker",
+    category: "Exploits & Persistence",
     code: "stored_xss_attack",
-    name: "Stored XSS attack",
-    description: "Injecting malicious scripts that are permanently stored on the target server.",
+    name: "Stored XSS",
+    description: "Injecting scripts permanently stored on the server.",
     cooldown: 5,
-    rarity: 7,
+    rarity: 6,
     effect: { kind: "damage", value: 7 }
   },
   {
     role: "attacker",
-    code: "file_extension_bypass",
-    name: "File extension bypass",
-    description: "Exploiting weaknesses in file upload valcodeation to upload malicious files.",
-    cooldown: 4,
-    rarity: 5,
-    effect: { kind: "damage", value: 4 }
+    category: "Exploits & Persistence",
+    code: "apt-style_long-term_intrusion",
+    name: "APT Intrusion",
+    description: "Establishing persistent presence within a target network.",
+    cooldown: 6,
+    rarity: 6,
+    effect: { kind: "heal", value: 4 }
   },
+ 
+  // --- Network & System ---
   {
     role: "attacker",
-    code: "business_logic_abuse",
-    name: "Business logic abuse",
-    description: "Exploiting flaws in business logic to achieve unauthorized actions.",
-    cooldown: 3,
-    rarity: 4,
-    // kept as "heal" to represent attacker momentum / foothold (pairs with exploit rule later)
-    effect: { kind: "heal", value: 2 }
-  },
-
-  // --- Network & MITM (4) ---
-  {
-    role: "attacker",
+    category: "Network & System",
     code: "connect_via_unsecured_wi-fi",
-    name: "Connect via unsecured Wi-Fi",
-    description: "Connect to the target system using an unsecured Wi-Fi network.",
+    name: "Unsecured Wi-Fi",
+    description: "Connect to the target via an unsecured network.",
     cooldown: 2,
     rarity: 1,
-    // “foothold gain” style heal (does NOT exceed 20; overflow becomes exploit)
     effect: { kind: "heal", value: 1 }
   },
   {
     role: "attacker",
+    category: "Network & System",
     code: "man-in-the-middle_attack",
-    name: "Man-in-the-middle attack",
-    description: "Intercepting and altering communications between two parties without their knowledge.",
-    cooldown: 4, // priced up for freeze
-    rarity: 5,
+    name: "MITM Attack",
+    description: "Intercepting and altering communications silently.",
+    cooldown: 4,
+    rarity: 3,
     effect: { kind: "freeze", value: 1 }
   },
   {
     role: "attacker",
-    code: "man-in-the-browser_attack",
-    name: "Man-in-the-browser attack",
-    description: "Injecting malicious code into a web browser to intercept and manipulate user interactions.",
-    cooldown: 5, // priced up for freeze(2)
-    rarity: 6,
-    effect: { kind: "freeze", value: 2 }
-  },
-  {
-    role: "attacker",
+    category: "Network & System",
     code: "server-side_request_forgery",
-    name: "Server-side request forgery",
-    description: "Forcing the server to make unauthorized requests to internal resources.",
+    name: "SSRF",
+    description: "Forcing the server to make unauthorized internal requests.",
     cooldown: 4,
-    rarity: 6,
+    rarity: 4,
     effect: { kind: "heal", value: 3 }
   },
-
-  // --- Privilege & Execution Escalation (4) ---
   {
     role: "attacker",
+    category: "Network & System",
     code: "privilege_escalation_via_misconfiguration",
-    name: "Privilege escalation via misconfiguration",
-    description: "Exploiting system misconfigurations to gain higher privileges.",
+    name: "Privilege Escalation",
+    description: "Exploiting misconfigurations to gain higher privileges.",
     cooldown: 5,
-    rarity: 7,
+    rarity: 5,
     effect: { kind: "damage", value: 6 }
   },
   {
     role: "attacker",
-    code: "kernel_privilege_escalation",
-    name: "Kernel privilege escalation",
-    description: "Exploiting vulnerabilities in the operating system kernel to gain higher privileges.",
+    category: "Network & System",
+    code: "man-in-the-browser_attack",
+    name: "MITB Attack",
+    description: "Injecting code into browser to manipulate interactions.",
     cooldown: 5,
-    rarity: 7,
-    effect: { kind: "damage", value: 6 }
-  },
-  {
-    role: "attacker",
-    code: "sandbox_escape",
-    name: "Sandbox escape",
-    description: "Breaking out of a restricted environment to access the host system.",
-    cooldown: 5,
-    rarity: 7,
-    effect: { kind: "damage", value: 6 }
-  },
-  {
-    role: "attacker",
-    code: "memory_corruption_exploit",
-    name: "Memory corruption exploit",
-    description: "Triggering buffer overflows or other memory corruption issues.",
-    cooldown: 5,
-    rarity: 7,
-    effect: { kind: "damage", value: 6 }
-  },
-
-  // --- Persistence & Long-Term Intrusion (3) ---
-  {
-    role: "attacker",
-    code: "apt-style_long-term_intrusion",
-    name: "APT-style long-term intrusion",
-    description: "Establishing a persistent presence within a target network for extended periods.",
-    cooldown: 6,
-    rarity: 7,
-    effect: { kind: "heal", value: 4 }
-  },
-  {
-    role: "attacker",
-    code: "firmware_attack",
-    name: "Firmware attack",
-    description: "Exploiting vulnerabilities in device firmware to gain persistent access.",
-    cooldown: 5,
-    rarity: 7,
-    effect: { kind: "heal", value: 4 }
-  },
-  {
-    role: "attacker",
-    code: "supply-chain_compromise",
-    name: "Supply-chain compromise",
-    description: "Exploiting vulnerabilities in third-party software or hardware to gain access to the target system.",
-    cooldown: 6, // priced up for freeze(2)
-    rarity: 7,
+    rarity: 5,
     effect: { kind: "freeze", value: 2 }
   },
-
-  // --- Recon & Social Engineering (4) ---
   {
     role: "attacker",
+    category: "Network & System",
+    code: "kernel_privilege_escalation",
+    name: "Kernel Escalation",
+    description: "Exploiting kernel vulnerabilities for root access.",
+    cooldown: 5,
+    rarity: 6,
+    effect: { kind: "damage", value: 6 }
+  },
+  {
+    role: "attacker",
+    category: "Network & System",
+    code: "sandbox_escape",
+    name: "Sandbox Escape",
+    description: "Breaking out of restricted environments to host system.",
+    cooldown: 5,
+    rarity: 6,
+    effect: { kind: "damage", value: 6 }
+  },
+ 
+  // --- Recon & Supply chain ---
+  {
+    role: "attacker",
+    category: "Recon & Supply chain",
     code: "browse_open_directories",
-    name: "Browse open directories",
-    description: "Look for sensitive information in open directories.",
+    name: "Open Directories",
+    description: "Look for sensitive info in open directories.",
     cooldown: 3,
     rarity: 1,
     effect: { kind: "heal", value: 1 }
   },
   {
     role: "attacker",
+    category: "Recon & Supply chain",
     code: "typosquat_their_domain",
-    name: "Typosquat their domain",
-    description: "Create a domain similar to the target's to deceive users.",
+    name: "Typosquatting",
+    description: "Create similar domains to deceive users.",
     cooldown: 3,
     rarity: 2,
     effect: { kind: "heal", value: 2 }
   },
   {
     role: "attacker",
-    code: "email_spoofing",
-    name: "Email spoofing",
-    description: "Sending emails with a forged sender address to deceive recipients.",
+    category: "Recon & Supply chain",
+    code: "business_logic_abuse",
+    name: "Logic Abuse",
+    description: "Exploiting flaws in business logic for unauthorized actions.",
     cooldown: 3,
-    rarity: 6,
+    rarity: 3,
     effect: { kind: "heal", value: 2 }
   },
   {
     role: "attacker",
+    category: "Recon & Supply chain",
     code: "session_fixation",
-    name: "Session fixation",
-    description: "Exploiting a vulnerability that allows an attacker to hijack a valcode user session.",
+    name: "Session Fixation",
+    description: "Hijacking valid user sessions via fixed IDs.",
+    cooldown: 3,
+    rarity: 4,
+    effect: { kind: "heal", value: 2 }
+  },
+  {
+    role: "attacker",
+    category: "Recon & Supply chain",
+    code: "email_spoofing",
+    name: "Email Spoofing",
+    description: "Sending emails with forged sender addresses.",
     cooldown: 3,
     rarity: 5,
     effect: { kind: "heal", value: 2 }
+  },
+  {
+    role: "attacker",
+    category: "Recon & Supply chain",
+    code: "supply-chain_compromise",
+    name: "Supply-chain Attack",
+    description: "Compromising 3rd party software to gain access.",
+    cooldown: 6,
+    rarity: 6,
+    effect: { kind: "freeze", value: 2 }
   }
 ];
 
@@ -554,8 +553,8 @@ const defendermoves = [
 
 export const add = async () => {
   try{
-    await Ability.deleteMany({role: "defender"});
-    console.log(await Ability.insertMany([...defendermoves]) ? true : false);
+    await Ability.deleteMany({});
+    console.log(await Ability.insertMany([...attackermoves, ...defendermoves]) ? true : false);
   } catch(e){
     console.log(e.message);
   }

@@ -1,4 +1,4 @@
-import useState from "react";
+import {useState, useEffect} from "react";
 import "./Ability.css";
 import {useDraggable} from '@dnd-kit/core';
 import { useDroppable } from "@dnd-kit/core";
@@ -143,12 +143,11 @@ const abilityImages = {
     "threat_intelligence_integration": threat_intelligence_integration,
 }
 
-const Ability = ({data = null, unlocked = true, type = "damage", id = 0, ...props}) => {
+const Ability = ({data = null, unlocked = true, type = "damage", ...props}) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
-        id: data.code,
+        id: data?.code,
     });
-
-
+    
     return(
         <>
             {
