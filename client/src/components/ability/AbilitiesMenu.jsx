@@ -18,6 +18,17 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, de
         }
     })
 
+    useEffect(()=>{
+        console.log("Sprawdzam", ownedAbilities.filter(item => item.role == type).length, deck.filter(item => item == null).length);
+        if(ownedAbilities.filter(item => item.role == type).length <= 4 && deck.filter(item => item == null).length <= 0){
+            console.log("jak kuzwa",deck.filter(item => item == null) <= 0, deck.filter(item => item == null).length);
+            setIsEmpty(true); 
+        } else {
+            setIsEmpty(false);
+        }
+        console.log(isEmpty);
+    }, [deck[0], deck[1], deck[2], deck[3], ownedAbilities]);
+
     return(
         <div className={`w-[40%]  ${type == 'attacker' ? 'bg-linear-to-t from-red-950 to-red-700/80' : 'bg-linear-to-t from-sky-950 to-sky-700/80'} text-center pt-7 border-r-7 border-black/80`}>
             <div className="flex">
@@ -29,7 +40,6 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, de
                 {
                     ownedAbilities?.filter((item) => (item.role === type && (deck.filter((value, _) => (item.code == value?.code)).length == 0))).map((item, index) => {
                         return (<Ability key={index} data={item} unlocked/>);
-                        setIsEmpty(false);
                     })
                 }
                 {
@@ -40,7 +50,7 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, de
                 }
                 {
                     activeId != null ?
-                    <AbilityBin/>
+                    <AbilityBin role={type}/>
                     :
                     ""
                 }

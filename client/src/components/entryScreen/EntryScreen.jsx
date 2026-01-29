@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Character from "../lobby/Character.jsx";
-import "./EntryScreen.css";
 
 const EntryScreen = ({setUser})=>{
     const navigate = useNavigate();
