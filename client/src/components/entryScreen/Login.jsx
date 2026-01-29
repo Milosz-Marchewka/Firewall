@@ -33,14 +33,14 @@ const Login = ({setUser, handleGuest, handleSignup})=>{
     }
 
     return(
-        <div className="flex flex-col items-center bg-gray-700 text-white rounded-2xl w-1/4 h-1/3 pb-4">
+        <div className="flex flex-col items-center bg-zinc-700 text-white border-zinc-900 border-10 shadow-[10px_10px_0px_rgb(0_0_0_/_0.4)] w-1/3 h-fit pb-4 z-2">
             <Header children="Log into your account" />
             <Input type="text" name="username"  placeholder='Username' value={username} onChange={e => setUsername(e.target.value)} className=""/>
             <Input type="password" name="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)} className=""/>
             <Button onClick={handleLogin} children="Login"/>
-            <div className="flex gap-8 mt-4 ">
-                <Link onClick={handleSignup} children="Create an account"/>
-                <Link onClick={handleGuest} children="Continue as Guest"/>
+            <div className="flex gap-8 mt-4 font-jersey text-xl">
+                <Link onClick={handleSignup} className={"hover:underline"} children="Create an account"/>
+                <Link onClick={handleGuest} className={"hover:underline"} children="Continue as Guest"/>
             </div>
         </div>
     )

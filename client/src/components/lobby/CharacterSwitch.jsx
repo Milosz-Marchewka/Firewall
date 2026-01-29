@@ -25,7 +25,7 @@ const CharacterSwitch = () => {
             <div className="flex items-center justify-center text-red-400 
                 border-b-zinc-800
                 border-b-3 hover:border-b-red-400 hover:bg-zinc-700/50 
-                hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)]"
+                hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)] transition-all"
                 ref={attackerRef}
                 onClick={()=>charSelected("attacker")}>
                 <h3 className="font-jersey text-5xl py-2 px-5">Hacker</h3>
@@ -33,7 +33,7 @@ const CharacterSwitch = () => {
             <div className="flex items-center justify-center text-sky-400 
                 border-b-zinc-800
                 border-b-3 hover:border-b-sky-400 hover:bg-zinc-700/50
-                hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)]"
+                hover:text-shadow-[2px_2px_0px_rgb(0_0_0/_1)] transition-all"
                 ref={deffenderRef}
                 onClick={()=>charSelected("defender")}>
                 <h3 className="font-jersey text-5xl py-2 px-5 ">Cybersecurity Specialist</h3>

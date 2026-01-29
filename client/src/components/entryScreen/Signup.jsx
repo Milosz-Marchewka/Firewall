@@ -52,13 +52,13 @@ const Signup = ({setUser, handleSignup})=>{
     }
 
     return(
-        <div className="flex flex-col items-center bg-gray-700 text-white rounded-2xl w-1/4 h-1/3">
+        <div className="flex flex-col items-center bg-zinc-700 text-white border-zinc-900 border-10 shadow-[10px_10px_0px_rgb(0_0_0_/_0.4)] w-1/3 h-fit z-2">
             <Header children="Create a new account" />
             <Input type="text" name="username" placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} />
             <Input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <Button onClick={handleSignup} children="Sign up"/>
-            <Link onClick={handleSignup} children="Already have an account? Log in"/>
+            <Link onClick={handleSignup} className={"font-jersey text-xl py-3 hover:underline"} children="Already have an account? Log in"/>
         </div>
     )
 }

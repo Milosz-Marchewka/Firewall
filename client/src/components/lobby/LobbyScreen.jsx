@@ -11,7 +11,7 @@ import Level from "./Level.jsx";
 import Rank from "./Rank.jsx";
 import Character from "./Character.jsx";
 export const CharacterContext = createContext();
-const baseOuterStyles = `screen bg-gradient-to-t from-neutral-900 flex gap-20 overflow-x-clip `;
+const baseOuterStyles = `screen bg-gradient-to-t from-neutral-950 flex gap-20 overflow-x-clip `;
 const characterGradients = {
     attacker: "to-red-950",
     defender: "to-sky-950"
@@ -133,7 +133,7 @@ const LobbyScreen = ({user}) => {
                         <div className="flex-1 flex items-center">
                             <Deck deck={decks[characterSelected]} activeId={activeId}/>
                             <div className="relative w-3/4 h-full p-10 pb-15 flex flex-col justify-end items-center">
-                                <Character role={characterSelected}/>
+                                <Character role={characterSelected} className={"h-4/5 w-4/5"}/>
                                 <Rank />
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>

@@ -10,7 +10,7 @@ const roles = {
 const Character = ({role="attacker", className})=>{
 
     return(
-        <div className={`absolute h-4/5 w-4/5 mb-12 flex justify-center items-center ${className}`}>
+        <div className={`absolute mb-12 flex justify-center items-center ${className}`}>
             <img src={roles[role]} alt="Player" className="w-full pixelart mirrored"/>
         </div>
     )

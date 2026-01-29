@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Character from "../lobby/Character.jsx";
+import "./EntryScreen.css";
 
 const EntryScreen = ({setUser})=>{
     const navigate = useNavigate();
@@ -34,13 +35,16 @@ const EntryScreen = ({setUser})=>{
     }
 
     return(
-        <div className="screen relative bg-gradient-to-r from-sky-700 to-red-700 flex justify-center items-center">
-            <Character role="defender" className="h-30 w-[25%] absolute left-0 top-[40%] mirrored"/>
+        <div className="screen relative gradient-background flex justify-center items-center overflow-hidden">
+            <h1 className='font-jersey text-white text-[150px] absolute top-[7%] text-shadow-[10px_10px_0px_rgb(0_0_0_/_0.6)]'>
+                <span className='text-red-200'>FIRE</span><span className='text-sky-200'>WALL</span>
+            </h1>
+            <Character role="defender" className="w-[80%] absolute left-[-20%] top-[-20%] mirrored grayscale opacity-50 z-1 fade-left"/>
             {/* <Signup setUser={setUser}/>
             <br/> */}
             { showSignup ? <Signup setUser={setUser} handleSignup={handleSignup}/> : <Login setUser={setUser} handleGuest={handleGuest} handleSignup={handleSignup}/> }
             {/* <button onClick={handleGuest}>Continue as guest</button> */}
-            <Character role="attacker" className="h-30 w-[25%] absolute right-0 top-[40%]"/>
+            <Character role="attacker" className="w-[80%] absolute right-[-20%] top-[-20%] grayscale opacity-50 z-1 fade-left"/>
         </div>
     )
 }
