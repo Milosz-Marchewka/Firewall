@@ -9,43 +9,483 @@ import Ability from "./Abilities.js";
 // Target feel: slightly damage-forward, but still has heal + freeze tools.
 // Count here: 12 damage, 9 heal, 4 freeze
 // ==========================
-const attackermoves = [
-  // --- Credentials & Identity (7) ---
-  { role: "attacker", category: "Credentials & Identity", code: "password_guess", name: "Password guess", cooldown: 1, rarity: 1, effect: { kind: "damage", value: 1 } },
-  { role: "attacker", category: "Credentials & Identity", code: "credential_stuffing", name: "Credential stuffing", cooldown: 2, rarity: 2, effect: { kind: "damage", value: 3 } },
-  { role: "attacker", category: "Credentials & Identity", code: "typosquat_domain", name: "Typosquatting", cooldown: 3, rarity: 2, effect: { kind: "heal", value: 2 } },
-  { role: "attacker", category: "Credentials & Identity", code: "brute_force", name: "Brute-force", cooldown: 4, rarity: 3, effect: { kind: "damage", value: 4 } },
-  { role: "attacker", category: "Credentials & Identity", code: "session_fixation", name: "Session Fixation", cooldown: 3, rarity: 4, effect: { kind: "heal", value: 2 } },
-  { role: "attacker", category: "Credentials & Identity", code: "email_spoofing", name: "Email Spoofing", cooldown: 3, rarity: 5, effect: { kind: "heal", value: 2 } },
-  { role: "attacker", category: "Credentials & Identity", code: "mfa_bypass", name: "MFA Bypass Phishing", cooldown: 5, rarity: 6, effect: { kind: "freeze", value: 2 } },
+const attackermoves =  [
 
-  // --- Exploits & Persistence (7) ---
-  { role: "attacker", category: "Exploits & Persistence", code: "url_tampering", name: "URL Tampering", cooldown: 2, rarity: 1, effect: { kind: "damage", value: 2 } },
-  { role: "attacker", category: "Exploits & Persistence", code: "exploit_kit", name: "Exploit Kit", cooldown: 3, rarity: 2, effect: { kind: "damage", value: 3 } }, // NOWE
-  { role: "attacker", category: "Exploits & Persistence", code: "sql_injection", name: "SQL Injection", cooldown: 3, rarity: 3, effect: { kind: "damage", value: 4 } },
-  { role: "attacker", category: "Exploits & Persistence", code: "file_extension_bypass", name: "Extension Bypass", cooldown: 4, rarity: 4, effect: { kind: "damage", value: 4 } },
-  { role: "attacker", category: "Exploits & Persistence", code: "command_injection", name: "Command Injection", cooldown: 4, rarity: 5, effect: { kind: "damage", value: 5 } },
-  { role: "attacker", category: "Exploits & Persistence", code: "stored_xss", name: "Stored XSS", cooldown: 6, rarity: 6, effect: { kind: "damage", value: 7 } },
-  { role: "attacker", category: "Exploits & Persistence", code: "apt_intrusion", name: "APT Intrusion", cooldown: 6, rarity: 6, effect: { kind: "heal", value: 4 } },
+  // --- Credential & codeentity Attacks (4) ---
 
-  // --- Network & System (7) ---
-  { role: "attacker", category: "Network & System", code: "unsecured_wifi", name: "Unsecured Wi-Fi", cooldown: 2, rarity: 1, effect: { kind: "heal", value: 1 } },
-  { role: "attacker", category: "Network & System", code: "dns_poisoning", name: "DNS Poisoning", cooldown: 4, rarity: 2, effect: { kind: "freeze", value: 1 } }, // NOWE
-  { role: "attacker", category: "Network & System", code: "mitm_attack", name: "MITM Attack", cooldown: 4, rarity: 3, effect: { kind: "freeze", value: 1 } },
-  { role: "attacker", category: "Network & System", code: "ssrf", name: "SSRF", cooldown: 4, rarity: 4, effect: { kind: "heal", value: 3 } },
-  { role: "attacker", category: "Network & System", code: "priv_esc_misconfig", name: "Privilege Escalation", cooldown: 5, rarity: 5, effect: { kind: "damage", value: 6 } },
-  { role: "attacker", category: "Network & System", code: "mitb_attack", name: "MITB Attack", cooldown: 5, rarity: 5, effect: { kind: "freeze", value: 2 } },
-  { role: "attacker", category: "Network & System", code: "kernel_esc", name: "Kernel Escalation", cooldown: 5, rarity: 6, effect: { kind: "damage", value: 6 } },
+   {
 
-  // --- Recon & Supply chain (6) ---
-  { role: "attacker", category: "Recon & Supply chain", code: "open_dirs", name: "Open Directories", cooldown: 3, rarity: 1, effect: { kind: "heal", value: 1 } },
-  { role: "attacker", category: "Recon & Supply chain", code: "social_eng_hunt", name: "Social Engineering", cooldown: 3, rarity: 2, effect: { kind: "heal", value: 2 } }, // NOWE
-  { role: "attacker", category: "Recon & Supply chain", code: "logic_abuse", name: "Logic Abuse", cooldown: 3, rarity: 3, effect: { kind: "heal", value: 2 } },
-  { role: "attacker", category: "Recon & Supply chain", code: "zero_day", name: "Zero-Day Exploit", cooldown: 7, rarity: 6, effect: { kind: "damage", value: 8 } }, // NOWE
-  { role: "attacker", category: "Recon & Supply chain", code: "supply_chain", name: "Supply-chain Attack", cooldown: 6, rarity: 6, effect: { kind: "freeze", value: 2 } },
-  { role: "attacker", category: "Recon & Supply chain", code: "sandbox_escape", name: "Sandbox Escape", cooldown: 5, rarity: 6, effect: { kind: "damage", value: 6 } }
-];
+    role: "attacker",
 
+    category: "Credentials & Identity",
+
+    code: "password_guess",
+
+    name: "Password guess",
+
+    description: "Attempt to guess the password of the target system.",
+
+    cooldown: 1,
+
+    rarity: 1,
+
+    effect: { kind: "damage", value: 1 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Credentials & Identity",
+
+    code: "credential_stuffing",
+
+    name: "Credential stuffing",
+
+    description: "Reusing leaked credentials to gain access.",
+
+    cooldown: 2,
+
+    rarity: 2,
+
+    effect: { kind: "damage", value: 3 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Credentials & Identity",
+
+    code: "basic_brute-force_attack",
+
+    name: "Brute-force",
+
+    description: "Systematically trying combinations to crack passwords.",
+
+    cooldown: 3,
+
+    rarity: 4,
+
+    effect: { kind: "damage", value: 4 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Credentials & Identity",
+
+    code: "advanced_phishing_with_mfa_bypass",
+
+    name: "MFA Bypass Phishing",
+
+    description: "Sophisticated phishing to trick users into revealing MFA codes.",
+
+    cooldown: 5,
+
+    rarity: 6,
+
+    effect: { kind: "freeze", value: 2 }
+
+  },
+
+ 
+
+  // --- Exploits & Persistence ---
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "url_parameter_tampering",
+
+    name: "URL Tampering",
+
+    description: "Manipulate URL parameters to exploit vulnerabilities.",
+
+    cooldown: 2,
+
+    rarity: 1,
+
+    effect: { kind: "damage", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "basic_sql_injection",
+
+    name: "SQL Injection",
+
+    description: "Injecting malicious queries to manipulate databases.",
+
+    cooldown: 3,
+
+    rarity: 3,
+
+    effect: { kind: "damage", value: 4 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "file_extension_bypass",
+
+    name: "Extension Bypass",
+
+    description: "Exploiting upload validation to plant malicious files.",
+
+    cooldown: 4,
+
+    rarity: 4,
+
+    effect: { kind: "damage", value: 4 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "command_injection",
+
+    name: "Command Injection",
+
+    description: "Injecting commands to be executed by the host OS.",
+
+    cooldown: 4,
+
+    rarity: 5,
+
+    effect: { kind: "damage", value: 5 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "stored_xss_attack",
+
+    name: "Stored XSS",
+
+    description: "Injecting scripts permanently stored on the server.",
+
+    cooldown: 5,
+
+    rarity: 6,
+
+    effect: { kind: "damage", value: 7 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Exploits & Persistence",
+
+    code: "apt-style_long-term_intrusion",
+
+    name: "APT Intrusion",
+
+    description: "Establishing persistent presence within a target network.",
+
+    cooldown: 6,
+
+    rarity: 6,
+
+    effect: { kind: "heal", value: 4 }
+
+  },
+
+ 
+
+  // --- Network & System ---
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "connect_via_unsecured_wi-fi",
+
+    name: "Unsecured Wi-Fi",
+
+    description: "Connect to the target via an unsecured network.",
+
+    cooldown: 2,
+
+    rarity: 1,
+
+    effect: { kind: "heal", value: 1 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "man-in-the-middle_attack",
+
+    name: "MITM Attack",
+
+    description: "Intercepting and altering communications silently.",
+
+    cooldown: 4,
+
+    rarity: 3,
+
+    effect: { kind: "freeze", value: 1 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "server-side_request_forgery",
+
+    name: "SSRF",
+
+    description: "Forcing the server to make unauthorized internal requests.",
+
+    cooldown: 4,
+
+    rarity: 4,
+
+    effect: { kind: "heal", value: 3 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "privilege_escalation_via_misconfiguration",
+
+    name: "Privilege Escalation",
+
+    description: "Exploiting misconfigurations to gain higher privileges.",
+
+    cooldown: 5,
+
+    rarity: 5,
+
+    effect: { kind: "damage", value: 6 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "man-in-the-browser_attack",
+
+    name: "MITB Attack",
+
+    description: "Injecting code into browser to manipulate interactions.",
+
+    cooldown: 5,
+
+    rarity: 5,
+
+    effect: { kind: "freeze", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "kernel_privilege_escalation",
+
+    name: "Kernel Escalation",
+
+    description: "Exploiting kernel vulnerabilities for root access.",
+
+    cooldown: 5,
+
+    rarity: 6,
+
+    effect: { kind: "damage", value: 6 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Network & System",
+
+    code: "sandbox_escape",
+
+    name: "Sandbox Escape",
+
+    description: "Breaking out of restricted environments to host system.",
+
+    cooldown: 5,
+
+    rarity: 6,
+
+    effect: { kind: "damage", value: 6 }
+
+  },
+
+ 
+
+  // --- Recon & Supply chain ---
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "browse_open_directories",
+
+    name: "Open Directories",
+
+    description: "Look for sensitive info in open directories.",
+
+    cooldown: 3,
+
+    rarity: 1,
+
+    effect: { kind: "heal", value: 1 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "typosquat_their_domain",
+
+    name: "Typosquatting",
+
+    description: "Create similar domains to deceive users.",
+
+    cooldown: 3,
+
+    rarity: 2,
+
+    effect: { kind: "heal", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "business_logic_abuse",
+
+    name: "Logic Abuse",
+
+    description: "Exploiting flaws in business logic for unauthorized actions.",
+
+    cooldown: 3,
+
+    rarity: 3,
+
+    effect: { kind: "heal", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "session_fixation",
+
+    name: "Session Fixation",
+
+    description: "Hijacking valid user sessions via fixed IDs.",
+
+    cooldown: 3,
+
+    rarity: 4,
+
+    effect: { kind: "heal", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "email_spoofing",
+
+    name: "Email Spoofing",
+
+    description: "Sending emails with forged sender addresses.",
+
+    cooldown: 3,
+
+    rarity: 5,
+
+    effect: { kind: "heal", value: 2 }
+
+  },
+
+  {
+
+    role: "attacker",
+
+    category: "Recon & Supply chain",
+
+    code: "supply-chain_compromise",
+
+    name: "Supply-chain Attack",
+
+    description: "Compromising 3rd party software to gain access.",
+
+    cooldown: 6,
+
+    rarity: 6,
+
+    effect: { kind: "freeze", value: 2 }
+
+  }
+
+]; 
 // ==========================
 // DEFENDER (Cybersec) — 25 moves
 // Target: 50% damage, 35% heal, 15% freeze (approx with 25 items)

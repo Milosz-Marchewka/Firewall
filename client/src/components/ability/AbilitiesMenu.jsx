@@ -36,24 +36,26 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, de
                 {/* <div className="absolute text-4xl left-5 top-5 pointer" onClick={() => {handleClick()}}><img src={back} alt="Back" className={`${styles.th[role]} h-20 w-20 p-3 pixelart hover:shadow-[4px_4px_0px_rgb(20,20,20)] hover:-translate-y-[4px] hover:-translate-x-[4px] hoverable`}/></div> */}
                 <h1 className="mx-auto mb-7 text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
             </div>
-            <div className="grid grid-cols-2 gap-2 px-5 pb-1 h-fit max-h-195 w-full overflow-y-scroll max-w-full relative">
-                {
-                    ownedAbilities?.filter((item) => (item.role === type && (deck.filter((value, _) => (item.code == value?.code)).length == 0))).map((item, index) => {
-                        return (<Ability key={index} data={item} unlocked/>);
-                    })
-                }
-                {
-                    isEmpty ? 
-                    <h2 className="text-6xl font-jersey text-white/50 text-center col-span-2 px-30 pt-10">There is no available abilities</h2>
-                    :
-                    ""
-                }
-                {
-                    activeId != null ?
-                    <AbilityBin role={type}/>
-                    :
-                    ""
-                }
+            <div className="h-full overflow-scroll pb-30">
+                <div className="grid grid-cols-2 gap-2 px-5 pb-1 w-full max-w-full relative">
+                    {
+                        ownedAbilities?.filter((item) => (item.role === type && (deck.filter((value, _) => (item.code == value?.code)).length == 0))).map((item, index) => {
+                            return (<Ability key={index} data={item} unlocked/>);
+                        })
+                    }
+                    {
+                        isEmpty ? 
+                        <h2 className="text-6xl font-jersey text-white/50 text-center col-span-2 px-30 pt-10">There is no available abilities</h2>
+                        :
+                        ""
+                    }
+                    {
+                        activeId != null ?
+                        <AbilityBin role={type}/>
+                        :
+                        ""
+                    }
+                </div>
             </div>
         </div>
     );

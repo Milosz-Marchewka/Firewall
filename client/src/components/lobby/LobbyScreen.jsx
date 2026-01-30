@@ -11,7 +11,7 @@ import Level from "./Level.jsx";
 import Rank from "./Rank.jsx";
 import Character from "./Character.jsx";
 export const CharacterContext = createContext();
-const baseOuterStyles = `screen bg-gradient-to-t from-neutral-950 flex gap-20 overflow-x-clip `;
+const baseOuterStyles = `screen bg-gradient-to-t from-neutral-950 flex gap-20 `;
 const characterGradients = {
     attacker: "to-red-950",
     defender: "to-sky-950"
@@ -121,7 +121,7 @@ const LobbyScreen = ({user}) => {
     const [isSkillTreeShowed, setIsSkillTreeShowed] = useState(false);
     return(
         <div className={outerStyle}>
-            <SkillTreeScreen role={characterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed}/>
+            <SkillTreeScreen role={characterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities}/>
             <CharacterContext.Provider value = {[characterSelected, setCharacterSelected]}>
                 <DndContext onDragStart={(event) => handleDragStart(event)}
                 onDragEnd={(event) => handleDragEnd(event)}

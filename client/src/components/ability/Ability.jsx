@@ -157,22 +157,20 @@ const Ability = ({data = null, unlocked = true, type = "damage", ...props}) => {
                     <div className="flex-1 flex items-center justify-center">
                         <img src={abilityImages[data?.code]} alt="photo" className="w-32 pixelart"/>
                     </div>
-                    <div className="flex-2 py-2">
-                        <h2 className="text-[24px] leading-5 text-shadow-lg">{data?.name}</h2>
-                        <div className="grid grid-cols-2 grid-row-2 text-lg gap-x-5 my-2">
-                            <div>
-                                {
-                                    <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className="ml-auto pixelart w-[30px]"/>
-                                }
+                    <div className="flex-2 py-2 flex flex-col">
+                        <h2 className="text-[24px] leading-5 text-shadow-lg text-center pl-3">{data?.name}</h2>
+                        <div className="flex align-middle w-full items-center flex-1 max-w-40 mx-auto pl-3">
+                            <div className="flex flex-1 justify-center items-center">
+                                <img src={abilityImages[data.effect.kind]} alt={data.effect.kind} className=" pixelart w-[40px]"/>
+                                <div className="text-left text-2xl w-fit">
+                                    {data?.effect?.value}
+                                </div>
                             </div>
-                            <div className="text-left text-2xl">
-                                {data?.effect?.value}
-                            </div>
-                            <div>
-                                <img src={cooldownIcon} alt="cooldown" className="ml-auto pixelart w-[30px]"/>
-                            </div>
-                            <div className="text-left text-2xl">
-                                {data?.cooldown}
+                            <div className="flex flex-1 justify-center">
+                                <img src={cooldownIcon} alt="cooldown" className="pixelart w-[40px]"/>
+                                <div className="text-left text-2xl w-fit">
+                                    {data?.cooldown}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -20,6 +20,7 @@ a, button, [role="button"], .cursor-pointer, .hoverable {
 .screen{
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 }
 
 .unselectable{
