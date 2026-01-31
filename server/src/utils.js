@@ -60,3 +60,19 @@ export const validatePassword = (password) => {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return passwordRegex.test(password);
 }
+
+export const clearCookies = (cookies, res)=>{
+    const names = new Set(Object.keys(cookies || {}));
+    names.add('auth');
+    const paths = ['/', '/api', '/api/account', '/api/account/'];
+
+    names.forEach((name) => {
+        paths.forEach((path) => {
+            res.clearCookie(name, {
+                sameSite: "lax",
+                secure: process.env.NODE_ENV === 'production',
+                path,
+            });
+        });
+    });
+}

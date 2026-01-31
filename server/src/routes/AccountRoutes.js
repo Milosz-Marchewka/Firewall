@@ -5,11 +5,33 @@ import login from '../controllers/accounts/login.js';
 import addtoLevel from '../controllers/accounts/addToLevel.js';
 import guest from '../controllers/accounts/guest.js';
 import { getUserAbilities } from '../controllers/abilities/getUserAbilities.js';
+import User from '../db/User.js';
+import Guest from '../db/Guest.js';
 
 const accountRoutes = Router();
 
-accountRoutes.get("/auth", requireAuth, (req, res)=>{
-    res.json({id: req.user._id});
+accountRoutes.get("/auth", requireAuth, async (req, res)=>{
+    try {
+        const user = await User.findById(req.user._id).select('-password -__v');
+        if (user) {
+            return res.json({
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                level: user.level,
+                levelPoints: user.levelPoints,
+            });
+        }
+
+        const guest = await Guest.findById(req.user._id).select('-password -__v');
+        if (guest) {
+            return res.json({ id: guest._id });
+        }
+
+        return res.status(404).send("User not found");
+    } catch {
+        return res.status(500).send("Server error");
+    }
 });
 accountRoutes.post("/signup", signup);
 accountRoutes.post("/login", login);

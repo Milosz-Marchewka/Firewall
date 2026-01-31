@@ -3,5 +3,9 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 export const makeJwtToken = (payload, expiresIn = '7d') =>{
-    return jwt.sign({id: payload._id}, process.env.JWT_SECRET, {expiresIn});
+    const id = typeof payload === 'string'
+        ? payload
+        : (payload?.id ?? payload?._id);
+
+    return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn});
 }

@@ -100,10 +100,16 @@ const RoomScreen = () => {
         };
 
         // pagehide triggers on back/forward cache and tab close in many browsers.
+        // popstate covers browser back/forward within SPA history.
+        // beforeunload is a fallback for full-page navigations.
         window.addEventListener('pagehide', doLeaveNow);
+        window.addEventListener('popstate', doLeaveNow);
+        window.addEventListener('beforeunload', doLeaveNow);
 
         return () => {
             window.removeEventListener('pagehide', doLeaveNow);
+            window.removeEventListener('popstate', doLeaveNow);
+            window.removeEventListener('beforeunload', doLeaveNow);
             scheduleLeave();
         };
     }, [token]);

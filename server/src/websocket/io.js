@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import Game from '../db/Game.js';
 import { extractRoomToken } from '../utils.js';
-import AbilityCatalog from '../temp/Abilities.js';
+import AbilityCatalog from '../db/Abilities.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const buildTokenRegex = (token) => new RegExp(`/room/${escapeRegex(token)}/?$`);
@@ -595,7 +595,13 @@ export default function createIo(httpServer) {
                 if (attackerHp <= 0 || defenderHp <= 0) {
                     game.status = 'finished';
                     game.winner = attackerHp <= 0 ? "defender" : "attacker";
-                    game.timeElapsed = Math.floor(((Math.abs(new Date() - socket.data?.startTime))/1000)/60);
+                    const startTime = socket.data?.startTime instanceof Date ? socket.data.startTime : null;
+                    if (startTime) {
+                        const elapsedMs = Math.abs(Date.now() - startTime.getTime());
+                        game.timeElapsed = Math.floor((elapsedMs / 1000) / 60);
+                    } else {
+                        game.timeElapsed = 0;
+                    }
                 } else {
                     // Advance turn
                     let next = opponentRole(role);

@@ -63,7 +63,7 @@ const BattleScreen = ({ token, role }) => {
     }
 
     return (
-        <div className="w-full max-w-5xl relative">
+        <div className="w-full max-w-5xl relative text-white">
             {state.finished ? (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="bg-black/70 text-white px-6 py-4 rounded text-2xl">

@@ -2,7 +2,7 @@
 // NOTE: This is a "HALVED" move list (~25 per scodee), grouped into clear ability families
 // to support future skill-tree progression (each family can become an upgrade path).
 
-import Ability from "./Abilities.js";
+import Ability from "../db/Abilities.js";
 
 // ==========================
 // ATTACKER (Hacker) — 25 moves

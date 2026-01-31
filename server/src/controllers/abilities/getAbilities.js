@@ -1,18 +1,35 @@
-import Ability from "../../temp/Abilities.js"
+import Ability from "../../db/Abilities.js"
 
 export const getAbilities = async (req, res)=>{
-    let abilities = [];
-    if(req.query?.role){
-        abilities = await Ability.find({role: req.query.role}).select("-__v -_id").sort((a,b)=>a.rarity-b.rarity);
-    } else {
-        const attacker = [...await Ability.find({role: "attacker"}).select("-__v -_id")].sort((a,b)=>a.rarity-b.rarity);
-        const defender = [...await Ability.find({role: "defender"})].sort((a,b)=>a.rarity-b.rarity);
-        abilities = {
-            attacker: attacker,
-            defender: defender
+    try{
+        let abilities;
+        const requestedRole = typeof req.query?.role === 'string' ? req.query.role.toLowerCase() : null;
+        if(requestedRole){
+            if (requestedRole !== 'attacker' && requestedRole !== 'defender') {
+                return res.status(400).json({ error: 'invalid_role' });
+            }
+
+            abilities = await Ability.find({ role: requestedRole })
+                .select("-__v -_id")
+                .sort({ rarity: 1 }); // ASC
+        } else {
+            const attacker = await Ability.find({ role: "attacker" })
+            .select("-__v -_id")
+            .sort({ rarity: 1 });
+
+            const defender = await Ability.find({ role: "defender" })
+                .select("-__v -_id")
+                .sort({ rarity: 1 });
+
+            abilities = {
+                attacker,
+                defender
+            }
         }
+        return res.status(200).json(abilities);
+    } catch(e){
+        console.log(e);
+        
+        return res.status(500).send("Internal server error");
     }
-    abilities ? 
-        res.status(200).json(abilities) :
-        res.status(500).send("Internal server error");
 }

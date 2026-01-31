@@ -1,6 +1,7 @@
-const Rank = ({rank = "Dinnerbone"})=>{
+const Rank = ({username, rank = "Rank"})=>{
+
     return(
-        <p className="font-jersey text-3xl mx-auto text-white">{rank}</p>
+        <p className="font-jersey text-3xl mx-auto text-white">{username} [{rank}]</p>
     )
 }
 

@@ -3,9 +3,10 @@ import User from "../../db/User.js";
 import jwt from 'jsonwebtoken';
 
 export const getUserAbilities = async (req, res)=>{
-    const uid = jwt.verify(req.headers.cookie.replace("auth=", ""), process.env.JWT_SECRET).id;
+    const token = req.cookies?.auth;
+    const uid = token ? jwt.verify(token, process.env.JWT_SECRET)?.id : null;
     
-    const user = await User.findOne({_id: uid});
+    const user = uid ? await User.findOne({_id: uid}) : null;
     let guest = null;
     if(!user){
         guest = await Guest.findOne({_id: uid});

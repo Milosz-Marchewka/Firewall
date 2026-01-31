@@ -1,7 +1,7 @@
 import User from "../../db/User.js";
 import bcrypt from 'bcrypt';
 import { makeJwtToken } from "./makeJwtToken.js";
-import { validateEmail, validateUsername, validatePassword } from "../../utils.js";
+import { validateEmail, validateUsername, validatePassword, clearCookies } from "../../utils.js";
 
 const signup = async (req, res) => {
     if([req.body.username, req.body.email, req.body.password].some(f => !f)){
@@ -17,10 +17,14 @@ const signup = async (req, res) => {
     });
     try{
         await user.save();
-        res.cookie("auth", makeJwtToken(user._id), {
+
+        clearCookies(req.cookies, res);
+
+        res.cookie("auth", makeJwtToken({id: user._id, username: user.username}), {
             httpOnly: true,
             sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
+            path: '/api/account',
             maxAge: 1000 * 60 * 60 * 24 * 7
         });
         

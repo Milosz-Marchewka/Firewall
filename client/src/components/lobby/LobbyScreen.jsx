@@ -134,7 +134,7 @@ const LobbyScreen = ({user}) => {
                             <Deck deck={decks[characterSelected]} activeId={activeId}/>
                             <div className="relative w-3/4 h-full p-10 pb-15 flex flex-col justify-end items-center">
                                 <Character role={characterSelected} className={"h-4/5 w-4/5"}/>
-                                <Rank />
+                                <Rank username={user.username}/>
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>

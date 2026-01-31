@@ -1,14 +1,18 @@
 import Guest from "../../db/Guest.js"
+import { clearCookies } from "../../utils.js";
 import { makeJwtToken } from "./makeJwtToken.js";
 
 const guest = async (req, res)=>{
     const guest = new Guest({});
     try{
-        guest.save();
-        res.cookie("auth", makeJwtToken(guest._id), {
+        await guest.save();
+
+        clearCookies(req.cookies, res);
+        res.cookie("auth", makeJwtToken({id: guest._id}), {
             httpOnly: true,
             sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
+            path: '/api/account',
             maxAge: 1000 * 60 * 60 * 24 // 24h for guest
         });
 

@@ -4,9 +4,11 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Character from "../lobby/Character.jsx";
 
-const EntryScreen = ({setUser})=>{
+const EntryScreen = ({user, setUser})=>{
     const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
+
+    if(user) navigate("/");
 
     const handleGuest = async ()=>{
         try{

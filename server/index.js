@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'node:http';
 import { connectDB } from './src/db/Connection.js';
+import { add } from './src/temp/addAbilities.js';
 import gameRoutes from './src/routes/GameRoutes.js';
 import accountRoutes from './src/routes/AccountRoutes.js';
 import createIo from './src/websocket/io.js';

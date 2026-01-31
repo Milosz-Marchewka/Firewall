@@ -1,6 +1,7 @@
 import User from "../../db/User.js";
 import bcrypt from 'bcrypt';
 import { makeJwtToken } from "./makeJwtToken.js";
+import { clearCookies } from "../../utils.js";
 
 const login = async (req, res)=>{
     if((!req.body.email && !req.body.username) || !req.body.password){
@@ -12,17 +13,20 @@ const login = async (req, res)=>{
             { username: req.body.username });
         
         if(!user){
-            return res.status(401).send("User not found.");
+            return res.status(404).send("User not found.");
         }
         const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
         if(!isPasswordValid){
             return res.status(401).send("Invalid password.");
         }
 
-        res.cookie("auth", makeJwtToken(user._id), {
+        clearCookies(req.cookies, res);
+
+        res.cookie("auth", makeJwtToken({id: user._id, username: user.username}), {
             httpOnly: true,
             sameSite: "lax",
             secure: process.env.NODE_ENV === 'production',
+            path: '/api/account',
             maxAge: 1000 * 60 * 60 * 24 * 7
         });
 
