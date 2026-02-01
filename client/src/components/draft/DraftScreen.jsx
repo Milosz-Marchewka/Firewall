@@ -109,12 +109,24 @@ const DraftScreen = ({role, setStatus})=>{
 // on select: if user has less than 4 abilities, refresh
 // else proceed to battle screen
     return(
-        <div>
-            {!role ? <div>Loading…</div> : null}
-            {meDone && !otherDone ? <div>Other person still choosing…</div> : null}
-            {!meDone && current.map((ability, index)=>
-                <Ability key={ability.code ?? index} data={ability} unlocked={true} onClick={()=>handlePicked(ability)}/>
-            )}
+        <div className={`screen flex flex-col items-center justify-center gap-5 gradient-background-${role}`}>
+            <div className="text-center">
+                <h1 className="font-jersey text-white text-8xl">DRAFT</h1>
+                <h3 className={`text-${role == "attacker" ? "red" : "sky"}-200 font-jersey text-4xl`}>Choose your ability:</h3>
+            </div>
+            <div className={`w-1/2 h-50 flex justify-center items-center px-10 gap-10 border-3 ${role == "attacker" ? "border-red-600" : "border-sky-600"} rounded-2xl ${role == "attacker" ? "bg-red-400/10" : "bg-sky-400/10"}`}>
+                {!role ? <div>Loading…</div> : null}
+                {meDone && !otherDone ? <div className="font-jersey text-white/80 text-4xl text-center w-full">Other person still choosing…</div> : null}
+                {!meDone && current.map((ability, index)=>
+                    <Ability key={ability.code ?? index} data={ability} unlocked={true} onClick={()=>handlePicked(ability)}/>
+                )}
+            </div>
+            <div className="flex text-white font-jersey gap-10 text-[40px]">
+                <div className={`w-8 h-8 bg-${picked.length >= 1 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 bg-${picked.length >= 2 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 bg-${picked.length >= 3 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 bg-${picked.length >= 4 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+            </div>
         </div>
     )
 }

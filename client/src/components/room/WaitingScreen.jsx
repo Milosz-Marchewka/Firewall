@@ -5,7 +5,7 @@ const WaitingScreen = ({role, players}) =>{
     console.log(players, role);
     
     return(
-        <div className="w-screen h-screen flex mx-auto overflow-hidden text-white relative">
+        <div className="w-screen h-screen flex mx-auto overflow-hidden text-white relative gradient-background">
             <div className="absolute top-0 left-[50%] -translate-x-[50%] font-jersey text-center mt-5 w-130">
                 <h2 className="w-full bg-neutral-500 text-7xl text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.9)] shadow-[5px_5px_0px_rgb(0_0_0_/_0.9)] px-5 py-2 border-b-5 border-black/50">Quick Match</h2>
                 <h3 className={`w-full ${ players < 2 ? 'bg-neutral-800' : 'bg-orange-400'} text-5xl px-10 py-2 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.9)] shadow-[5px_5px_0px_rgb(0_0_0_/_0.9)]`}>                    

@@ -21,7 +21,7 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, de
     useEffect(()=>{
         console.log("Sprawdzam", ownedAbilities.filter(item => item.role == type).length, deck.filter(item => item == null).length);
         if(ownedAbilities.filter(item => item.role == type).length <= 4 && deck.filter(item => item == null).length <= 0){
-            console.log("jak kuzwa",deck.filter(item => item == null) <= 0, deck.filter(item => item == null).length);
+            console.log("jak kuzwa", deck.filter(item => item == null) <= 0, deck.filter(item => item == null).length);
             setIsEmpty(true); 
         } else {
             setIsEmpty(false);

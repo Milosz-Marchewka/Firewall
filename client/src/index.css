@@ -88,6 +88,21 @@ body{
     background-image: linear-gradient(90deg, oklch(32.143% 0.06365 239.338) 0%, rgb(17, 17, 20) 30%, rgb(17,17,17) 55%, rgb(25, 17, 17) 70%, oklch(30.818% 0.11854 25.746) 100%);
 }
 
+.gradient-background-mirrored{
+    background-color: black;
+    background-image: linear-gradient(90deg, oklch(30.818% 0.11854 25.746) 0%, rgb(25, 17, 17) 30%, rgb(17,17,17) 55%, rgb(17, 17, 20) 70%, oklch(32.143% 0.06365 239.338) 100%);
+}
+
+.gradient-background-attacker{
+    background-color: black;
+    background-image: linear-gradient(90deg, oklch(30.818% 0.11854 25.746) 0%, rgb(25, 17, 17) 30%, rgb(17,17,17) 55%, rgb(25, 17, 17) 70%, oklch(30.818% 0.11854 25.746) 100%);
+}
+
+.gradient-background-defender{
+    background-color: black;
+    background-image: linear-gradient(90deg, oklch(32.143% 0.06365 239.338) 0%, rgb(17, 17, 20) 30%, rgb(17,17,17) 55%, rgb(17, 17, 20) 70%, oklch(32.143% 0.06365 239.338) 100%);
+}
+
 .fade-left {
   mask-image: linear-gradient(to right, transparent 30%, black 100%);
   mask-repeat: no-repeat;

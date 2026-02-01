@@ -135,7 +135,7 @@ const RoomScreen = () => {
     }
 
     return (
-        <div className="screen flex justify-center items-center gradient-background overflow-hidden">
+        <div className="screen flex justify-center items-center overflow-hidden">
             {status === "joining" ? <WaitingScreen role={role} players={players} /> : status === "draft" ? <DraftScreen role={role} setStatus={setStatus}/> : <BattleScreen token={token} role={role} />}
         </div>
     );
