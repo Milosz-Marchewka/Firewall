@@ -56,8 +56,8 @@ const Signup = ({setUser, handleSignup})=>{
             <Header children="Create a new account" />
             <Input type="text" name="username" placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} />
             <Input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <Button onClick={handle} children="Sign up"/>
+            <Input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e)=>e.code==="Enter" ? handle() : ""}/>
+            <Button onClick={handle} children="Sign up" className="mt-8 bg-yellow-500 hover:bg-yellow-400"/>
             <Link onClick={handleSignup} className={"font-jersey text-xl py-3 hover:underline"} children="Already have an account? Log in"/>
         </div>
     )

@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import Game from '../db/Game.js';
 import { extractRoomToken } from '../utils.js';
 import AbilityCatalog from '../db/Abilities.js';
+import getUsername from '../controllers/accounts/getUsername.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const buildTokenRegex = (token) => new RegExp(`/room/${escapeRegex(token)}/?$`);
@@ -86,7 +87,7 @@ const toBattleState = (game) => {
     };
 };
 
-const releaseSocketFromRoom = async (io, socket, roomId) => {
+const releaseSocketFromRoom = async (io, socket, id, roomId) => {
     if (!roomId) return;
 
     const role = socket.data?.role;
@@ -96,7 +97,7 @@ const releaseSocketFromRoom = async (io, socket, roomId) => {
         if (role === 'attacker' || role === 'defender') {
             const doneKey = roleDoneKey(role);
             updated = await Game.findOneAndUpdate(
-                { _id: roomId, [`${role}.id`]: socket.id },
+                { _id: roomId, [`${role}.id`]: id },
                 { $set: { [`${role}.id`]: null, status: 'waiting', ...(doneKey ? { [doneKey]: false } : {}) } },
                 { new: true }
             );
@@ -104,7 +105,7 @@ const releaseSocketFromRoom = async (io, socket, roomId) => {
 
         if (!updated) {
             updated = await Game.findOneAndUpdate(
-                { _id: roomId, 'attacker.id': socket.id },
+                { _id: roomId, 'attacker.id': id },
                 { $set: { 'attacker.id': null, status: 'waiting', 'draft.attackerDone': false } },
                 { new: true }
             );
@@ -112,7 +113,7 @@ const releaseSocketFromRoom = async (io, socket, roomId) => {
 
         if (!updated) {
             updated = await Game.findOneAndUpdate(
-                { _id: roomId, 'defender.id': socket.id },
+                { _id: roomId, 'defender.id': id },
                 { $set: { 'defender.id': null, status: 'waiting', 'draft.defenderDone': false } },
                 { new: true }
             );
@@ -130,7 +131,7 @@ const releaseSocketFromRoom = async (io, socket, roomId) => {
         socket.leave(roomId);
         socket.to(roomId).emit('player-left', { roomId });
         if (updated) {
-            socket.to(roomId).emit('room-state', { roomId, players: countPlayers(updated) });
+            socket.to(roomId).emit('room-state', { roomId, players: {count: countPlayers(updated)}, usernames: {defender: await getUsername(updated?.defender?.id) ?? "no5", attacker: await getUsername(updated?.attacker?.id) ?? "no6" } });
             socket.to(roomId).emit('draft-status', {
                 attackerDone: !!updated.draft?.attackerDone,
                 defenderDone: !!updated.draft?.defenderDone,
@@ -158,11 +159,12 @@ export default function createIo(httpServer) {
     io.on('connection', (socket) => {
         socket.on('join-room', async (payload, ack) => {
             try {
-                const raw = typeof payload === 'string'
+                const raw = typeof payload === 'object'
                     ? payload
                     : (payload?.url ?? payload?.token ?? payload?.roomUrl ?? payload?.room);
 
-                const token = extractRoomToken(raw);
+                const token = extractRoomToken(raw?.token);
+                
                 if (!token) {
                     const response = { ok: false, error: 'invalid_room' };
                     if (typeof ack === 'function') return ack(response);
@@ -183,14 +185,14 @@ export default function createIo(httpServer) {
 
                 // If this socket is still associated with another room (e.g. browser back button
                 // navigating away without a clean leave), release that old room before joining.
-                if (socket.data?.roomId && socket.data.roomId !== roomId) {
-                    await releaseSocketFromRoom(io, socket, socket.data.roomId);
+                if (socket.data?.roomId && socket.data.roomId !== roomId && raw?.id) {
+                    await releaseSocketFromRoom(io, socket, raw.id, socket.data.roomId);
                 }
 
                 // If this socket was already assigned a slot in this game, treat this as a re-join.
                 // This happens in dev due to React StrictMode double-invoking effects.
-                if (game.attacker?.id === socket.id || game.defender?.id === socket.id) {
-                    const role = game.attacker?.id === socket.id ? 'attacker' : 'defender';
+                if (game.attacker?.id === raw?.id || game.defender?.id === raw?.id) {
+                    const role = game.attacker?.id === raw?.id ? 'attacker' : 'defender';
 
                     // If the socket was previously in another room, leave it.
                     if (socket.data?.roomId && socket.data.roomId !== roomId) {
@@ -201,6 +203,7 @@ export default function createIo(httpServer) {
                     socket.data.roomId = roomId;
                     socket.data.roomToken = token;
                     socket.data.role = role;
+                    socket.data.username = raw?.username;
 
                     const response = { ok: true, roomId, players: countPlayers(game), role };
                     if (typeof ack === 'function') return ack(response);
@@ -234,7 +237,7 @@ export default function createIo(httpServer) {
 
                 const updated = await Game.findOneAndUpdate(
                     { _id: game._id, [`${role}.id`]: null },
-                    { $set: { [`${role}.id`]: socket.id } },
+                    { $set: { [`${role}.id`]: raw?.id } },
                     { new: true }
                 );
 
@@ -259,14 +262,14 @@ export default function createIo(httpServer) {
                     if (retryRole && retryRole !== role) {
                         const retried = await Game.findOneAndUpdate(
                             { _id: game._id, [`${retryRole}.id`]: null },
-                            { $set: { [`${retryRole}.id`]: socket.id } },
+                            { $set: { [`${retryRole}.id`]: raw?.id } },
                             { new: true }
                         );
 
                         if (retried) {
                             socket.data.role = retryRole;
                             const playersAfterRetry = countPlayers(retried);
-                            io.to(roomId).emit('room-state', { roomId, players: playersAfterRetry });
+                            io.to(roomId).emit('room-state', { roomId, players: playersAfterRetry , usernames: {defender: await getUsername(retried?.defender?.id) ?? "no7", attacker: await getUsername(retried?.attacker?.id) ?? "no8" } });
                             io.to(roomId).emit('player-joined', { roomId, role: retryRole });
 
                             const bothJoinedRetry = retried.attacker?.id != null && retried.defender?.id != null;
@@ -275,7 +278,8 @@ export default function createIo(httpServer) {
                                     { _id: retried._id, status: { $ne: 'in_progress' } },
                                     { $set: { status: 'in_progress' } }
                                 );
-                                io.to(roomId).emit('room-ready', { roomId });
+                                console.log("hiretry");
+                                io.to(roomId).emit('room-ready', { roomId, usernames: { defender: getUsername(retried.defender?.id) ?? "no3", attacker: getUsername(retried.attacker?.id) ?? "no4" } });
                             }
 
                             const response = { ok: true, roomId, players: playersAfterRetry, role: retryRole };
@@ -292,9 +296,11 @@ export default function createIo(httpServer) {
                 }
 
                 socket.data.role = role;
+                console.log(socket.data);
+                
 
                 const playersAfterJoin = countPlayers(updated);
-                io.to(roomId).emit('room-state', { roomId, players: playersAfterJoin });
+                io.to(roomId).emit('room-state', { roomId, players: playersAfterJoin, usernames: {defender: await getUsername(updated?.defender?.id) ?? "no1", attacker: await getUsername(updated?.attacker?.id) ?? "no2" } });
                 io.to(roomId).emit('player-joined', { roomId, role });
 
                 const bothJoined = updated.attacker?.id != null && updated.defender?.id != null;
@@ -306,13 +312,13 @@ export default function createIo(httpServer) {
                 }
 
                 if (bothJoined) {
-                    io.to(roomId).emit('room-ready', { roomId });
+                    io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(updated.defender?.id) ?? "no", attacker: await getUsername(updated.attacker?.id) ?? "no2" } });
                 }
 
                 const response = { ok: true, roomId, players: playersAfterJoin, role };
                 if (typeof ack === 'function') return ack(response);
-            } catch {
-                const response = { ok: false, error: 'server_error' };
+            } catch(e) {
+                const response = { ok: false, error: 'you done fucked something up - ' + e.message };
                 if (typeof ack === 'function') return ack(response);
                 socket.emit('join-error', response);
             }
@@ -634,11 +640,11 @@ export default function createIo(httpServer) {
 
         socket.on('leave-room', async (payload, ack) => {
             try {
-                const raw = typeof payload === 'string'
+                const raw = typeof payload === 'object'
                     ? payload
                     : (payload?.url ?? payload?.token ?? payload?.roomUrl ?? payload?.room);
 
-                const token = extractRoomToken(raw);
+                const token = extractRoomToken(raw?.token);
                 const tokenRegex = token ? buildTokenRegex(token) : null;
 
                 let game = null;
@@ -662,7 +668,7 @@ export default function createIo(httpServer) {
                 if (role === 'attacker' || role === 'defender') {
                     const doneKey = roleDoneKey(role);
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, [`${role}.id`]: socket.id },
+                        { _id: roomId, [`${role}.id`]: raw?.id },
                         { $set: {
                             [`${role}.id`]: null,
                             [`${role}.abilities`]: [],
@@ -677,14 +683,14 @@ export default function createIo(httpServer) {
                 // Fallback: clear whichever slot matches this socket.
                 if (!updated) {
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'attacker.id': socket.id },
+                        { _id: roomId, 'attacker.id': raw?.id },
                         { $set: { 'attacker.id': null, 'attacker.abilities': [], 'skipTurns.attacker': 0, status: 'waiting', 'draft.attackerDone': false } },
                         { new: true }
                     );
                 }
                 if (!updated) {
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'defender.id': socket.id },
+                        { _id: roomId, 'defender.id': raw?.id },
                         { $set: { 'defender.id': null, 'defender.abilities': [], 'skipTurns.defender': 0, status: 'waiting', 'draft.defenderDone': false } },
                         { new: true }
                     );
@@ -704,7 +710,7 @@ export default function createIo(httpServer) {
                 }
 
                 const players = updated ? countPlayers(updated) : 0;
-                socket.to(roomId).emit('room-state', { roomId, players });
+                socket.to(roomId).emit('room-state', { roomId, players, usernames: {defender: await getUsername(updated?.defender?.id) ?? "no5", attacker: await getUsername(updated?.attacker?.id) ?? "no6" } });
                 socket.to(roomId).emit('player-left', { roomId });
                 if (updated) {
                     socket.to(roomId).emit('draft-status', {
@@ -721,7 +727,7 @@ export default function createIo(httpServer) {
             }
         });
 
-        socket.on('disconnect', async () => {
+        socket.on('disconnect', async (payload) => {
             const roomId = socket.data?.roomId;
             if (!roomId) return;
 
@@ -733,7 +739,7 @@ export default function createIo(httpServer) {
                 if (role === 'attacker' || role === 'defender') {
                     const doneKey = roleDoneKey(role);
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, [`${role}.id`]: socket.id },
+                        { _id: roomId, [`${role}.id`]: payload?.id },
                         { $set: {
                             [`${role}.id`]: null,
                             [`${role}.abilities`]: [],
@@ -748,7 +754,7 @@ export default function createIo(httpServer) {
                 // Fallback: if role wasn't stored, clear whichever slot matches this socket.
                 if (!updated) {
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'attacker.id': socket.id },
+                        { _id: roomId, 'attacker.id': payload?.id },
                         { $set: { 'attacker.id': null, 'attacker.abilities': [], 'skipTurns.attacker': 0, status: 'waiting', 'draft.attackerDone': false } },
                         { new: true }
                     );
@@ -756,7 +762,7 @@ export default function createIo(httpServer) {
 
                 if (!updated) {
                     updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'defender.id': socket.id },
+                        { _id: roomId, 'defender.id': payload?.id },
                         { $set: { 'defender.id': null, 'defender.abilities': [], 'skipTurns.defender': 0, status: 'waiting', 'draft.defenderDone': false } },
                         { new: true }
                     );

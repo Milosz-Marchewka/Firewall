@@ -1,8 +1,6 @@
 import Ability from "../ability/Ability";
 
 const DeckBattle = ({role, abilities, myTurn, state, handleUse, username, rank, hp, overflow}) => {
-
-
     return (
         <div className={`fixed bottom-0 left-0 w-2/3`}>
             <div className='w-2/3 text-white font-jersey p-2'>

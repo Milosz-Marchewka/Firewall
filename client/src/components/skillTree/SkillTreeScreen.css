@@ -60,3 +60,23 @@ td > div + div {
 
 
 .locked{}
+
+.popUp{
+    animation-name: pop-up;
+    animation-duration: 70ms;
+    animation-timing-function: linear;
+}
+
+@keyframes pop-up{
+    0%{
+        transform: scale(10%);
+    }
+
+    80%{
+        transform: scale(110%);
+    }
+    
+    100%{
+        transform: scale(100%);
+    }
+}

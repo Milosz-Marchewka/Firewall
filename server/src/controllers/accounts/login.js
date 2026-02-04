@@ -33,8 +33,6 @@ const login = async (req, res)=>{
         const safeUser = user.toObject();
         delete safeUser.password;
         delete safeUser.__v;
-
-        console.log(safeUser);
         
         return res.status(200).send(safeUser);
     } catch (error) {

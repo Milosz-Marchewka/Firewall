@@ -5,12 +5,13 @@ import DraftScreen from '../draft/DraftScreen.jsx';
 import WaitingScreen from './WaitingScreen.jsx';
 import BattleScreen from '../battle/BattleScreen.jsx';
 
-const RoomScreen = () => {
+const RoomScreen = ({user}) => {
     const { token } = useParams();
     const [status, setStatus] = useState('joining');
     const [error, setError] = useState(null);
     const [role, setRole] = useState(null);
     const [players, setPlayers] = useState(null);
+    const [usernames, setUsernames] = useState({defender: "", attacker: ""});
 
     const navigate = useNavigate();
     const leaveTimerRef = useRef(null);
@@ -24,7 +25,7 @@ const RoomScreen = () => {
 
             if (!socket.connected) socket.connect();
 
-            socket.emit('join-room', token, (ack) => {
+            socket.emit('join-room', {token, username: user?.username, id: user?.id}, (ack) => {
                 if (isCancelled) return;
 
                 if (!ack?.ok) {
@@ -46,11 +47,17 @@ const RoomScreen = () => {
         const onRoomState = (payload) => {
             if (isCancelled) return;
             if (typeof payload?.players === 'number') setPlayers(payload.players);
+            setUsernames(payload?.usernames);
+            console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
+            
         };
 
-        const onRoomReady = () => {
+        const onRoomReady = (payload) => {
+            console.log("PAYLOAD: ", payload);
+            
             setTimeout(()=>{
                 if (isCancelled) return;
+                setUsernames(payload?.usernames);
                 setStatus('draft');
             }, 1500);
         };
@@ -77,7 +84,7 @@ const RoomScreen = () => {
         const doLeaveNow = () => {
             try {
                 if (socket.connected) {
-                    socket.emit('leave-room', token);
+                    socket.emit('leave-room', {token, id: user?.id});
                 }
             } catch {
                 // ignore
@@ -136,7 +143,7 @@ const RoomScreen = () => {
 
     return (
         <div className="screen flex justify-center items-center overflow-hidden">
-            {status === "joining" ? <WaitingScreen role={role} players={players} /> : status === "draft" ? <DraftScreen role={role} setStatus={setStatus}/> : <BattleScreen token={token} role={role} />}
+            {status === "joining" ? <WaitingScreen role={role} players={players} usernames={usernames}/> : status === "draft" ? <DraftScreen role={role} setStatus={setStatus}/> : <BattleScreen token={token} role={role} usernames={usernames} />}
         </div>
     );
 };

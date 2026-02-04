@@ -5,8 +5,11 @@ import DeckBattle from './DeckBattle.jsx';
 import BattleCharacter from './BattleCharacter.jsx';
 import Character from '../lobby/Character.jsx';
 
-const BattleScreen = ({ token, role }) => {
+const BattleScreen = ({ token, role, usernames }) => {
+    console.log(usernames);
+    
     const [state, setState] = useState(null);
+    const [username, setUsername] = useState(null);
     const [error, setError] = useState(null);
     const [actionError, setActionError] = useState(null);
 
@@ -74,22 +77,11 @@ const BattleScreen = ({ token, role }) => {
                     </div>
                 </div>
             ) : null}
-            <div className='fixed z-1000'>
-                <div>Room: {token}</div>
-                <div>Turn: {state.turnNumber}</div>
-                <div>Current turn: {state.currentTurn}</div>
-                <div>You: {role ?? '—'} {myTurn ? '(your turn)' : ''}</div>
-                <div>Attacker HP: {state.attacker?.hp}</div>
-                <div>Defender HP: {state.defender?.hp}</div>
-                <div>Attacker overflow (next dmg bonus): {state.attacker?.overflow ?? 0}</div>
-                <div>Skip turns (attacker/defender): {state.attacker?.skipTurns}/{state.defender?.skipTurns}</div>
-                {actionError ? <div>Action error: {String(actionError)}</div> : null}
-            </div>
             <div className="w-full h-full relative">
                 <Character role={role} className={"w-2/3 -left-30 mirrored -top-20"}/>
-                <BattleCharacter username={"Stefan"} rank={"Noob"} hp={role == "attacker" ? state.defender?.hp : state.attacker?.hp} role={role == "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
+                <BattleCharacter username={usernames[role == "attacker" ? "defender" : "attacker"]} rank={"Noob"} hp={role == "attacker" ? state.defender?.hp : state.attacker?.hp} role={role == "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
             </div>
-            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={"Kratos"} rank={"Pro"} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
+            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={usernames[role]} rank={"Pro"} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
             <div className="absolute top-0 right-1/2 bg-neutral-700 font-jersey text-white text-center translate-x-[50%] shadow-[10px_10px_0px_rgb(0_0_0_/_0.4)] w-1/3">
                 <h2 className='text-7xl border-b-5 border-black/50 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.7)]'>
                     Turn {state.turnNumber}
@@ -102,7 +94,7 @@ const BattleScreen = ({ token, role }) => {
             </div>
             <div className={`absolute bottom-0 right-0 bg-neutral-600 font-jersey text-white m-12 border-5 border-neutral-800 shadow-[5px_5px_0px_rgb(0_0_0)] pointer-events-none`}>
                 <h2 className='text-4xl text-shadow-[3px_3px_0px_rgb(0_0_0)] p-4 bg-neutral-700 border-b-7 border-neutral-800'>Last used opponent's ability</h2>
-                <Ability data={  {
+                <Ability data={{
                     role: "defender",
                     category: "Infrastructure",
                     code: "transport_layer_security_handling",

@@ -36,10 +36,10 @@ const LobbyScreen = ({user}) => {
     useEffect(()=>{
       try{
         (async()=>{
-        const req = await fetch("/api/account/auth", {credentials: 'include'});
-          if(!req.ok){
-            navigate("/hello");
-          }
+            if(!user?._id && !user?.id){
+                navigate("/hello");
+                return;
+            }
 
           const abilityreq = await fetch("/api/abilities", 
             {method: "GET"}
@@ -121,13 +121,13 @@ const LobbyScreen = ({user}) => {
     const [isSkillTreeShowed, setIsSkillTreeShowed] = useState(false);
     return(
         <div className={outerStyle}>
-            <SkillTreeScreen role={characterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities}/>
+            <SkillTreeScreen role={characterSelected} switchRole={setCharacterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities} numOfSkillPoints={2}/>
             <CharacterContext.Provider value = {[characterSelected, setCharacterSelected]}>
                 <DndContext onDragStart={(event) => handleDragStart(event)}
                 onDragEnd={(event) => handleDragEnd(event)}
                 onDragCancel={() => setActiveId(null)}
                 >
-                    <AbilitiesMenu type={characterSelected} activeId={activeId} setActiveId={setActiveId} abilities={ownedAbilities} ownedAbilities={ownedAbilities} deck={decks[characterSelected]} setIsSkillTreeShowed={setIsSkillTreeShowed}/>
+                    <AbilitiesMenu type={characterSelected} activeId={activeId} setActiveId={setActiveId} abilities={ownedAbilities} ownedAbilities={ownedAbilities} deck={decks[characterSelected]} setIsSkillTreeShowed={setIsSkillTreeShowed} numOfSkillPoints={2}/>
                     <div className="w-[60%] p-3 flex flex-col justify-between">
                         <CharacterSwitch/>
                         <div className="flex-1 flex items-center">
@@ -138,7 +138,7 @@ const LobbyScreen = ({user}) => {
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>
-                        <PlayButtons/>
+                        <PlayButtons username={user?.username} id={user?.id}/>
                     </div>
                     <DragOverlay>
                         {activeId !== null && <Ability data={getAbilitiesById(activeId)} unlocked onClick={console.log("aaa", getAbilitiesById(activeId))}/>}
