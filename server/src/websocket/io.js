@@ -10,6 +10,23 @@ const countPlayers = (game) => (game?.attacker?.id != null ? 1 : 0) + (game?.def
 const roleDoneKey = (role) => (role === 'attacker' ? 'draft.attackerDone' : (role === 'defender' ? 'draft.defenderDone' : null));
 const opponentRole = (role) => (role === 'attacker' ? 'defender' : 'attacker');
 
+const applyForfeit = (game, loserRole, reason = 'give_up') => {
+    if (!game || (loserRole !== 'attacker' && loserRole !== 'defender')) return;
+    const winner = opponentRole(loserRole);
+    game.status = 'finished';
+    game.winner = winner;
+    game.log.push({
+        turn: game.turnNumber,
+        player: loserRole,
+        action: {
+            type: 'forfeit',
+            ability: reason,
+            abilityName: 'Give up',
+        },
+    });
+    if (game.timeElapsed == null) game.timeElapsed = 0;
+};
+
 const getUsableAbilityCount = (game, role) => {
     const list = game?.[role]?.abilities ?? [];
     return list.reduce((count, a) => count + (((a?.currentCooldown ?? 0) <= 0) ? 1 : 0), 0);
@@ -82,6 +99,7 @@ const toBattleState = (game) => {
             skipTurns: game?.skipTurns?.defender ?? 0,
             abilities: game?.defender?.abilities ?? [],
         },
+        log: (game?.log ?? []).slice(-20),
         finished,
         winner,
     };
@@ -131,7 +149,7 @@ const releaseSocketFromRoom = async (io, socket, id, roomId) => {
         socket.leave(roomId);
         socket.to(roomId).emit('player-left', { roomId });
         if (updated) {
-            socket.to(roomId).emit('room-state', { roomId, players: {count: countPlayers(updated)}, usernames: {defender: await getUsername(updated?.defender?.id) ?? "no5", attacker: await getUsername(updated?.attacker?.id) ?? "no6" } });
+            socket.to(roomId).emit('room-state', { roomId, players: countPlayers(updated), usernames: {defender: await getUsername(updated?.defender?.id) ?? "no5", attacker: await getUsername(updated?.attacker?.id) ?? "no6" } });
             socket.to(roomId).emit('draft-status', {
                 attackerDone: !!updated.draft?.attackerDone,
                 defenderDone: !!updated.draft?.defenderDone,
@@ -204,8 +222,18 @@ export default function createIo(httpServer) {
                     socket.data.roomToken = token;
                     socket.data.role = role;
                     socket.data.username = raw?.username;
+                    socket.data.userId = raw?.id;
 
-                    const response = { ok: true, roomId, players: countPlayers(game), role };
+                    const response = {
+                        ok: true,
+                        roomId,
+                        players: countPlayers(game),
+                        role,
+                        usernames: {
+                            defender: await getUsername(game?.defender?.id) ?? null,
+                            attacker: await getUsername(game?.attacker?.id) ?? null,
+                        },
+                    };
                     if (typeof ack === 'function') return ack(response);
                     return;
                 }
@@ -234,6 +262,7 @@ export default function createIo(httpServer) {
                 socket.join(roomId);
                 socket.data.roomId = roomId;
                 socket.data.roomToken = token;
+                socket.data.userId = raw?.id;
 
                 const updated = await Game.findOneAndUpdate(
                     { _id: game._id, [`${role}.id`]: null },
@@ -279,10 +308,19 @@ export default function createIo(httpServer) {
                                     { $set: { status: 'in_progress' } }
                                 );
                                 console.log("hiretry");
-                                io.to(roomId).emit('room-ready', { roomId, usernames: { defender: getUsername(retried.defender?.id) ?? "no3", attacker: getUsername(retried.attacker?.id) ?? "no4" } });
+                                io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(retried.defender?.id) ?? "no3", attacker: await getUsername(retried.attacker?.id) ?? "no4" } });
                             }
 
-                            const response = { ok: true, roomId, players: playersAfterRetry, role: retryRole };
+                            const response = {
+                                ok: true,
+                                roomId,
+                                players: playersAfterRetry,
+                                role: retryRole,
+                                usernames: {
+                                    defender: await getUsername(retried?.defender?.id) ?? null,
+                                    attacker: await getUsername(retried?.attacker?.id) ?? null,
+                                },
+                            };
                             if (typeof ack === 'function') return ack(response);
                             return;
                         }
@@ -296,6 +334,7 @@ export default function createIo(httpServer) {
                 }
 
                 socket.data.role = role;
+                socket.data.userId = raw?.id;
                 console.log(socket.data);
                 
 
@@ -315,7 +354,16 @@ export default function createIo(httpServer) {
                     io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(updated.defender?.id) ?? "no", attacker: await getUsername(updated.attacker?.id) ?? "no2" } });
                 }
 
-                const response = { ok: true, roomId, players: playersAfterJoin, role };
+                const response = {
+                    ok: true,
+                    roomId,
+                    players: playersAfterJoin,
+                    role,
+                    usernames: {
+                        defender: await getUsername(updated?.defender?.id) ?? null,
+                        attacker: await getUsername(updated?.attacker?.id) ?? null,
+                    },
+                };
                 if (typeof ack === 'function') return ack(response);
             } catch(e) {
                 const response = { ok: false, error: 'you done fucked something up - ' + e.message };
@@ -638,6 +686,39 @@ export default function createIo(httpServer) {
             }
         });
 
+        socket.on('battle-giveup', async (_payload, ack) => {
+            try {
+                const roomId = socket.data?.roomId;
+                const role = socket.data?.role;
+                if (!roomId || (role !== 'attacker' && role !== 'defender')) {
+                    const response = { ok: false, error: 'bad_request' };
+                    if (typeof ack === 'function') return ack(response);
+                    return;
+                }
+
+                const game = await Game.findById(roomId);
+                if (!game) {
+                    const response = { ok: false, error: 'not_found' };
+                    if (typeof ack === 'function') return ack(response);
+                    return;
+                }
+
+                if (game.status !== 'finished') {
+                    applyForfeit(game, role, 'give_up');
+                    await game.save();
+                }
+
+                const state = toBattleState(game);
+                io.to(roomId).emit('battle-state', state);
+
+                const response = { ok: true, state };
+                if (typeof ack === 'function') return ack(response);
+            } catch {
+                const response = { ok: false, error: 'server_error' };
+                if (typeof ack === 'function') return ack(response);
+            }
+        });
+
         socket.on('leave-room', async (payload, ack) => {
             try {
                 const raw = typeof payload === 'object'
@@ -663,38 +744,33 @@ export default function createIo(httpServer) {
 
                 const roomId = game._id.toString();
                 const role = socket.data?.role;
+                const userId = raw?.id ?? socket.data?.userId;
 
-                let updated = null;
+                let leavingRole = null;
                 if (role === 'attacker' || role === 'defender') {
-                    const doneKey = roleDoneKey(role);
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, [`${role}.id`]: raw?.id },
-                        { $set: {
-                            [`${role}.id`]: null,
-                            [`${role}.abilities`]: [],
-                            [`skipTurns.${role}`]: 0,
-                            status: 'waiting',
-                            ...(doneKey ? { [doneKey]: false } : {})
-                        } },
-                        { new: true }
-                    );
+                    leavingRole = role;
+                } else if (userId) {
+                    if (game.attacker?.id === userId) leavingRole = 'attacker';
+                    if (game.defender?.id === userId) leavingRole = 'defender';
                 }
 
-                // Fallback: clear whichever slot matches this socket.
-                if (!updated) {
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'attacker.id': raw?.id },
-                        { $set: { 'attacker.id': null, 'attacker.abilities': [], 'skipTurns.attacker': 0, status: 'waiting', 'draft.attackerDone': false } },
-                        { new: true }
-                    );
+                const opponentId = leavingRole ? game[opponentRole(leavingRole)]?.id : null;
+                if (leavingRole && opponentId && game.status !== 'finished') {
+                    applyForfeit(game, leavingRole, 'left_game');
                 }
-                if (!updated) {
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'defender.id': raw?.id },
-                        { $set: { 'defender.id': null, 'defender.abilities': [], 'skipTurns.defender': 0, status: 'waiting', 'draft.defenderDone': false } },
-                        { new: true }
-                    );
+
+                if (leavingRole) {
+                    const doneKey = roleDoneKey(leavingRole);
+                    game[leavingRole].id = null;
+                    game[leavingRole].abilities = [];
+                    if (game.skipTurns) game.skipTurns[leavingRole] = 0;
+                    if (doneKey) game.set(doneKey, false);
+                    if (game.status !== 'finished') game.status = 'waiting';
                 }
+
+                await game.save();
+
+                const updated = game;
 
                 let terminated = false;
                 if (updated && updated.attacker?.id == null && updated.defender?.id == null) {
@@ -719,6 +795,10 @@ export default function createIo(httpServer) {
                     });
                 }
 
+                if (updated?.status === 'finished') {
+                    io.to(roomId).emit('battle-state', toBattleState(updated));
+                }
+
                 const response = { ok: true, roomId, players, terminated };
                 if (typeof ack === 'function') return ack(response);
             } catch {
@@ -735,38 +815,34 @@ export default function createIo(httpServer) {
             let updated = null;
 
             try {
+                const game = await Game.findById(roomId);
+                if (!game) return;
 
+                const userId = socket.data?.userId ?? payload?.id;
+                let leavingRole = null;
                 if (role === 'attacker' || role === 'defender') {
-                    const doneKey = roleDoneKey(role);
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, [`${role}.id`]: payload?.id },
-                        { $set: {
-                            [`${role}.id`]: null,
-                            [`${role}.abilities`]: [],
-                            [`skipTurns.${role}`]: 0,
-                            status: 'waiting',
-                            ...(doneKey ? { [doneKey]: false } : {})
-                        } },
-                        { new: true }
-                    );
+                    leavingRole = role;
+                } else if (userId) {
+                    if (game.attacker?.id === userId) leavingRole = 'attacker';
+                    if (game.defender?.id === userId) leavingRole = 'defender';
                 }
 
-                // Fallback: if role wasn't stored, clear whichever slot matches this socket.
-                if (!updated) {
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'attacker.id': payload?.id },
-                        { $set: { 'attacker.id': null, 'attacker.abilities': [], 'skipTurns.attacker': 0, status: 'waiting', 'draft.attackerDone': false } },
-                        { new: true }
-                    );
+                const opponentId = leavingRole ? game[opponentRole(leavingRole)]?.id : null;
+                if (leavingRole && opponentId && game.status !== 'finished') {
+                    applyForfeit(game, leavingRole, 'disconnect');
                 }
 
-                if (!updated) {
-                    updated = await Game.findOneAndUpdate(
-                        { _id: roomId, 'defender.id': payload?.id },
-                        { $set: { 'defender.id': null, 'defender.abilities': [], 'skipTurns.defender': 0, status: 'waiting', 'draft.defenderDone': false } },
-                        { new: true }
-                    );
+                if (leavingRole) {
+                    const doneKey = roleDoneKey(leavingRole);
+                    game[leavingRole].id = null;
+                    game[leavingRole].abilities = [];
+                    if (game.skipTurns) game.skipTurns[leavingRole] = 0;
+                    if (doneKey) game.set(doneKey, false);
+                    if (game.status !== 'finished') game.status = 'waiting';
                 }
+
+                await game.save();
+                updated = game;
 
                 if (updated && updated.attacker?.id == null && updated.defender?.id == null) {
                     await Game.deleteOne({ _id: roomId });
@@ -781,6 +857,9 @@ export default function createIo(httpServer) {
                     attackerDone: !!updated.draft?.attackerDone,
                     defenderDone: !!updated.draft?.defenderDone,
                 });
+                if (updated?.status === 'finished') {
+                    io.to(roomId).emit('battle-state', toBattleState(updated));
+                }
             }
         });
     });

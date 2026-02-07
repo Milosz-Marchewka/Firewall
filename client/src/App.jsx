@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import EntryScreen from "./components/entryScreen/EntryScreen.jsx";
 import LobbyScreen from "./components/lobby/LobbyScreen";
 import RoomScreen from "./components/room/RoomScreen.jsx";
+import Documentation from "./components/documentation/Documentation.jsx";
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 function App() {
@@ -48,8 +49,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LobbyScreen user={user} />} />
+        <Route path="/" element={<LobbyScreen user={user} setUser={setUser} />} />
         <Route path="/room/:token" element={<RoomScreen user={user}/>} />
+        <Route path="/documentation" element={<Documentation />} />
         <Route path="/hello" element={<EntryScreen user={user} setUser={setUser} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

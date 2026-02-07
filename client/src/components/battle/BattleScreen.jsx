@@ -9,7 +9,6 @@ const BattleScreen = ({ token, role, usernames }) => {
     console.log(usernames);
     
     const [state, setState] = useState(null);
-    const [username, setUsername] = useState(null);
     const [error, setError] = useState(null);
     const [actionError, setActionError] = useState(null);
 
@@ -60,6 +59,18 @@ const BattleScreen = ({ token, role, usernames }) => {
         });
     };
 
+    const handleGiveUp = () => {
+        setActionError(null);
+        if (!socket.connected) socket.connect();
+        socket.emit('battle-giveup', null, (ack) => {
+            if (!ack?.ok) {
+                setActionError(ack?.error ?? 'battle_giveup_failed');
+                return;
+            }
+            if (ack?.state) setState(ack.state);
+        });
+    };
+
     if (error) {
         return <div>Battle error: {String(error)}</div>;
     }
@@ -67,6 +78,32 @@ const BattleScreen = ({ token, role, usernames }) => {
     if (!state) {
         return <div>Loading battle…</div>;
     }
+
+    const myName = usernames?.[role] || (role === 'attacker' ? 'Attacker' : 'Defender');
+    const opponentRole = role === 'attacker' ? 'defender' : 'attacker';
+    const opponentName = usernames?.[opponentRole] || (opponentRole === 'attacker' ? 'Attacker' : 'Defender');
+
+    const lastOpponentEntry = (state.log ?? []).slice().reverse().find((entry) => {
+        return entry?.player === opponentRole && entry?.action?.type === 'ability';
+    });
+    const lastOpponentAbilityCode = lastOpponentEntry?.action?.ability ?? null;
+    const opponentAbilities = state?.[opponentRole]?.abilities ?? [];
+    const lastOpponentAbility = lastOpponentAbilityCode
+        ? opponentAbilities.find((ability) => ability.code === lastOpponentAbilityCode)
+        : null;
+    const lastOpponentAbilityName = lastOpponentEntry?.action?.abilityName
+        ?? lastOpponentAbility?.name
+        ?? lastOpponentAbilityCode
+        ?? '—';
+    const lastOpponentAbilityData = lastOpponentAbility ?? (lastOpponentAbilityCode ? {
+        code: lastOpponentAbilityCode,
+        name: lastOpponentAbilityName,
+        description: '',
+        cooldown: 0,
+        currentCooldown: 0,
+        rarity: 1,
+        effect: lastOpponentEntry?.action?.effect ?? { kind: 'damage', value: 0 },
+    } : null);
 
     return (
         <div className={`screen relative text-black ${role=="defender" ? "gradient-background" : "gradient-background-mirrored"}`}>
@@ -79,9 +116,9 @@ const BattleScreen = ({ token, role, usernames }) => {
             ) : null}
             <div className="w-full h-full relative">
                 <Character role={role} className={"w-2/3 -left-30 mirrored -top-20"}/>
-                <BattleCharacter username={usernames[role == "attacker" ? "defender" : "attacker"]} rank={"Noob"} hp={role == "attacker" ? state.defender?.hp : state.attacker?.hp} role={role == "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
+                <BattleCharacter username={opponentName} rank={"Noob"} hp={role == "attacker" ? state.defender?.hp : state.attacker?.hp} role={role == "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
             </div>
-            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={usernames[role]} rank={"Pro"} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
+            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={myName} rank={"Pro"} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
             <div className="absolute top-0 right-1/2 bg-neutral-700 font-jersey text-white text-center translate-x-[50%] shadow-[10px_10px_0px_rgb(0_0_0_/_0.4)] w-1/3">
                 <h2 className='text-7xl border-b-5 border-black/50 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.7)]'>
                     Turn {state.turnNumber}
@@ -89,21 +126,13 @@ const BattleScreen = ({ token, role, usernames }) => {
                 <h3 className={`text-3xl ${state.currentTurn == "attacker" ? "bg-red-600" : "bg-sky-600"} text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.7)]`}>Current turn: {state.currentTurn} {myTurn ? '(your turn)' : ''} </h3>
             </div>
             <div className="absolute top-0 left-0 font-jersey text-white bg-red-700 text-4xl px-5 flex items-center justify-center border-4 border-black/80
-            hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_rgb(0_0_0)] transition-all hover:bg-red-600 hoverable unselectable m-5">
+            hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0px_rgb(0_0_0)] transition-all hover:bg-red-600 hoverable unselectable m-5"
+            onClick={handleGiveUp} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleGiveUp(); }}>
                 <h2 className="text-shadow-[3px_3px_0px_rgb(0_0_0)]">&lt; Give up</h2>
             </div>
             <div className={`absolute bottom-0 right-0 bg-neutral-600 font-jersey text-white m-12 border-5 border-neutral-800 shadow-[5px_5px_0px_rgb(0_0_0)] pointer-events-none`}>
-                <h2 className='text-4xl text-shadow-[3px_3px_0px_rgb(0_0_0)] p-4 bg-neutral-700 border-b-7 border-neutral-800'>Last used opponent's ability</h2>
-                <Ability data={{
-                    role: "defender",
-                    category: "Infrastructure",
-                    code: "transport_layer_security_handling",
-                    name: "TLS handling",
-                    description: "Properly implementing TLS for data in transit.",
-                    cooldown: 2,
-                    rarity: 2,
-                    effect: { kind: "heal", value: 1 }
-                }}/>
+                <h2 className='text-4xl text-shadow-[3px_3px_0px_rgb(0_0_0)] p-4 bg-neutral-700 border-b-7 border-neutral-800'>Opponent used {lastOpponentAbilityName}!</h2>
+                {lastOpponentAbilityData ? <Ability data={lastOpponentAbilityData} /> : null}
             </div>
         </div>
     );

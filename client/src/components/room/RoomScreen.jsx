@@ -15,9 +15,49 @@ const RoomScreen = ({user}) => {
 
     const navigate = useNavigate();
     const leaveTimerRef = useRef(null);
+    const draftTimerRef = useRef(null);
+    const DRAFT_DELAY_MS = 1500;
 
     useEffect(() => {
         let isCancelled = false;
+
+        const startDraftDelayed = () => {
+            if (draftTimerRef.current != null) return;
+            draftTimerRef.current = setTimeout(() => {
+                draftTimerRef.current = null;
+                if (isCancelled) return;
+                setStatus('draft');
+            }, DRAFT_DELAY_MS);
+        };
+
+        const onRoomState = (payload) => {
+            if (isCancelled) return;
+            if (typeof payload?.players === 'number') {
+                setPlayers(payload.players);
+                if (payload.players === 2) startDraftDelayed();
+            }
+            setUsernames(payload?.usernames);
+            console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
+            
+        };
+
+        const onRoomReady = (payload) => {
+            console.log("PAYLOAD: ", payload);
+            
+            startDraftDelayed();
+            setUsernames(payload?.usernames);
+        };
+
+        const onPlayerLeft = () => {
+            if (isCancelled) return;
+            if (status === 'draft') {
+                setStatus('battle');
+            }
+        };
+
+        socket.on('room-state', onRoomState);
+        socket.on('room-ready', onRoomReady);
+        socket.on('player-left', onPlayerLeft);
 
         const join = () => {
             setStatus('joining');
@@ -36,39 +76,22 @@ const RoomScreen = ({user}) => {
 
                 setRole(ack.role ?? null);
                 setPlayers(ack.players ?? null);
-                setTimeout(()=>{
-                    setStatus(ack.players === 2 ? 'draft' : 'joining');
-                }, 1500);
+                if (ack?.usernames) setUsernames(ack.usernames);
+                if (ack.players === 2) startDraftDelayed();
             });
         };
 
         join();
 
-        const onRoomState = (payload) => {
-            if (isCancelled) return;
-            if (typeof payload?.players === 'number') setPlayers(payload.players);
-            setUsernames(payload?.usernames);
-            console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
-            
-        };
-
-        const onRoomReady = (payload) => {
-            console.log("PAYLOAD: ", payload);
-            
-            setTimeout(()=>{
-                if (isCancelled) return;
-                setUsernames(payload?.usernames);
-                setStatus('draft');
-            }, 1500);
-        };
-
-        socket.on('room-state', onRoomState);
-        socket.on('room-ready', onRoomReady);
-
         return () => {
             isCancelled = true;
             socket.off('room-state', onRoomState);
             socket.off('room-ready', onRoomReady);
+            socket.off('player-left', onPlayerLeft);
+            if (draftTimerRef.current != null) {
+                clearTimeout(draftTimerRef.current);
+                draftTimerRef.current = null;
+            }
         };
     }, [token]);
 

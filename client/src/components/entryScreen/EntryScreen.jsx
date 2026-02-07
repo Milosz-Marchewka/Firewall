@@ -8,7 +8,7 @@ const EntryScreen = ({user, setUser})=>{
     const navigate = useNavigate();
     const [showSignup, setShowSignup] = useState(false);
 
-    if(user) navigate("/");
+    if (user?.id) navigate("/");
 
     const handleGuest = async ()=>{
         try{
@@ -23,8 +23,17 @@ const EntryScreen = ({user, setUser})=>{
             
             if(!req.ok){
                 console.error("Login failed:", await req.text());
+                return;
             }
-            
+
+            const userData = await req.json();
+            setUser({
+                id: userData?._id ?? userData?.id ?? null,
+                username: userData?.username || (userData?._id ? `Guest ${userData._id}` : undefined),
+                level: userData?.level ?? 0,
+                levelPoints: userData?.levelPoints ?? 0,
+            });
+
             navigate("/");
         } catch(e){
             console.error("Login error:", e);

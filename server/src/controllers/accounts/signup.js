@@ -7,9 +7,9 @@ const signup = async (req, res) => {
     if([req.body.username, req.body.email, req.body.password].some(f => !f)){
         return res.status(400).send("All fields are required.");
     }
-    // if(!validateUsername(req.body.username) || !validateEmail(req.body.email) || !validatePassword(req.body.password)){
-    //     return res.status(400).send("Invalid input.");
-    // }
+    if (!validateUsername(req.body.username) || !validateEmail(req.body.email) || !validatePassword(req.body.password)) {
+        return res.status(400).send("Username, email, or password does not match the required format.");
+    }
     const user = new User({
         username: req.body.username,
         email: req.body.email,

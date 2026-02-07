@@ -17,7 +17,7 @@ const characterGradients = {
     defender: "to-sky-950"
 }
 
-const LobbyScreen = ({user}) => {
+const LobbyScreen = ({user, setUser}) => {
     const [activeId, setActiveId] = useState(null);
     const [characterSelected, setCharacterSelected] = useState("attacker");
     const [decks, setDecks] = useState({
@@ -119,6 +119,19 @@ const LobbyScreen = ({user}) => {
     }
 
     const [isSkillTreeShowed, setIsSkillTreeShowed] = useState(false);
+
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/account/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+        } catch {
+            // ignore
+        }
+        setUser({ id: null });
+        navigate('/hello');
+    };
     return(
         <div className={outerStyle}>
             <SkillTreeScreen role={characterSelected} switchRole={setCharacterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities} numOfSkillPoints={2}/>
@@ -138,7 +151,7 @@ const LobbyScreen = ({user}) => {
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>
-                        <PlayButtons username={user?.username} id={user?.id}/>
+                        <PlayButtons username={user?.username} id={user?.id} onLogout={handleLogout}/>
                     </div>
                     <DragOverlay>
                         {activeId !== null && <Ability data={getAbilitiesById(activeId)} unlocked onClick={console.log("aaa", getAbilitiesById(activeId))}/>}
