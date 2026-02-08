@@ -151,7 +151,7 @@ const LobbyScreen = ({user, setUser}) => {
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>
-                        <PlayButtons username={user?.username} id={user?.id} onLogout={handleLogout}/>
+                        <PlayButtons username={user?.username} id={user?.id} onLogout={handleLogout} characterSelected={characterSelected} deck={decks[characterSelected]}/>
                     </div>
                     <DragOverlay>
                         {activeId !== null && <Ability data={getAbilitiesById(activeId)} unlocked onClick={console.log("aaa", getAbilitiesById(activeId))}/>}

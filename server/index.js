@@ -26,6 +26,4 @@ const PORT = 5000;
 const httpServer = createServer(app);
 const io = createIo(httpServer);
 app.set('io', io);
-httpServer.listen(PORT, "0.0.0.0", () => {
-    console.log(`App running on port ${PORT}`);
-});
+httpServer.listen(PORT, "0.0.0.0");

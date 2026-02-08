@@ -16,6 +16,7 @@ const AbilitySchema = new mongoose.Schema({
 // enormous ahh schema
 const gameSchema = new mongoose.Schema({
     url: {type: String, required: true, unique: true},
+    type: {type: String, enum: ['quickplay', 'play']},
     status: {
         type: String, 
         enum: ['waiting', 'in_progress', 'finished'],

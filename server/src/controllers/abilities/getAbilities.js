@@ -28,8 +28,6 @@ export const getAbilities = async (req, res)=>{
         }
         return res.status(200).json(abilities);
     } catch(e){
-        console.log(e);
-        
         return res.status(500).send("Internal server error");
     }
 }

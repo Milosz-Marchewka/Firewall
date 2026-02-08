@@ -12,11 +12,24 @@ const RoomScreen = ({user}) => {
     const [role, setRole] = useState(null);
     const [players, setPlayers] = useState(null);
     const [usernames, setUsernames] = useState({defender: "", attacker: ""});
+    const [roomType, setRoomType] = useState(null);
 
     const navigate = useNavigate();
     const leaveTimerRef = useRef(null);
     const draftTimerRef = useRef(null);
+    const roomTypeRef = useRef(null);
+    const statusRef = useRef(status);
     const DRAFT_DELAY_MS = 1500;
+
+    useEffect(() => {
+        statusRef.current = status;
+    }, [status]);
+
+    useEffect(() => {
+        if (roomType === 'play' && players === 2) {
+            setStatus('battle');
+        }
+    }, [roomType, players]);
 
     useEffect(() => {
         let isCancelled = false;
@@ -32,9 +45,20 @@ const RoomScreen = ({user}) => {
 
         const onRoomState = (payload) => {
             if (isCancelled) return;
+            if (payload?.type) {
+                roomTypeRef.current = payload.type;
+                setRoomType(payload.type);
+            }
             if (typeof payload?.players === 'number') {
                 setPlayers(payload.players);
-                if (payload.players === 2) startDraftDelayed();
+                const effectiveType = payload?.type ?? roomTypeRef.current;
+                if (payload.players === 2 && effectiveType === "play"){
+                    setStatus("battle");
+                    return;
+                }
+                if (payload.players === 2) {
+                    startDraftDelayed();
+                }
             }
             setUsernames(payload?.usernames);
             console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
@@ -43,14 +67,25 @@ const RoomScreen = ({user}) => {
 
         const onRoomReady = (payload) => {
             console.log("PAYLOAD: ", payload);
+            console.log("ABOVE PAYLOAD STATUS: " , status);
             
-            startDraftDelayed();
             setUsernames(payload?.usernames);
+            if (payload?.type) {
+                roomTypeRef.current = payload.type;
+                setRoomType(payload.type);
+            }
+            const effectiveType = payload?.type ?? roomTypeRef.current;
+            if(effectiveType === "play"){
+                setStatus("battle");
+                return;
+            }
+
+            startDraftDelayed();
         };
 
         const onPlayerLeft = () => {
             if (isCancelled) return;
-            if (status === 'draft') {
+            if (statusRef.current === 'draft') {
                 setStatus('battle');
             }
         };
@@ -77,6 +112,14 @@ const RoomScreen = ({user}) => {
                 setRole(ack.role ?? null);
                 setPlayers(ack.players ?? null);
                 if (ack?.usernames) setUsernames(ack.usernames);
+                if (ack?.type) {
+                    roomTypeRef.current = ack.type;
+                    setRoomType(ack.type);
+                }
+                if (ack.players === 2 && ack?.type === "play") {
+                    setStatus("battle");
+                    return;
+                }
                 if (ack.players === 2) startDraftDelayed();
             });
         };
@@ -166,7 +209,11 @@ const RoomScreen = ({user}) => {
 
     return (
         <div className="screen flex justify-center items-center overflow-hidden">
-            {status === "joining" ? <WaitingScreen role={role} players={players} usernames={usernames}/> : status === "draft" ? <DraftScreen role={role} setStatus={setStatus}/> : <BattleScreen token={token} role={role} usernames={usernames} />}
+            {status === "joining"
+                ? <WaitingScreen role={role} players={players} usernames={usernames}/>
+                : status === "draft" && roomType !== "play"
+                    ? <DraftScreen role={role} setStatus={setStatus}/>
+                    : <BattleScreen token={token} role={role} usernames={usernames} />}
         </div>
     );
 };

@@ -5,7 +5,7 @@ import { extractToken } from "../../utils/utils";
 import { socket } from "../../socket";
 import "./CharacterSwitch.css";
 
-const PlayButtons = ({username, id, onLogout}) => {
+const PlayButtons = ({username, id, onLogout, characterSelected, deck}) => {
 
     const [char, charSelected] = useContext(CharacterContext);
     const attackerRef = useRef(null);
@@ -15,7 +15,7 @@ const PlayButtons = ({username, id, onLogout}) => {
     const navigate = useNavigate();
     const [isOptionsVisible, setIsOptionsVisible] = useState(false);
 
-    const handleQuickPlay = async () => {
+    const handlePlay = async (type)=>{
         if (isJoining) return;
         setIsJoining(true);
         setError(null);
@@ -23,9 +23,14 @@ const PlayButtons = ({username, id, onLogout}) => {
             if (!socket.connected) socket.connect();
 
             const tryJoin = async () => {
-                const response = await fetch(`/api/quickplay`, {
+                const response = await fetch(`/api/play`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, play: type === 'play' ? {
+                            abilities: deck,
+                            character: characterSelected,
+                            id: id
+                        } : undefined })
                 });
 
                 if (!response.ok) {
@@ -40,14 +45,14 @@ const PlayButtons = ({username, id, onLogout}) => {
                 const token = extractToken(roomUrl);
                 if (!token) throw new Error('Invalid roomUrl');
 
-                const payload = {token, username, id};
+                const payload = {token, username, id, type};
 
                 const ack = await new Promise((resolve) => {
                     socket.emit('join-room', payload, resolve);
                 });
 
                 return { token, ack };
-            };
+            }
 
             // retry logic (sometimes rooms get full/not found/mistakenly full)
             let lastAck = null;
@@ -68,7 +73,7 @@ const PlayButtons = ({username, id, onLogout}) => {
 
             throw new Error(lastAck?.error ?? 'join_failed');
         } catch (err) {
-            setError(err?.message ?? 'quickplay_failed');
+            setError(err?.message ?? 'play_failed');
             setIsJoining(false);
         }
     };
@@ -98,11 +103,11 @@ const PlayButtons = ({username, id, onLogout}) => {
                 }
                 <h2 className="text-shadow-[3px_3px_0px_rgb(0_0_0)]">OPTIONS</h2>
             </div>
-            <div onClick={handleQuickPlay} className="bg-gray-500 text-6xl py-5 flex items-center justify-center border-6 border-black/80
+            <div onClick={()=>handlePlay('quickplay')} className="bg-gray-500 text-6xl py-5 flex items-center justify-center border-6 border-black/80
             hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[8px_8px_0px_rgb(0_0_0)] transition-all hover:bg-gray-400 hoverable unselectable">
                 <h2 className="text-shadow-[3px_3px_0px_rgb(0_0_0)]">QUICK MATCH</h2>
             </div>
-            <div className="bg-amber-400 text-6xl py-5 flex items-center justify-center border-6 border-black/80
+            <div onClick={()=>handlePlay('play')} className="bg-amber-400 text-6xl py-5 flex items-center justify-center border-6 border-black/80
             hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[8px_8px_0px_rgb(0_0_0)] transition-all hover:bg-amber-300 hoverable unselectable">
                 <h2 className="text-shadow-[3px_3px_0px_rgb(0_0_0)]">PLAY</h2>
             </div>

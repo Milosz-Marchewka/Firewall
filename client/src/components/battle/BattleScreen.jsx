@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Ability from '../ability/Ability.jsx';
 import { socket } from '../../socket.js';
 import DeckBattle from './DeckBattle.jsx';
@@ -11,32 +11,43 @@ const BattleScreen = ({ token, role, usernames }) => {
     const [state, setState] = useState(null);
     const [error, setError] = useState(null);
     const [actionError, setActionError] = useState(null);
+    const [myAbilities, setMyAbilities] = useState([]);
+    const [opponentAbilities, setOpponentAbilities] = useState([]);
 
     const myTurn = state?.currentTurn === role;
 
-    const myAbilities = useMemo(() => {
-        if (!state || !role) return [];
-        return role === 'attacker' ? (state.attacker?.abilities ?? []) : (state.defender?.abilities ?? []);
-    }, [state, role]);
+    const syncAbilities = (nextState, nextRole) => {
+        if (!nextState || !nextRole) return;
+        const opponentRole = nextRole === 'attacker' ? 'defender' : 'attacker';
+        setMyAbilities(nextState?.[nextRole]?.abilities ?? []);
+        setOpponentAbilities(nextState?.[opponentRole]?.abilities ?? []);
+    };
 
     useEffect(() => {
         let cancelled = false;
-
+        console.log("BATTLE");
+        
         const onBattleState = (payload) => {
+            console.log("BATTLE PAYLOAD:", payload);
             if (cancelled) return;
+            
             setState(payload);
+            syncAbilities(payload, role);
         };
 
         socket.on('battle-state', onBattleState);
 
         if (!socket.connected) socket.connect();
         socket.emit('battle-get', null, (ack) => {
+            console.log("BATTLE-GET:", ack);
+            
             if (cancelled) return;
             if (!ack?.ok) {
                 setError(ack?.error ?? 'battle_get_failed');
                 return;
             }
             setState(ack.state);
+            syncAbilities(ack.state, role);
         });
 
         return () => {
@@ -44,6 +55,10 @@ const BattleScreen = ({ token, role, usernames }) => {
             socket.off('battle-state', onBattleState);
         };
     }, []);
+
+    useEffect(() => {
+        syncAbilities(state, role);
+    }, [state, role]);
 
     const handleUse = async (code) => {
         setActionError(null);
@@ -87,7 +102,6 @@ const BattleScreen = ({ token, role, usernames }) => {
         return entry?.player === opponentRole && entry?.action?.type === 'ability';
     });
     const lastOpponentAbilityCode = lastOpponentEntry?.action?.ability ?? null;
-    const opponentAbilities = state?.[opponentRole]?.abilities ?? [];
     const lastOpponentAbility = lastOpponentAbilityCode
         ? opponentAbilities.find((ability) => ability.code === lastOpponentAbilityCode)
         : null;

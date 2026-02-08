@@ -59,9 +59,9 @@ const attackermoves =  [
 
     category: "Credentials & Identity",
 
-    code: "basic_brute-force_attack",
+    code: "brute-force_attack",
 
-    name: "Brute-force",
+    name: "Brute-force attack",
 
     description: "Systematically trying combinations to crack passwords.",
 
@@ -79,9 +79,9 @@ const attackermoves =  [
 
     category: "Credentials & Identity",
 
-    code: "advanced_phishing_with_mfa_bypass",
+    code: "mfa_bypass_phishing",
 
-    name: "MFA Bypass Phishing",
+    name: "MFA bypass phishing",
 
     description: "Sophisticated phishing to trick users into revealing MFA codes.",
 
@@ -105,7 +105,7 @@ const attackermoves =  [
 
     code: "url_parameter_tampering",
 
-    name: "URL Tampering",
+    name: "URL parameter tampering",
 
     description: "Manipulate URL parameters to exploit vulnerabilities.",
 
@@ -123,7 +123,7 @@ const attackermoves =  [
 
     category: "Exploits & Persistence",
 
-    code: "basic_sql_injection",
+    code: "sql_injection",
 
     name: "SQL Injection",
 
@@ -145,7 +145,7 @@ const attackermoves =  [
 
     code: "file_extension_bypass",
 
-    name: "Extension Bypass",
+    name: "File extension bypass",
 
     description: "Exploiting upload validation to plant malicious files.",
 
@@ -185,7 +185,7 @@ const attackermoves =  [
 
     code: "stored_xss_attack",
 
-    name: "Stored XSS",
+    name: "Stored XSS attack",
 
     description: "Injecting scripts permanently stored on the server.",
 
@@ -203,7 +203,7 @@ const attackermoves =  [
 
     category: "Exploits & Persistence",
 
-    code: "apt-style_long-term_intrusion",
+    code: "apt_intrusion",
 
     name: "APT Intrusion",
 
@@ -229,7 +229,7 @@ const attackermoves =  [
 
     code: "connect_via_unsecured_wi-fi",
 
-    name: "Unsecured Wi-Fi",
+    name: "Connect via unsecured Wi-Fi",
 
     description: "Connect to the target via an unsecured network.",
 
@@ -249,7 +249,7 @@ const attackermoves =  [
 
     code: "man-in-the-middle_attack",
 
-    name: "MITM Attack",
+    name: "Man-in-the-Middle attack",
 
     description: "Intercepting and altering communications silently.",
 
@@ -269,7 +269,7 @@ const attackermoves =  [
 
     code: "server-side_request_forgery",
 
-    name: "SSRF",
+    name: "Server-side request forgery",
 
     description: "Forcing the server to make unauthorized internal requests.",
 
@@ -289,7 +289,7 @@ const attackermoves =  [
 
     code: "privilege_escalation_via_misconfiguration",
 
-    name: "Privilege Escalation",
+    name: "Privilege Escalation via misconfiguration",
 
     description: "Exploiting misconfigurations to gain higher privileges.",
 
@@ -309,7 +309,7 @@ const attackermoves =  [
 
     code: "man-in-the-browser_attack",
 
-    name: "MITB Attack",
+    name: "Man-in-the-Browser attack",
 
     description: "Injecting code into browser to manipulate interactions.",
 
@@ -329,7 +329,7 @@ const attackermoves =  [
 
     code: "kernel_privilege_escalation",
 
-    name: "Kernel Escalation",
+    name: "Kernel privilege escalation",
 
     description: "Exploiting kernel vulnerabilities for root access.",
 
@@ -349,7 +349,7 @@ const attackermoves =  [
 
     code: "sandbox_escape",
 
-    name: "Sandbox Escape",
+    name: "Sandbox escape",
 
     description: "Breaking out of restricted environments to host system.",
 
@@ -373,7 +373,7 @@ const attackermoves =  [
 
     code: "browse_open_directories",
 
-    name: "Open Directories",
+    name: "Browse open directories",
 
     description: "Look for sensitive info in open directories.",
 
@@ -391,7 +391,7 @@ const attackermoves =  [
 
     category: "Recon & Supply chain",
 
-    code: "typosquat_their_domain",
+    code: "typosquatting",
 
     name: "Typosquatting",
 
@@ -413,7 +413,7 @@ const attackermoves =  [
 
     code: "business_logic_abuse",
 
-    name: "Logic Abuse",
+    name: "Business logic abuse",
 
     description: "Exploiting flaws in business logic for unauthorized actions.",
 
@@ -433,7 +433,7 @@ const attackermoves =  [
 
     code: "session_fixation",
 
-    name: "Session Fixation",
+    name: "Session fixation",
 
     description: "Hijacking valid user sessions via fixed IDs.",
 
@@ -453,7 +453,7 @@ const attackermoves =  [
 
     code: "email_spoofing",
 
-    name: "Email Spoofing",
+    name: "Email spoofing",
 
     description: "Sending emails with forged sender addresses.",
 
@@ -471,9 +471,9 @@ const attackermoves =  [
 
     category: "Recon & Supply chain",
 
-    code: "supply-chain_compromise",
+    code: "supply-chain_attack",
 
-    name: "Supply-chain Attack",
+    name: "Supply-chain attack",
 
     description: "Compromising 3rd party software to gain access.",
 
@@ -506,7 +506,7 @@ const defendermoves = [
   { 
     role: "defender",
     category: "Identity & Access",
-    code: "strong_password_policy_enforcement",
+    code: "strong_password_policy",
     name: "Strong password policy", 
     description: "Implementing and enforcing a strong password policy.", 
     cooldown: 2, 
@@ -516,7 +516,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Identity & Access",
-    code: "account_lockout_after_failures",
+    code: "account_lockout",
     name: "Account lockout",
     description: "Lock accounts after a set number of failed login attempts.",
     cooldown: 4,
@@ -537,7 +537,7 @@ const defendermoves = [
     role: "defender",
     category: "Identity & Access",
     code: "multi-factor_authentication_mfa",
-    name: "MFA",
+    name: "Multi-factor authentication",
     description: "Multi-factor authentication for extra security.",
     cooldown: 4,
     rarity: 3,
@@ -578,7 +578,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Application security",
-    code: "cross-site_request_forgery_tokens",
+    code: "CSRF_tokens",
     name: "CSRF tokens",
     description: "Using tokens to protect against CSRF attacks.",
     cooldown: 3,
@@ -608,7 +608,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Application security",
-    code: "jwt_signing_and_validation",
+    code: "jwt_signing_&_validation",
     name: "JWT signing & validation",
     description: "Ensuring integrity of JSON Web Tokens.",
     cooldown: 3,
@@ -618,7 +618,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Application security",
-    code: "server-side_request_forgery_protections",
+    code: "SSRF_protections",
     name: "SSRF protections",
     description: "Preventing Server-Side Request Forgery.",
     cooldown: 4,
@@ -640,7 +640,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Infrastructure",
-    code: "transport_layer_security_handling",
+    code: "TLS_handling",
     name: "TLS handling",
     description: "Properly implementing TLS for data in transit.",
     cooldown: 2,
@@ -680,7 +680,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "Infrastructure",
-    code: "sandboxing_untrusted_code",
+    code: "sandboxing_code",
     name: "Sandboxing code",
     description: "Isolated environments for untrusted code.",
     cooldown: 4,
@@ -702,7 +702,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "basic_logging_and_auditing",
+    code: "basic_logging_&_auditing",
     name: "Basic logging & auditing",
     description: "Monitor system activity to detect incidents.",
     cooldown: 2,
@@ -712,7 +712,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "intrusion_detection_system",
+    code: "intrusion_detection_(IDS)",
     name: "Intrusion Detection (IDS)",
     description: "Monitor network traffic for suspicious activity.",
     cooldown: 5,
@@ -722,7 +722,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "behavioral_anomaly_detection",
+    code: "behavioral_detection",
     name: "Behavioral detection",
     description: "Identify unusual user or system behavior.",
     cooldown: 5,
@@ -732,7 +732,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "inccodeent_response_playbooks",
+    code: "incident_response_playbooks",
     name: "Incident response playbooks",
     description: "Standard procedures for security incidents.",
     cooldown: 4,
@@ -742,7 +742,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "threat_intelligence_integration",
+    code: "threat_intelligence",
     name: "Threat intelligence",
     description: "Staying informed about emerging threats.",
     cooldown: 4,
@@ -752,7 +752,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "supply-chain_security_valcodeation",
+    code: "supply-chain_security",
     name: "Supply-chain security",
     description: "Verifying third-party security.",
     cooldown: 5,
@@ -762,7 +762,7 @@ const defendermoves = [
   {
     role: "defender",
     category: "SOC & Monitoring",
-    code: "formal_verification_of_critical_components",
+    code: "formal_verification",
     name: "Formal verification",
     description: "Mathematical proof of component security.",
     cooldown: 5,
@@ -790,8 +790,10 @@ const defendermoves = [
 export const add = async () => {
   try{
     await Ability.deleteMany({});
-    console.log(await Ability.insertMany([...attackermoves, ...defendermoves]) ? true : false);
+    await Ability.insertMany([...attackermoves, ...defendermoves]);
+    console.log(true);
+    
   } catch(e){
-    console.log(e.message);
+    
   }
 }

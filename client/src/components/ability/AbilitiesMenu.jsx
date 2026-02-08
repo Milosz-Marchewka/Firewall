@@ -1,7 +1,7 @@
 import Ability from "./Ability.jsx"
 import AbilityBin from "./AbilityBin.jsx";
 import { useEffect, useState } from "react";
-import SkillTreeIcon from "../../assets/skillTreeIcon.png";
+import SkillTreeIcon from "../../assets/oldIcons/skillTreeIcon.png";
 
 const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, numOfSkillPoints, deck}) => {
 

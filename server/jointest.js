@@ -17,19 +17,14 @@ const makeClient = (name) => {
 		timeout: 5000
 	});
 
-	socket.on('connect', () => console.log(`${name}: connected (${socket.id})`));
 	socket.on('connect_error', (err) => console.error(`${name}: connect_error`, err?.message ?? err));
 	socket.on('join-error', (msg) => console.error(`${name}: join-error`, msg));
-	socket.on('room-state', (state) => console.log(`${name}: room-state`, state));
-	socket.on('player-left', (msg) => console.log(`${name}: player-left`, msg));
-	socket.on('disconnect', (reason) => console.log(`${name}: disconnected (${reason})`));
 
 	return socket;
 };
 
 const join = (socket, payload) => new Promise((resolve) => {
 	socket.emit('join-room', payload, (ack) => {
-		console.log(`ack (${socket.id}):`, ack);
 		resolve(ack);
 	});
 });
