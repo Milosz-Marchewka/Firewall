@@ -3,7 +3,7 @@ import AbilityBin from "./AbilityBin.jsx";
 import { useEffect, useState } from "react";
 import SkillTreeIcon from "../../assets/oldIcons/skillTreeIcon.png";
 
-const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, numOfSkillPoints, deck}) => {
+const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, skillPoints, deck}) => {
 
     const handleClick = () => {
         setIsSkillTreeShowed(prev =>true);
@@ -35,9 +35,9 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, nu
                 <div className="absolute left-3 pointer hover:shadow-[4px_4px_0px_rgb(0_0_0_/_0.4)] hover:-translate-y-[4px] hover:-translate-x-[4px] transition-all hoverable relative h-fit w-fit" onClick={() => {handleClick()}}>
                     <img src={SkillTreeIcon} alt="skill tree" className={`${styles.th[type]} border-3 border-black/70 h-17 w-17 p-2 pixelart`}/>
                     {
-                        numOfSkillPoints > 0 ?
+                        skillPoints > 0 ?
                         <div className="absolute font-jersey bg-amber-300 rounded-[50%] w-7 h-7 flex items-center justify-center -bottom-1 -right-2 outline-2 outline-black">
-                            <p className="text-2xl">{numOfSkillPoints}</p>
+                            <p className="text-2xl">{skillPoints}</p>
                         </div>
                         : 
                         <></>

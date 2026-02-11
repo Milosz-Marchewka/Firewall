@@ -29,7 +29,9 @@ const attackermoves =  [
 
     rarity: 1,
 
-    effect: { kind: "damage", value: 1 }
+    effect: { kind: "damage", value: 1 },
+
+    cost: 1
 
   },
 
@@ -49,7 +51,9 @@ const attackermoves =  [
 
     rarity: 2,
 
-    effect: { kind: "damage", value: 3 }
+    effect: { kind: "damage", value: 3 },
+
+    cost: 2
 
   },
 
@@ -69,7 +73,9 @@ const attackermoves =  [
 
     rarity: 4,
 
-    effect: { kind: "damage", value: 4 }
+    effect: { kind: "damage", value: 4 },
+
+    cost: 4
 
   },
 
@@ -89,7 +95,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "freeze", value: 2 }
+    effect: { kind: "freeze", value: 2 },
+
+    cost: 7
 
   },
 
@@ -113,7 +121,9 @@ const attackermoves =  [
 
     rarity: 1,
 
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+
+    cost: 1
 
   },
 
@@ -133,7 +143,9 @@ const attackermoves =  [
 
     rarity: 3,
 
-    effect: { kind: "damage", value: 4 }
+    effect: { kind: "damage", value: 4 },
+
+    cost: 3
 
   },
 
@@ -153,7 +165,9 @@ const attackermoves =  [
 
     rarity: 4,
 
-    effect: { kind: "damage", value: 4 }
+    effect: { kind: "damage", value: 4 },
+
+    cost: 4
 
   },
 
@@ -173,7 +187,9 @@ const attackermoves =  [
 
     rarity: 5,
 
-    effect: { kind: "damage", value: 5 }
+    effect: { kind: "damage", value: 5 },
+
+    cost: 5
 
   },
 
@@ -193,7 +209,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "damage", value: 7 }
+    effect: { kind: "damage", value: 7 },
+
+    cost: 7
 
   },
 
@@ -213,7 +231,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "heal", value: 4 }
+    effect: { kind: "heal", value: 4 },
+
+    cost: 8
 
   },
 
@@ -237,7 +257,9 @@ const attackermoves =  [
 
     rarity: 1,
 
-    effect: { kind: "heal", value: 1 }
+    effect: { kind: "heal", value: 1 },
+
+    cost: 1
 
   },
 
@@ -257,7 +279,9 @@ const attackermoves =  [
 
     rarity: 3,
 
-    effect: { kind: "freeze", value: 1 }
+    effect: { kind: "freeze", value: 1 },
+
+    cost: 3
 
   },
 
@@ -277,7 +301,9 @@ const attackermoves =  [
 
     rarity: 4,
 
-    effect: { kind: "heal", value: 3 }
+    effect: { kind: "heal", value: 3 },
+
+    cost: 4
 
   },
 
@@ -297,7 +323,9 @@ const attackermoves =  [
 
     rarity: 5,
 
-    effect: { kind: "damage", value: 6 }
+    effect: { kind: "damage", value: 6 },
+
+    cost: 5
 
   },
 
@@ -317,7 +345,9 @@ const attackermoves =  [
 
     rarity: 5,
 
-    effect: { kind: "freeze", value: 2 }
+    effect: { kind: "freeze", value: 2 },
+
+    cost: 6
 
   },
 
@@ -337,7 +367,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "damage", value: 6 }
+    effect: { kind: "damage", value: 6 },
+
+    cost: 7
 
   },
 
@@ -357,7 +389,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "damage", value: 6 }
+    effect: { kind: "damage", value: 6 },
+
+    cost: 8
 
   },
 
@@ -381,7 +415,9 @@ const attackermoves =  [
 
     rarity: 1,
 
-    effect: { kind: "heal", value: 1 }
+    effect: { kind: "heal", value: 1 },
+
+    cost: 1
 
   },
 
@@ -401,7 +437,9 @@ const attackermoves =  [
 
     rarity: 2,
 
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+
+    cost: 2
 
   },
 
@@ -421,7 +459,9 @@ const attackermoves =  [
 
     rarity: 3,
 
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+
+    cost: 3
 
   },
 
@@ -441,7 +481,9 @@ const attackermoves =  [
 
     rarity: 4,
 
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+
+    cost: 4
 
   },
 
@@ -461,7 +503,9 @@ const attackermoves =  [
 
     rarity: 5,
 
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+
+    cost: 5
 
   },
 
@@ -481,7 +525,9 @@ const attackermoves =  [
 
     rarity: 6,
 
-    effect: { kind: "freeze", value: 2 }
+    effect: { kind: "freeze", value: 2 },
+
+    cost: 7
 
   }
 
@@ -501,7 +547,8 @@ const defendermoves = [
     description: "Replace default passwords with strong, unique ones.",
     cooldown: 2,
     rarity: 1,
-    effect: { kind: "heal", value: 1 }
+    effect: { kind: "heal", value: 1 },
+    cost: 1
   },
   { 
     role: "defender",
@@ -511,17 +558,8 @@ const defendermoves = [
     description: "Implementing and enforcing a strong password policy.", 
     cooldown: 2, 
     rarity: 2, 
-    effect: { kind: "heal", value: 1 } 
-  },
-  {
-    role: "defender",
-    category: "Identity & Access",
-    code: "account_lockout",
-    name: "Account lockout",
-    description: "Lock accounts after a set number of failed login attempts.",
-    cooldown: 4,
-    rarity: 2,
-    effect: { kind: "freeze", value: 1 }
+    effect: { kind: "heal", value: 1 },
+    cost: 2
   },
   {
     role: "defender",
@@ -531,17 +569,30 @@ const defendermoves = [
     description: "Using CAPTCHAs to prevent automated attacks.",
     cooldown: 4,
     rarity: 2,
-    effect: { kind: "freeze", value: 1 }
+    effect: { kind: "freeze", value: 1 },
+    cost: 2
   },
   {
     role: "defender",
     category: "Identity & Access",
-    code: "multi-factor_authentication_mfa",
+    code: "account_lockout",
+    name: "Account lockout",
+    description: "Lock accounts after a set number of failed login attempts.",
+    cooldown: 4,
+    rarity: 2,
+    effect: { kind: "freeze", value: 1 },
+    cost: 3
+  },
+  {
+    role: "defender",
+    category: "Identity & Access",
+    code: "multi-factor_authentication",
     name: "Multi-factor authentication",
     description: "Multi-factor authentication for extra security.",
     cooldown: 4,
     rarity: 3,
-    effect: { kind: "freeze", value: 1 }
+    effect: { kind: "freeze", value: 1 },
+    cost: 3
   },
   {
     role: "defender",
@@ -551,7 +602,8 @@ const defendermoves = [
     description: "Using secure flags and attributes for cookies.",
     cooldown: 3,
     rarity: 3,
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+    cost: 4
   },
 
   // --- Application security ---
@@ -563,7 +615,8 @@ const defendermoves = [
     description: "Validating user inputs to prevent overflows.",
     cooldown: 2,
     rarity: 1,
-    effect: { kind: "damage", value: 1 }
+    effect: { kind: "damage", value: 1 },
+    cost: 1
   },
   {
     role: "defender",
@@ -573,7 +626,8 @@ const defendermoves = [
     description: "Using queries to prevent SQL injection.",
     cooldown: 2,
     rarity: 2,
-    effect: { kind: "damage", value: 1 }
+    effect: { kind: "damage", value: 1 },
+    cost: 2
   },
   {
     role: "defender",
@@ -583,7 +637,8 @@ const defendermoves = [
     description: "Using tokens to protect against CSRF attacks.",
     cooldown: 3,
     rarity: 3,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 3
   },
   {
     role: "defender",
@@ -593,7 +648,8 @@ const defendermoves = [
     description: "Validating uploaded files for malicious content.",
     cooldown: 3,
     rarity: 3,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 4
   },
   {
     role: "defender",
@@ -603,7 +659,8 @@ const defendermoves = [
     description: "Implementing CSP to prevent XSS attacks.",
     cooldown: 3,
     rarity: 4,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 4
   },
   {
     role: "defender",
@@ -613,7 +670,8 @@ const defendermoves = [
     description: "Ensuring integrity of JSON Web Tokens.",
     cooldown: 3,
     rarity: 4,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 5
   },
   {
     role: "defender",
@@ -623,7 +681,8 @@ const defendermoves = [
     description: "Preventing Server-Side Request Forgery.",
     cooldown: 4,
     rarity: 5,
-    effect: { kind: "damage", value: 3 }
+    effect: { kind: "damage", value: 3 },
+    cost: 6
   },
 
   // --- Infrastructure ---
@@ -635,7 +694,8 @@ const defendermoves = [
     description: "Control incoming and outgoing network traffic.",
     cooldown: 2,
     rarity: 1,
-    effect: { kind: "damage", value: 1 }
+    effect: { kind: "damage", value: 1 },
+    cost: 1
   },
   {
     role: "defender",
@@ -645,7 +705,8 @@ const defendermoves = [
     description: "Properly implementing TLS for data in transit.",
     cooldown: 2,
     rarity: 2,
-    effect: { kind: "heal", value: 1 }
+    effect: { kind: "heal", value: 1 },
+    cost: 2
   },
   {
     role: "defender",
@@ -655,7 +716,8 @@ const defendermoves = [
     description: "Limit access to reduce breach impact.",
     cooldown: 3,
     rarity: 3,
-    effect: { kind: "heal", value: 2 }
+    effect: { kind: "heal", value: 2 },
+    cost: 3
   },
   {
     role: "defender",
@@ -665,7 +727,8 @@ const defendermoves = [
     description: "Headers to protect against web vulnerabilities.",
     cooldown: 3,
     rarity: 4,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 4
   },
   {
     role: "defender",
@@ -675,7 +738,8 @@ const defendermoves = [
     description: "Ensuring integrity of the boot process.",
     cooldown: 4,
     rarity: 5,
-    effect: { kind: "heal", value: 3 }
+    effect: { kind: "heal", value: 3 },
+    cost: 6
   },
   {
     role: "defender",
@@ -685,7 +749,8 @@ const defendermoves = [
     description: "Isolated environments for untrusted code.",
     cooldown: 4,
     rarity: 5,
-    effect: { kind: "damage", value: 3 }
+    effect: { kind: "damage", value: 3 },
+    cost: 7
   },
   {
     role: "defender",
@@ -695,7 +760,8 @@ const defendermoves = [
     description: "Strengthening the OS against exploitation.",
     cooldown: 5,
     rarity: 6,
-    effect: { kind: "heal", value: 4 }
+    effect: { kind: "heal", value: 4 },
+    cost: 8
   },
 
   // --- SOC & Monitoring ---
@@ -707,7 +773,8 @@ const defendermoves = [
     description: "Monitor system activity to detect incidents.",
     cooldown: 2,
     rarity: 1,
-    effect: { kind: "damage", value: 1 }
+    effect: { kind: "damage", value: 1 },
+    cost: 1
   },
   {
     role: "defender",
@@ -717,17 +784,8 @@ const defendermoves = [
     description: "Monitor network traffic for suspicious activity.",
     cooldown: 5,
     rarity: 4,
-    effect: { kind: "damage", value: 2 }
-  },
-  {
-    role: "defender",
-    category: "SOC & Monitoring",
-    code: "behavioral_detection",
-    name: "Behavioral detection",
-    description: "Identify unusual user or system behavior.",
-    cooldown: 5,
-    rarity: 5,
-    effect: { kind: "damage", value: 2 }
+    effect: { kind: "damage", value: 2 },
+    cost: 4
   },
   {
     role: "defender",
@@ -737,7 +795,19 @@ const defendermoves = [
     description: "Standard procedures for security incidents.",
     cooldown: 4,
     rarity: 5,
-    effect: { kind: "damage", value: 4 }
+    effect: { kind: "damage", value: 4 },
+    cost: 6
+  },
+  {
+    role: "defender",
+    category: "SOC & Monitoring",
+    code: "behavioral_detection",
+    name: "Behavioral detection",
+    description: "Identify unusual user or system behavior.",
+    cooldown: 5,
+    rarity: 5,
+    effect: { kind: "damage", value: 2 },
+    cost: 7
   },
   {
     role: "defender",
@@ -747,7 +817,8 @@ const defendermoves = [
     description: "Staying informed about emerging threats.",
     cooldown: 4,
     rarity: 6,
-    effect: { kind: "damage", value: 3 }
+    effect: { kind: "damage", value: 3 },
+    cost: 8
   },
   {
     role: "defender",
@@ -757,7 +828,8 @@ const defendermoves = [
     description: "Verifying third-party security.",
     cooldown: 5,
     rarity: 6,
-    effect: { kind: "damage", value: 4 }
+    effect: { kind: "damage", value: 4 },
+    cost: 8
   },
   {
     role: "defender",
@@ -767,7 +839,8 @@ const defendermoves = [
     description: "Mathematical proof of component security.",
     cooldown: 5,
     rarity: 6,
-    effect: { kind: "heal", value: 5 }
+    effect: { kind: "heal", value: 5 },
+    cost: 8
   }
 ];
 

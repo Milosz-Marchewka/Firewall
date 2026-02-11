@@ -19,6 +19,7 @@ accountRoutes.get("/auth", requireAuth, async (req, res)=>{
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                points: user.points,
                 level: user.level,
                 levelPoints: user.levelPoints,
             });
@@ -26,7 +27,14 @@ accountRoutes.get("/auth", requireAuth, async (req, res)=>{
 
         const guest = await Guest.findById(req.user._id).select('-password -__v');
         if (guest) {
-            return res.json({ id: guest._id });
+            return res.json({
+                id: guest._id,
+                username: guest.username,
+                email: guest.email,
+                points: guest.points,
+                level: guest.level,
+                levelPoints: guest.levelPoints,
+            });
         }
 
         return res.status(404).send("User not found");

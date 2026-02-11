@@ -30,6 +30,7 @@ const LobbyScreen = ({user, setUser}) => {
     });
     const [ownedAbilities, setOwnedAbilities] = useState([]);
     const [outerStyle, setOuterStyle] = useState(baseOuterStyles);
+    const [skillPoints, setSkillPoints] = useState(user?.points || 0);
 
     const navigate = useNavigate();
 
@@ -134,13 +135,13 @@ const LobbyScreen = ({user, setUser}) => {
     };
     return(
         <div className={outerStyle}>
-            <SkillTreeScreen role={characterSelected} switchRole={setCharacterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities} numOfSkillPoints={2}/>
+            <SkillTreeScreen id={user.id} role={characterSelected} switchRole={setCharacterSelected} abilities={characterSelected == "attacker" ? abilities.attacker : abilities.defender} ownedAbilities={ownedAbilities} isShowed={isSkillTreeShowed} setIsShowed={setIsSkillTreeShowed} setOwned={setOwnedAbilities} skillPoints={skillPoints} setSkillPoints={setSkillPoints}/>
             <CharacterContext.Provider value = {[characterSelected, setCharacterSelected]}>
                 <DndContext onDragStart={(event) => handleDragStart(event)}
                 onDragEnd={(event) => handleDragEnd(event)}
                 onDragCancel={() => setActiveId(null)}
                 >
-                    <AbilitiesMenu type={characterSelected} activeId={activeId} setActiveId={setActiveId} abilities={ownedAbilities} ownedAbilities={ownedAbilities} deck={decks[characterSelected]} setIsSkillTreeShowed={setIsSkillTreeShowed} numOfSkillPoints={2}/>
+                    <AbilitiesMenu type={characterSelected} activeId={activeId} setActiveId={setActiveId} abilities={ownedAbilities} ownedAbilities={ownedAbilities} deck={decks[characterSelected]} setIsSkillTreeShowed={setIsSkillTreeShowed} skillPoints={skillPoints} setSkillPoints={setSkillPoints}/>
                     <div className="w-[60%] p-3 flex flex-col justify-between">
                         <CharacterSwitch/>
                         <div className="flex-1 flex items-center">

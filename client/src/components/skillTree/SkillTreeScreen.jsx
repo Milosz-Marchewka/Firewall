@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import SkillTreeAbility from "./SkillTreeAbility";
 import back from '../../assets/oldIcons/back.png';
 import "./SkillTreeScreen.css";
-import Button from "../entryScreen/Button"
+import Button from "../entryScreen/Button";
+import { abilityImages } from "../../utils/images";
 
 const categories = {
     defender: ["Identity & Access", "Application security", "Infrastructure", "SOC & Monitoring"],
     attacker: ["Credentials & Identity", "Exploits & Persistence", "Network & System", "Recon & Supply chain"]
 }
 
-const SkillTreeScreen = ({role, switchRole, abilities, ownedAbilities, isShowed, setIsShowed, setOwned, numOfSkillPoints}) => {
+const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isShowed, setIsShowed, setOwned, skillPoints, setSkillPoints}) => {
     const [styles, setStyles] = useState({
         outer: {
             defender: `screen overflow-x-auto fixed pt-1 top-0 bg-linear-to-l from-sky-700 to-gray-900 z-1000 transition-[left] duration-500 `,
@@ -27,12 +28,39 @@ const SkillTreeScreen = ({role, switchRole, abilities, ownedAbilities, isShowed,
         setIsShowed(prev => false);
     }
 
+    const handleBuy = async ()=>{
+        try{
+            (async()=>{
+                const req = await fetch("/api/buyAbility", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"                
+                    },
+                    body: JSON.stringify({
+                        id,
+                        code: buyingProgress.ability.code
+                    })
+                });
+
+                if(!req.ok){
+                    return;
+                }
+                setBuyingProgress((prev)=>({...prev, stage: "final"}));
+                const res = await req.json();
+                setOwned(prev => [...prev, res.ability]);
+                setSkillPoints(res.points);
+            })();
+
+        } catch(e){
+            //
+        }
+    }
 
     return(
         <div className={styles.outer[role]} style={{left: isShowed ? "0" : "-100%"}}>
             <div className="absolute top-0 right-0 m-5 font-jersey text-4xl text-black flex gap-2">
                 <div className="py-2 px-5 border-4 border-black bg-amber-300">
-                    {numOfSkillPoints} skill points available
+                    {skillPoints} skill points available
                 </div>
                 <div className={`${styles.th[role]} w-16 h-16 border-4 border-black flex justify-center items-center pointer hover:-translate-0.5 hover:shadow-[2px_2px_0px_rgba(0_0_0_/_0.1)]`} onClick={() => {switchRole(role == 'attacker' ? 'defender' : 'attacker'); console.log(role)}}>
                     <img src={back} alt="💫" className=""/>
@@ -88,7 +116,7 @@ const SkillTreeScreen = ({role, switchRole, abilities, ownedAbilities, isShowed,
                             <div className="bg-gray-200 min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
                                 <h2 className="text-2xl">Are you sure you want to buy <h1 className="text-3xl">{buyingProgress.ability?.name}?</h1></h2>
                                 <div className="flex gap-5 w-full justify-center py-2">
-                                    <Button children={"Yes"} className="mt-0 bg-lime-500" onClick={()=>{setBuyingProgress((prev)=>({...prev, stage: "final"})); setOwned((prev)=>[...prev, buyingProgress.ability])}}/>
+                                    <Button children={"Yes"} className="mt-0 bg-lime-500" onClick={()=>{handleBuy()}}/>
                                     <Button children={"No"} className="mt-0 bg-red-500" onClick={()=>setBuyingProgress({stage: "", ability: {}})}/>
                                 </div>
                             </div>

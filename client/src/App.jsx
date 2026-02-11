@@ -31,6 +31,7 @@ function App() {
             username: data?.username || `Guest ${data.id}`,
             level: data?.level ?? 0,
             levelPoints: data?.levelPoints ?? 0,
+            points: data?.points ?? 0,
           });
         }
       } catch {

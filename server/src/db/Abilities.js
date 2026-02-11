@@ -11,7 +11,8 @@ const AbilitySchema = new mongoose.Schema({
   effect: {
     kind: {type: String}, // damage, heal, buff, freeze, etc
     value: {type: Number}
-  }
+  },
+  cost: {type: Number, min: 1},
 }, { _id: false });
 
 const Ability = mongoose.model('Ability', AbilitySchema);
