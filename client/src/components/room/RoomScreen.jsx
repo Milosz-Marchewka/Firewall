@@ -12,6 +12,7 @@ const RoomScreen = ({user}) => {
     const [role, setRole] = useState(null);
     const [players, setPlayers] = useState(null);
     const [usernames, setUsernames] = useState({defender: "", attacker: ""});
+    const [ranks, setRanks] = useState({defender: "", attacker: ""});
     const [roomType, setRoomType] = useState(null);
 
     const navigate = useNavigate();
@@ -45,6 +46,7 @@ const RoomScreen = ({user}) => {
 
         const onRoomState = (payload) => {
             if (isCancelled) return;
+            console.log("ROOM_STATE_PAYLOAD:", payload);
             if (payload?.type) {
                 roomTypeRef.current = payload.type;
                 setRoomType(payload.type);
@@ -61,6 +63,7 @@ const RoomScreen = ({user}) => {
                 }
             }
             setUsernames(payload?.usernames);
+            setRanks(payload?.ranks);
             console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
             
         };
@@ -70,6 +73,7 @@ const RoomScreen = ({user}) => {
             console.log("ABOVE PAYLOAD STATUS: " , status);
             
             setUsernames(payload?.usernames);
+            setRanks(payload?.ranks);
             if (payload?.type) {
                 roomTypeRef.current = payload.type;
                 setRoomType(payload.type);
@@ -112,6 +116,7 @@ const RoomScreen = ({user}) => {
                 setRole(ack.role ?? null);
                 setPlayers(ack.players ?? null);
                 if (ack?.usernames) setUsernames(ack.usernames);
+                if(ack?.ranks) setRanks(ack.ranks);
                 if (ack?.type) {
                     roomTypeRef.current = ack.type;
                     setRoomType(ack.type);
@@ -210,10 +215,10 @@ const RoomScreen = ({user}) => {
     return (
         <div className="screen flex justify-center items-center overflow-hidden">
             {status === "joining"
-                ? <WaitingScreen role={role} players={players} usernames={usernames}/>
+                ? <WaitingScreen role={role} players={players} usernames={usernames} ranks={ranks}/>
                 : status === "draft" && roomType !== "play"
                     ? <DraftScreen role={role} setStatus={setStatus}/>
-                    : <BattleScreen token={token} role={role} usernames={usernames} />}
+                    : <BattleScreen token={token} role={role} usernames={usernames} ranks={ranks}/>}
         </div>
     );
 };

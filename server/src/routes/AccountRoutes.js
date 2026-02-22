@@ -8,6 +8,7 @@ import logout from '../controllers/accounts/logout.js';
 import { getUserAbilities } from '../controllers/abilities/getUserAbilities.js';
 import User from '../db/User.js';
 import Guest from '../db/Guest.js';
+import { determineRank } from '../controllers/accounts/getRank.js';
 
 const accountRoutes = Router();
 
@@ -16,12 +17,13 @@ accountRoutes.get("/auth", requireAuth, async (req, res)=>{
         const user = await User.findById(req.user._id).select('-password -__v');
         if (user) {
             return res.json({
-                id: user._id,
-                username: user.username,
+                id: user._id ?? -1,
+                username: user.username ?? "error",
                 email: user.email,
                 points: user.points,
                 level: user.level,
                 levelPoints: user.levelPoints,
+                rank: determineRank(user.level)
             });
         }
 
@@ -29,11 +31,12 @@ accountRoutes.get("/auth", requireAuth, async (req, res)=>{
         if (guest) {
             return res.json({
                 id: guest._id,
-                username: guest.username,
+                username: `Guest ${guest.id}`,
                 email: guest.email,
                 points: guest.points,
                 level: guest.level,
                 levelPoints: guest.levelPoints,
+                rank: determineRank(guest.level)
             });
         }
 

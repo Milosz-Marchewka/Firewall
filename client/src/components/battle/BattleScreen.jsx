@@ -5,8 +5,8 @@ import DeckBattle from './DeckBattle.jsx';
 import BattleCharacter from './BattleCharacter.jsx';
 import Character from '../lobby/Character.jsx';
 
-const BattleScreen = ({ token, role, usernames }) => {
-    console.log(usernames);
+const BattleScreen = ({ token, role, usernames, ranks}) => {
+    console.log("BATTLESCREEN_RANKS:", ranks);
     
     const [state, setState] = useState(null);
     const [error, setError] = useState(null);
@@ -130,9 +130,9 @@ const BattleScreen = ({ token, role, usernames }) => {
             ) : null}
             <div className="w-full h-full relative">
                 <Character role={role} className={"w-2/3 -left-30 mirrored -top-20"}/>
-                <BattleCharacter username={opponentName} rank={"Noob"} hp={role == "attacker" ? state.defender?.hp : state.attacker?.hp} role={role == "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
+                <BattleCharacter username={opponentName} rank={role === 'attacker' ? ranks.defender : ranks.attacker} hp={role === "attacker" ? state.defender?.hp : state.attacker?.hp} role={role === "attacker" ? "defender" : "attacker"} className={"w-1/3 right-0"}/>
             </div>
-            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={myName} rank={"Pro"} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
+            <DeckBattle role={role} abilities={myAbilities} myTurn={myTurn} state={state} handleUse={handleUse} username={myName} rank={ranks[role]} hp={state[role]?.hp} overflow={role == "attacker" ? state.attacker?.overflow ?? 0 : 0}/>
             <div className="absolute top-0 right-1/2 bg-neutral-700 font-jersey text-white text-center translate-x-[50%] shadow-[10px_10px_0px_rgb(0_0_0_/_0.4)] w-1/3">
                 <h2 className='text-7xl border-b-5 border-black/50 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.7)]'>
                     Turn {state.turnNumber}

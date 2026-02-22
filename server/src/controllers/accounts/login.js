@@ -2,6 +2,7 @@ import User from "../../db/User.js";
 import bcrypt from 'bcrypt';
 import { makeJwtToken } from "./makeJwtToken.js";
 import { clearCookies } from "../../utils.js";
+import { determineRank } from "./getRank.js";
 
 const login = async (req, res)=>{
     if((!req.body.email && !req.body.username) || !req.body.password){
@@ -31,11 +32,17 @@ const login = async (req, res)=>{
         });
 
         const safeUser = user.toObject();
+        safeUser.rank = determineRank(safeUser.level);
         delete safeUser.password;
         delete safeUser.__v;
+
+        console.log(safeUser);
+        
         
         return res.status(200).send(safeUser);
     } catch (error) {
+        console.log(error.message);
+        
         return res.status(500).send("Server error.");
     }
 }

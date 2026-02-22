@@ -3,6 +3,7 @@ import Game from '../db/Game.js';
 import { extractRoomToken } from '../utils.js';
 import AbilityCatalog from '../db/Abilities.js';
 import getUsername from '../controllers/accounts/getUsername.js';
+import getRank from '../controllers/accounts/getRank.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const buildTokenRegex = (token) => new RegExp(`/room/${escapeRegex(token)}/?$`);
@@ -149,7 +150,7 @@ const releaseSocketFromRoom = async (io, socket, id, roomId) => {
         socket.leave(roomId);
         socket.to(roomId).emit('player-left', { roomId });
         if (updated) {
-            socket.to(roomId).emit('room-state', { roomId, players: countPlayers(updated), usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, type: updated?.type });
+            socket.to(roomId).emit('room-state', { roomId, players: countPlayers(updated), usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, ranks: {defender: await getRank(updated?.defender?.id) ?? "Defender rank error", attacker: await getRank(updated?.attacker?.id) ?? "Attacker rank error" }, type: updated?.type });
             socket.to(roomId).emit('draft-status', {
                 attackerDone: !!updated.draft?.attackerDone,
                 defenderDone: !!updated.draft?.defenderDone,
@@ -233,6 +234,10 @@ export default function createIo(httpServer) {
                             defender: await getUsername(game?.defender?.id) ?? null,
                             attacker: await getUsername(game?.attacker?.id) ?? null,
                         },
+                        ranks: {
+                            defender: await getRank(game?.defender?.id) ?? null,
+                            attacker: await getRank(game?.attacker?.id) ?? null,
+                        },
                         type: game?.type,
                     };
                     const playersAfterJoin = response.players;
@@ -240,6 +245,7 @@ export default function createIo(httpServer) {
                         roomId,
                         players: playersAfterJoin,
                         usernames: response.usernames,
+                        ranks: response.ranks,
                         type: game?.type,
                     });
 
@@ -248,6 +254,7 @@ export default function createIo(httpServer) {
                         io.to(roomId).emit('room-ready', {
                             roomId,
                             usernames: response.usernames,
+                            ranks: response.ranks,
                             type: game?.type,
                         });
                     }
@@ -317,7 +324,7 @@ export default function createIo(httpServer) {
                         if (retried) {
                             socket.data.role = retryRole;
                             const playersAfterRetry = countPlayers(retried);
-                            io.to(roomId).emit('room-state', { roomId, players: playersAfterRetry , usernames: {defender: await getUsername(retried?.defender?.id) ?? "Defender name error", attacker: await getUsername(retried?.attacker?.id) ?? "Attacker name error" }, type: retried?.type });
+                            io.to(roomId).emit('room-state', { roomId, players: playersAfterRetry , usernames: {defender: await getUsername(retried?.defender?.id) ?? "Defender name error", attacker: await getUsername(retried?.attacker?.id) ?? "Attacker name error" }, ranks: {defender: await getRank(retried?.defender?.id) ?? "Defender rank error", attacker: await getRank(retried?.attacker?.id) ?? "Attacker rank error" }, type: retried?.type });
                             io.to(roomId).emit('player-joined', { roomId, role: retryRole });
 
                             const bothJoinedRetry = retried.attacker?.id != null && retried.defender?.id != null;
@@ -326,7 +333,7 @@ export default function createIo(httpServer) {
                                     { _id: retried._id, status: { $ne: 'in_progress' } },
                                     { $set: { status: 'in_progress' } }
                                 );
-                                io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(retried.defender?.id) ?? "Defender name error", attacker: await getUsername(retried.attacker?.id) ?? "Attacker name error" }, type: retried?.type});
+                                io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(retried.defender?.id) ?? "Defender name error", attacker: await getUsername(retried.attacker?.id) ?? "Attacker name error" }, ranks: { defender: await getRank(retried.defender?.id) ?? "Defender rank error", attacker: await getRank(retried.attacker?.id) ?? "Attacker rank error" }, type: retried?.type});
                             }
 
                             const response = {
@@ -337,6 +344,10 @@ export default function createIo(httpServer) {
                                 usernames: {
                                     defender: await getUsername(retried?.defender?.id) ?? "Defender name error",
                                     attacker: await getUsername(retried?.attacker?.id) ?? "Attacker name error",
+                                },
+                                ranks: {
+                                    defender: await getRank(retried?.defender?.id) ?? "Defender rank error",
+                                    attacker: await getRank(retried?.attacker?.id) ?? "Attacker rank error",
                                 },
                                 type: retried?.type,
                             };
@@ -357,7 +368,7 @@ export default function createIo(httpServer) {
                 
 
                 const playersAfterJoin = countPlayers(updated);
-                io.to(roomId).emit('room-state', { roomId, players: playersAfterJoin, usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, type: updated?.type });
+                io.to(roomId).emit('room-state', { roomId, players: playersAfterJoin, usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, ranks: {defender: await getRank(updated?.defender?.id) ?? "Defender rank error", attacker: await getRank(updated?.attacker?.id) ?? "Attacker rank error" }, type: updated?.type });
                 io.to(roomId).emit('player-joined', { roomId, role });
 
                 const bothJoined = updated.attacker?.id != null && updated.defender?.id != null;
@@ -369,7 +380,7 @@ export default function createIo(httpServer) {
                 }
 
                 if (bothJoined) {
-                    io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(updated.defender?.id) ?? "Defender name error", attacker: await getUsername(updated.attacker?.id) ?? "Attacker name error" }, type: updated?.type });
+                    io.to(roomId).emit('room-ready', { roomId, usernames: { defender: await getUsername(updated.defender?.id) ?? "Defender name error", attacker: await getUsername(updated.attacker?.id) ?? "Attacker name error" }, ranks: { defender: await getRank(updated.defender?.id) ?? "Defender rank error", attacker: await getRank(updated.attacker?.id) ?? "Attacker rank error" }, type: updated?.type });
                 }
 
                 const response = {
@@ -380,6 +391,10 @@ export default function createIo(httpServer) {
                     usernames: {
                         defender: await getUsername(updated?.defender?.id) ?? "Defender name error",
                         attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error",
+                    },
+                    ranks: {
+                        defender: await getRank(updated?.defender?.id) ?? "Defender rank error",
+                        attacker: await getRank(updated?.attacker?.id) ?? "Attacker rank error",
                     },
                     type: updated?.type
                 };
@@ -805,7 +820,7 @@ export default function createIo(httpServer) {
                 }
 
                 const players = updated ? countPlayers(updated) : 0;
-                socket.to(roomId).emit('room-state', { roomId, players, usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, type: updated?.type });
+                socket.to(roomId).emit('room-state', { roomId, players, usernames: {defender: await getUsername(updated?.defender?.id) ?? "Defender name error", attacker: await getUsername(updated?.attacker?.id) ?? "Attacker name error" }, ranks: {defender: await getRank(updated?.defender?.id) ?? "Defender rank error", attacker: await getRank(updated?.attacker?.id) ?? "Attacker rank error" }, type: updated?.type });
                 socket.to(roomId).emit('player-left', { roomId });
                 if (updated) {
                     socket.to(roomId).emit('draft-status', {

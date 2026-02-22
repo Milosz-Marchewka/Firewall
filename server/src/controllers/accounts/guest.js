@@ -17,6 +17,7 @@ const guest = async (req, res)=>{
         });
 
         const safeUser = guest.toObject();
+        safeUser.rank = "Noob";
         delete safeUser.password;
         delete safeUser.__v;
 

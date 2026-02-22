@@ -29,6 +29,7 @@ const signup = async (req, res) => {
         });
         
         const safeUser = user.toObject();
+        safeUser.rank = "Noob";
         delete safeUser.password;
         delete safeUser.__v;
 

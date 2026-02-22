@@ -115,8 +115,8 @@ const LobbyScreen = ({user, setUser}) => {
     const getAbilitiesById = (id) => {
         const localabilities = [...abilities.attacker, ...abilities.defender];
         let item = localabilities.filter(item => item?.code == id)[0];
-        console.log(item);
-        return item ? item : [...decks[characterSelected].attacker, decks[characterSelected]].filter(item => item?.code == id)[0];
+        console.log("ERROR SPOT: " , decks[characterSelected].attacker);
+        return item ? item : [...decks[characterSelected].attacker ?? [], decks[characterSelected]].filter(item => item?.code == id)[0];
     }
 
     const [isSkillTreeShowed, setIsSkillTreeShowed] = useState(false);
@@ -148,7 +148,7 @@ const LobbyScreen = ({user, setUser}) => {
                             <Deck deck={decks[characterSelected]} activeId={activeId}/>
                             <div className="relative w-3/4 h-full p-10 pb-15 flex flex-col justify-end items-center">
                                 <Character role={characterSelected} className={"h-4/5 w-4/5"}/>
-                                <Rank username={user.username}/>
+                                <Rank username={user.username} rank={user.rank} />
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>

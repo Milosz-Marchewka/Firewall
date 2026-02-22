@@ -26,13 +26,9 @@ function App() {
         const data = await res.json();
         if (cancelled) return;
         if (data?.id) {
-          setUser({
-            id: data.id,
-            username: data?.username || `Guest ${data.id}`,
-            level: data?.level ?? 0,
-            levelPoints: data?.levelPoints ?? 0,
-            points: data?.points ?? 0,
-          });
+          setUser(
+            data
+          );
         }
       } catch {
       }

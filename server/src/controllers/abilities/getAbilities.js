@@ -10,15 +10,15 @@ export const getAbilities = async (req, res)=>{
             }
 
             abilities = await Ability.find({ role: requestedRole })
-                .select("-__v -_id")
+                .select("-__v")
                 .sort({ rarity: 1 }); // ASC
         } else {
             const attacker = await Ability.find({ role: "attacker" })
-            .select("-__v -_id")
+            .select("-__v")
             .sort({ rarity: 1 });
 
             const defender = await Ability.find({ role: "defender" })
-                .select("-__v -_id")
+                .select("-__v")
                 .sort({ rarity: 1 });
 
             abilities = {
