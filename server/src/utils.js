@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import os from 'os';
 
 const URL_LENGTH = 10;
 export const URL_BASE = process.env.URL_BASE ?? 'http://localhost:5173';
@@ -158,3 +159,4 @@ export const abilityDefaults = [{
         effect: { kind: "heal", value: 1 }
     },
 ];
+
