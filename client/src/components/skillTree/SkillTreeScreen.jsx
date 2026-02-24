@@ -3,7 +3,9 @@ import SkillTreeAbility from "./SkillTreeAbility";
 import back from '../../assets/oldIcons/back.png';
 import "./SkillTreeScreen.css";
 import Button from "../entryScreen/Button";
-import { abilityImages } from "../../utils/images";
+import abilityImages from "../../utils/images";
+import changeAttacker from "../../assets/newIcons/changeAttacker.png";
+import changeDefender from "../../assets/newIcons/changeDefender.png";
 
 const categories = {
     defender: ["Identity & Access", "Application security", "Infrastructure", "SOC & Monitoring"],
@@ -62,11 +64,11 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                 <div className="py-2 px-5 border-4 border-black bg-amber-300">
                     {skillPoints} skill points available
                 </div>
-                <div className={`${styles.th[role]} w-16 h-16 border-4 border-black flex justify-center items-center pointer hover:-translate-0.5 hover:shadow-[2px_2px_0px_rgba(0_0_0_/_0.1)]`} onClick={() => {switchRole(role == 'attacker' ? 'defender' : 'attacker'); console.log(role)}}>
-                    <img src={back} alt="💫" className=""/>
+                <div className={`${styles.th[role]} w-16 h-16 border-4 border-black flex justify-center items-center cursor-pointer hover:-translate-0.5 hover:shadow-[2px_2px_0px_rgba(0_0_0_/_0.1)]`} onClick={() => {switchRole(role == 'attacker' ? 'defender' : 'attacker'); console.log(role)}}>
+                    <img src={role == "attacker" ? changeAttacker : changeDefender} alt="Change Role" className="w-full h-full object-contain pixelart bg-[rgba(0,0,0,0.3)]"/>
                 </div>
             </div>
-            <div className="absolute text-4xl left-5 top-5 pointer" onClick={() => {handleClick()}}><img src={back} alt="Back" className={`${styles.th[role]} h-20 w-20 p-3 pixelart hover:shadow-[4px_4px_0px_rgb(20,20,20)] hover:-translate-y-[4px] hover:-translate-x-[4px] transition-all hoverable`}/></div>
+            <div className="absolute text-4xl left-5 top-5 cursor-pointer" onClick={() => {handleClick()}}><img src={back} alt="Back" className={`${styles.th[role]} h-20 w-20 p-3 pixelart hover:shadow-[4px_4px_0px_rgb(20,20,20)] hover:-translate-y-[4px] hover:-translate-x-[4px] transition-all hoverable`}/></div>
             <h1 className="font-jersey text-7xl text-center text-white text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)] py-3">{role.toUpperCase()}'S SKILL TREE</h1>
             <div className="h-full overflow-auto pb-30">
                 <div className="bg-neutral-900 w-4/5 mx-auto p-1 border border-gray-600">
@@ -96,7 +98,7 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                                                             if(item.category == category && item.rarity == index+1){
                                                                 return(
                                                                     <>
-                                                                        <SkillTreeAbility data={item} owned={ownedAbilities.filter((value, _) => (item.code == value.code)).length > 0} onClick={() => setBuyingProgress(()=>({stage: "confirm", ability: item}))}/>
+                                                                        <SkillTreeAbility data={item} owned={ownedAbilities.filter((value, _) => (item.code == value.code)).length > 0} onClick={() => setBuyingProgress(()=>({stage: "confirm", ability: item}))} locked={skillPoints == 0}/>
                                                                     </>
                                                                 );
                                                             }

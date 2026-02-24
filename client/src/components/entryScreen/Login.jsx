@@ -47,7 +47,7 @@ const Login = ({setUser, handleGuest, handleSignup})=>{
             </div>
             {
                 error != "" ?
-                <div className=" bg-red-700 font-jersey absolute w-1/3 h-fit -bottom-15 border-2 border-red-950 text-center">
+                <div className=" bg-red-700 font-jersey absolute w-fit h-fit -bottom-15 border-2 border-red-950 text-center px-1">
                     <p className="text-2xl text-red-100 text-center">{error}</p>
                 </div>
                 :

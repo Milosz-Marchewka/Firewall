@@ -1,8 +1,8 @@
 import { abilityImages } from "../../utils/images"
 
-const SkillTreeAbility = ({data, owned, onClick}) => {
+const SkillTreeAbility = ({data, owned, onClick, locked = false}) => {
     return(
-        <div className={`ability flex h-32 w-full text-white font-jersey rounded-sm ml-1 ${owned ? data.role == "attacker" ? "bg-neutral-700/50 border-2 border-red-300" : "bg-neutral-700/50 border-2 border-sky-300" : "bg-neutral-900 border-2 border-neutral-800"} transition-all`} {...owned ? "" : onClick={onClick}}>
+        <div className={`ability flex h-32 w-full text-white font-jersey rounded-sm ml-1 ${owned ? data.role == "attacker" ? "bg-neutral-700/50 border-2 border-red-300" : "bg-neutral-700/50 border-2 border-sky-300" : "bg-neutral-900 border-2 border-neutral-800"} transition-all ${locked && !owned ? "opacity-30 pointer-events-none grayscale-75" : "cursor-pointer hover:opacity-90"}`} {...owned ? "" : onClick={onClick}}>
             <div className="flex-2 flex items-center justify-center px-2 max-w-[90px]">
                 <img src={abilityImages[data?.code]} alt="photo" className="w-32 pixelart"/>
             </div>
