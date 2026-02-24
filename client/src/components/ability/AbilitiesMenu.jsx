@@ -44,7 +44,7 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, sk
                     }
                 </div>
                 {/* <div className="absolute text-4xl left-5 top-5 pointer" onClick={() => {handleClick()}}><img src={back} alt="Back" className={`${styles.th[role]} h-20 w-20 p-3 pixelart hover:shadow-[4px_4px_0px_rgb(20,20,20)] hover:-translate-y-[4px] hover:-translate-x-[4px] hoverable`}/></div> */}
-                <h1 className="mx-auto mb-7 text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
+                <h1 className="mx-auto mb-7 md:text-5xl xl:text-6xl 2xl:text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
             </div>
             <div className="h-full overflow-scroll pb-30">
                 <div className="grid grid-cols-2 gap-2 px-5 pb-1 w-full max-w-full relative">
