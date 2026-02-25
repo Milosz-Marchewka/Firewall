@@ -111,7 +111,7 @@ export const abilityDefaults = [{
     {
         role: "defender",
         category: "SOC & Monitoring",
-        code: "basic_logging_and_auditing",
+        code: "basic_logging_&_auditing",
         name: "Basic logging & auditing",
         description: "Monitor system activity to detect incidents.",
         cooldown: 2,

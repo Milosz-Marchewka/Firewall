@@ -50,6 +50,7 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, sk
                 <div className="grid grid-cols-2 gap-2 px-5 pb-1 w-full max-w-full relative">
                     {
                         ownedAbilities?.filter((item) => (item.role === type && (deck.filter((value, _) => (item.code == value?.code)).length == 0))).map((item, index) => {
+                            console.log("item", item);
                             return (<Ability key={index} data={item} unlocked/>);
                         })
                     }

@@ -12,7 +12,24 @@ const categories = {
     attacker: ["Credentials & Identity", "Exploits & Persistence", "Network & System", "Recon & Supply chain"]
 }
 
+const unlocked = {
+    defender:{
+        "Identity & Access": 1,
+        "Application security": 1,
+        "Infrastructure": 1,
+        "SOC & Monitoring": 1
+    },
+    attacker: {
+        "Credentials & Identity": 1,
+        "Exploits & Persistence": 1,
+        "Network & System": 1,
+        "Recon & Supply chain": 1
+    }
+}
+
 const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isShowed, setIsShowed, setOwned, skillPoints, setSkillPoints}) => {
+    const normalizeCode = (c) => typeof c === 'string' ? c.replace(/_and_/g, '_&_') : c;
+    const ownedCodesSet = new Set((ownedAbilities || []).map(a => normalizeCode(a?.code)));
     const [styles, setStyles] = useState({
         outer: {
             defender: `screen overflow-x-auto fixed pt-1 top-0 bg-linear-to-l from-sky-700 to-gray-900 z-1000 transition-[left] duration-500 `,
@@ -96,12 +113,29 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                                                     {
                                                         abilities?.map((item, i)=>{
                                                             if(item.category == category && item.rarity == index+1){
-                                                                return(
-                                                                    <>
-                                                                        <SkillTreeAbility data={item} owned={ownedAbilities.filter((value, _) => (item.code == value.code)).length > 0} onClick={() => setBuyingProgress(()=>({stage: "confirm", ability: item}))} locked={skillPoints == 0}/>
-                                                                    </>
+                                                                const isOwned = ownedAbilities.some(value => value.code === item.code);
+                                                                const prevRarity = item.rarity - 1;
+                                                                const isTier1 = item.rarity === 1;
+                                                                // whether this category actually contains any ability at the previous rarity
+                                                                const categoryHasPrev = abilities.some(a => a.category === category && a.rarity === prevRarity);
+                                                                // whether player owns previous-rarity ability in same category (and same role)
+                                                                const hasOwnPrev = ownedAbilities.some(a => a.role === role && a.category === category && a.rarity === prevRarity);
+                                                                // when this category doesn't have the previous tier, check other categories (same role) for that tier owned
+                                                                const otherHasPrev = ownedAbilities.some(a => a.role === role && a.category !== category && a.rarity === prevRarity);
+                                                                const unlockedForThis = isTier1 || hasOwnPrev || (!categoryHasPrev && otherHasPrev);
+                                                                const locked = skillPoints === 0 || !unlockedForThis;
+                                                                return (
+                                                                    <SkillTreeAbility
+                                                                        key={item.code}
+                                                                        data={item}
+                                                                        owned={isOwned}
+                                                                        onClick={() => setBuyingProgress(()=>({stage: "confirm", ability: item}))}
+                                                                        notEnoughSkillPoints={!isOwned && skillPoints < item.cost}
+                                                                        locked={locked}
+                                                                    />
                                                                 );
                                                             }
+                                                            return null;
                                                         })
                                                     }
                                                 </td>
@@ -114,6 +148,16 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                     </table>
                     {
                         buyingProgress.stage === "confirm" ?
+                        buyingProgress.ability?.cost > skillPoints ?
+                        <div className="screen absolute backdrop-blur-xs -top-2 left-0 flex items-center justify-center font-jersey text-white text-center">
+                            <div className="bg-gray-200 min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
+                                <h2 className="text-2xl">You don't have enough skill points!</h2>
+                                <div className="flex gap-5 w-full justify-center py-2">
+                                    <Button children={"Never mind :("} className="mt-0 bg-gray-500 w-2/3" onClick={()=>setBuyingProgress({stage: "", ability: {}})}/>
+                                </div>
+                            </div>
+                        </div>
+                        :
                         <div className="screen absolute backdrop-blur-xs -top-2 left-0 flex items-center justify-center font-jersey text-white text-center">
                             <div className="bg-gray-200 min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
                                 <h2 className="text-2xl">Are you sure you want to buy <h1 className="text-3xl">{buyingProgress.ability?.name}?</h1></h2>

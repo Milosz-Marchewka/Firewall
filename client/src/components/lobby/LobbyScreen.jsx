@@ -65,6 +65,7 @@ const LobbyScreen = ({user, setUser}) => {
             
         }
         const ownedtemp = await ownedreq.json();
+        console.log('OWNED RAW FROM /api/account/abilities', ownedtemp);
         setOwnedAbilities(ownedtemp);
         })();
       } catch(e){

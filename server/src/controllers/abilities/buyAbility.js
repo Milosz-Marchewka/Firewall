@@ -27,6 +27,15 @@ const buyAbility = async (req, res)=>{
             
             return res.status(404).send("Ability not found");
         }
+        // debug: log ability code and current owned codes
+        try{
+            const userCodes = user ? (Array.isArray(user.abilities) ? user.abilities.map(a => a.code) : []) : [];
+            const guestCodes = guest ? (Array.isArray(guest.abilities) ? guest.abilities.map(a => a.code) : []) : [];
+            console.log('[buyAbility] requested code:', req.body.code, 'found ability.code:', ability.code);
+            console.log('[buyAbility] userCodes:', userCodes, 'guestCodes:', guestCodes);
+        }catch(e){
+            console.log('[buyAbility] logging error', e);
+        }
         if(user?.abilities.includes(ability.code) || guest?.abilities.includes(ability.code)){
             console.log('owned');
             

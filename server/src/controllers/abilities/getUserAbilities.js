@@ -14,5 +14,13 @@ export const getUserAbilities = async (req, res)=>{
             return res.status(404).send("User not found");
         }
     }
+    // debug: log codes as they are read from the database
+    try{
+        const source = user || guest;
+        const codes = Array.isArray(source?.abilities) ? source.abilities.map(a => a?.code) : [];
+        console.log('[getUserAbilities] returning abilities for', source?._id, 'codes:', codes);
+    }catch(e){
+        console.log('[getUserAbilities] error logging abilities', e);
+    }
     return res.status(200).json(user?.abilities || guest?.abilities);
 };
