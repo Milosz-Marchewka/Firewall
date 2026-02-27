@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SkillTreeAbility from "./SkillTreeAbility";
-import back from '../../assets/oldIcons/back.png';
+import back from '../../assets/icons/back.png';
 import "./SkillTreeScreen.css";
 import Button from "../entryScreen/Button";
 import abilityImages from "../../utils/images";
