@@ -122,10 +122,10 @@ const DraftScreen = ({role, setStatus})=>{
                 )}
             </div>
             <div className="flex text-white font-jersey gap-10 text-[40px]">
-                <div className={`w-8 h-8 bg-${picked.length >= 1 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
-                <div className={`w-8 h-8 bg-${picked.length >= 2 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
-                <div className={`w-8 h-8 bg-${picked.length >= 3 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
-                <div className={`w-8 h-8 bg-${picked.length >= 4 ? "white" : "neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 ${picked.length >= 1 ? "bg-white" : "bg-neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 ${picked.length >= 2 ? "bg-white" : "bg-neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 ${picked.length >= 3 ? "bg-white" : "bg-neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
+                <div className={`w-8 h-8 ${picked.length >= 4 ? "bg-white" : "bg-neutral-800"} shadow-[6px_6px_0px_rgb(0_0_0)]`}></div>
             </div>
         </div>
     )

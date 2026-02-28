@@ -10,6 +10,7 @@ import SkillTreeScreen from "../skillTree/SkillTreeScreen.jsx";
 import Level from "./Level.jsx";
 import Rank from "./Rank.jsx";
 import Character from "./Character.jsx";
+
 export const CharacterContext = createContext();
 const baseOuterStyles = `screen bg-gradient-to-t from-neutral-950 flex gap-20 `;
 const characterGradients = {

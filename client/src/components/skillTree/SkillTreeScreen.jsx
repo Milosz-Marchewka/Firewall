@@ -150,7 +150,7 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                         buyingProgress.stage === "confirm" ?
                         buyingProgress.ability?.cost > skillPoints ?
                         <div className="screen absolute backdrop-blur-xs -top-2 left-0 flex items-center justify-center font-jersey text-white text-center">
-                            <div className="bg-gray-200 min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
+                            <div className="min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
                                 <h2 className="text-2xl">You don't have enough skill points!</h2>
                                 <div className="flex gap-5 w-full justify-center py-2">
                                     <Button children={"Never mind :("} className="mt-0 bg-gray-500 w-2/3" onClick={()=>setBuyingProgress({stage: "", ability: {}})}/>
@@ -159,7 +159,7 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                         </div>
                         :
                         <div className="screen absolute backdrop-blur-xs -top-2 left-0 flex items-center justify-center font-jersey text-white text-center">
-                            <div className="bg-gray-200 min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
+                            <div className="min-w-100 bg-neutral-800 border-4 border-black p-2 popUp">
                                 <h2 className="text-2xl">Are you sure you want to buy <h1 className="text-3xl">{buyingProgress.ability?.name}?</h1></h2>
                                 <div className="flex gap-5 w-full justify-center py-2">
                                     <Button children={"Yes"} className="mt-0 bg-lime-500" onClick={()=>{handleBuy()}}/>

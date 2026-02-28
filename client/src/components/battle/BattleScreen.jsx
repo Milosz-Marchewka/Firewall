@@ -4,6 +4,7 @@ import { socket } from '../../socket.js';
 import DeckBattle from './DeckBattle.jsx';
 import BattleCharacter from './BattleCharacter.jsx';
 import Character from '../lobby/Character.jsx';
+import EndScreen from './EndScreen.jsx';
 
 const BattleScreen = ({ token, role, usernames, ranks}) => {
     console.log("BATTLESCREEN_RANKS:", ranks);
@@ -58,6 +59,7 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
 
     useEffect(() => {
         syncAbilities(state, role);
+        console.log(state);
     }, [state, role]);
 
     const handleUse = async (code) => {
@@ -122,11 +124,12 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
     return (
         <div className={`screen relative text-black ${role=="defender" ? "gradient-background" : "gradient-background-mirrored"}`}>
             {state.finished ? (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-100">
-                    <div className="bg-black/70 text-white px-6 py-4 rounded text-2xl">
-                        Winner: {String(state.winner)}
-                    </div>
-                </div>
+                <EndScreen result={{
+                    message: state.winner === role ? "won" : "lost",
+                    timeElapsed: state.timeElapsed,
+                    numberOfTurns: state.turnNumber,
+                    gainedXP: state.gainedXP
+                }}/>
             ) : null}
             <div className="w-full h-full relative">
                 <Character role={role} className={"w-2/3 -left-30 mirrored -top-20"}/>
