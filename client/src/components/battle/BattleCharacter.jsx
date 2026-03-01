@@ -1,6 +1,5 @@
 import hacker from '../../assets/icons/hacker.png';
 import defender from '../../assets/icons/cybersecurity_specialist.png';
-import { useRef, useEffect } from 'react';
 
 const roles = {
     attacker: hacker,

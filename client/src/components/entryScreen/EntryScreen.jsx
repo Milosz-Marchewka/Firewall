@@ -12,8 +12,6 @@ const EntryScreen = ({user, setUser})=>{
 
     const handleGuest = async ()=>{
         try{
-            console.log('a');
-            
             const req = await fetch("/api/account/guest", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -50,10 +48,7 @@ const EntryScreen = ({user, setUser})=>{
                 <span className='text-red-200'>FIRE</span><span className='text-sky-200'>WALL</span>
             </h1>
             <Character role="defender" className="w-[80%] absolute left-[-20%] top-[-20%] mirrored grayscale opacity-50 z-1 fade-left"/>
-            {/* <Signup setUser={setUser}/>
-            <br/> */}
             { showSignup ? <Signup setUser={setUser} handleSignup={handleSignup}/> : <Login setUser={setUser} handleGuest={handleGuest} handleSignup={handleSignup}/> }
-            {/* <button onClick={handleGuest}>Continue as guest</button> */}
             <Character role="attacker" className="w-[80%] absolute right-[-20%] top-[-20%] grayscale opacity-50 z-1 fade-left"/>
         </div>
     )

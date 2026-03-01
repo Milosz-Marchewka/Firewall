@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SkillTreeAbility from "./SkillTreeAbility";
 import back from '../../assets/icons/back.png';
 import "./SkillTreeScreen.css";
 import Button from "../entryScreen/Button";
 import abilityImages from "../../utils/images";
-import changeAttacker from "../../assets/newIcons/changeAttacker.png";
-import changeDefender from "../../assets/newIcons/changeDefender.png";
+import changeAttacker from "../../assets/icons/changeAttacker.png";
+import changeDefender from "../../assets/icons/changeDefender.png";
 
 const categories = {
     defender: ["Identity & Access", "Application security", "Infrastructure", "SOC & Monitoring"],
@@ -116,11 +116,8 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                                                                 const isOwned = ownedAbilities.some(value => value.code === item.code);
                                                                 const prevRarity = item.rarity - 1;
                                                                 const isTier1 = item.rarity === 1;
-                                                                // whether this category actually contains any ability at the previous rarity
                                                                 const categoryHasPrev = abilities.some(a => a.category === category && a.rarity === prevRarity);
-                                                                // whether player owns previous-rarity ability in same category (and same role)
                                                                 const hasOwnPrev = ownedAbilities.some(a => a.role === role && a.category === category && a.rarity === prevRarity);
-                                                                // when this category doesn't have the previous tier, check other categories (same role) for that tier owned
                                                                 const otherHasPrev = ownedAbilities.some(a => a.role === role && a.category !== category && a.rarity === prevRarity);
                                                                 const unlockedForThis = isTier1 || hasOwnPrev || (!categoryHasPrev && otherHasPrev);
                                                                 const locked = skillPoints === 0 || !unlockedForThis;

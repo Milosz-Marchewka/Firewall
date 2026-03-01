@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const Input = ({className, type="text", placeholder="", value, onChange, ...other})=>{
 
     return(

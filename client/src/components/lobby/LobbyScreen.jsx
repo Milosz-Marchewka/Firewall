@@ -35,6 +35,10 @@ const LobbyScreen = ({user, setUser}) => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setOwnedAbilities(prev => prev.sort((a, b) => a.rarity - b.rarity));
+    }, [ownedAbilities]);
+
     useEffect(()=>{
       try{
         (async()=>{
@@ -67,7 +71,7 @@ const LobbyScreen = ({user, setUser}) => {
         }
         const ownedtemp = await ownedreq.json();
         console.log('OWNED RAW FROM /api/account/abilities', ownedtemp);
-        setOwnedAbilities(ownedtemp);
+        setOwnedAbilities(ownedtemp.sort((a, b) => a.rarity - b.rarity));
         })();
       } catch(e){
         navigate("/hello");

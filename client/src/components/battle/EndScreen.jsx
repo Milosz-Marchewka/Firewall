@@ -11,7 +11,12 @@ const EndScreen = ({result})=>{
                         <h3>Time elapsed: {result.timeElapsed}</h3>
                         <h3>Number of turns: {result.numberOfTurns}</h3>
                     </div>
-                    <h2 className={`text-4xl mt-2 ${result.gainedXP <= 0 ? "text-neutral-400" : "text-amber-300"}`}>Gained XP: {result.gainedXP}</h2>
+                    {
+                        result.gainedXP == -1 ?
+                        ""
+                        :
+                        <h2 className={`text-4xl mt-2 ${result.gainedXP <= 0 ? "text-neutral-400" : "text-amber-300"}`}>Gained XP: {result.gainedXP}</h2>
+                    }
                     <Button className={"bg-neutral-500 w-3/4 mt-3"}>Back to lobby</Button>
             </div>
         </div>

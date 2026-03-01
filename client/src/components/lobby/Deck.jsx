@@ -18,9 +18,7 @@ const Deck = ({deck, activeId}) => {
             deckRef.current.classList.add("activeDeckDefender");
             deckRef.current.classList.remove("activeDeckAttacker");
         }
-    },[char])
-
-    console.log("DECK MAP:", deck);
+    },[char]);
 
     return(
         <div className=" w-2/3 max-w-80 h-fit px-2 py-3 border-3 border-black/50 shadow-[5px_5px_0px_rgb(0_0_0)] flex flex-col gap-1" ref={deckRef}>
@@ -28,8 +26,6 @@ const Deck = ({deck, activeId}) => {
             {
                 
                 deck.map((element, index) => {
-                    console.log("DECK ELEMENT: ", element);
-                    
                     if(deck[index] === null){
                         return(<AbilitySocket id={index}/>);
                     }else{

@@ -1,7 +1,5 @@
-import {useState, useEffect} from "react";
 import "./Ability.css";
 import {useDraggable} from '@dnd-kit/core';
-import { useDroppable } from "@dnd-kit/core";
 import { abilityImages } from "../../utils/images";
 
 const Ability = ({data = null, unlocked = true, type = "damage", overflow, ...props}) => {

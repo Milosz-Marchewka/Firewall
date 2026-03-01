@@ -1,8 +1,7 @@
-import Spinner from "../../utils/Spinner";
 import Character from "../lobby/Character";
+import Button from "../entryScreen/Button";
 
 const WaitingScreen = ({role, players, usernames, ranks}) =>{
-    console.log("USERNAMES:", usernames);
 
     const defenderName = usernames?.defender || (players < 2 && role !== 'defender' ? '' : 'Defender');
     const attackerName = usernames?.attacker || (players < 2 && role !== 'attacker' ? '' : 'Attacker');
@@ -26,6 +25,14 @@ const WaitingScreen = ({role, players, usernames, ranks}) =>{
                 <h3 className="text-6xl font-jersey z-3 bg-sky-500 px-10 py-2 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.9)] shadow-[5px_5px_0px_rgb(0_0_0_/_0.9)]">Defender{role === "defender" ? " (you)" : ""}</h3>
             </div>
             <p className="absolute left-[50%] top-[50%] translate-x-[-52.5%] translate-y-[-50%] text-[300px] text-shadow-[10px_10px_0px_rgb(0_0_0_/_0.9)] font-jersey text-white">V<span className="relative left-2 top-10 text-white">S</span></p>
+            {
+                players < 2 ?
+                <div className="text-white mt-auto w-full flex items-center justify-center mb-3">
+                    <Button className={"w-1/2 bg-neutral-500 text-4xl text-shadow-[2px_2px_0px_rgb(0_0_0_/_0.9)] z-101"}>Leave Room</Button> {/*TODO: implement leave room functionality*/}
+                </div>
+                :
+                ""
+            }
             <div className="w-1/2 h-full p-10 pt-7 flex flex-col gap-5 items-end justify-end overflow-hidden">
                 <div className="mb-auto font-jersey">
                     <h3 className="text-6xl z-3 bg-neutral-900 px-10 py-2 text-shadow-[3px_3px_0px_rgb(0_0_0_/_0.9)] shadow-[5px_5px_0px_rgb(0_0_0_/_0.9)] mb-auto">{role !== 'attacker' && players < 2 ? <span className="dots-loading"></span> : attackerName}</h3>

@@ -7,7 +7,6 @@ import Character from '../lobby/Character.jsx';
 import EndScreen from './EndScreen.jsx';
 
 const BattleScreen = ({ token, role, usernames, ranks}) => {
-    console.log("BATTLESCREEN_RANKS:", ranks);
     
     const [state, setState] = useState(null);
     const [error, setError] = useState(null);
@@ -26,10 +25,8 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
 
     useEffect(() => {
         let cancelled = false;
-        console.log("BATTLE");
         
         const onBattleState = (payload) => {
-            console.log("BATTLE PAYLOAD:", payload);
             if (cancelled) return;
             
             setState(payload);
@@ -40,8 +37,6 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
 
         if (!socket.connected) socket.connect();
         socket.emit('battle-get', null, (ack) => {
-            console.log("BATTLE-GET:", ack);
-            
             if (cancelled) return;
             if (!ack?.ok) {
                 setError(ack?.error ?? 'battle_get_failed');
@@ -59,7 +54,6 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
 
     useEffect(() => {
         syncAbilities(state, role);
-        console.log(state);
     }, [state, role]);
 
     const handleUse = async (code) => {
