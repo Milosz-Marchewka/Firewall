@@ -51,7 +51,7 @@ const Signup = ({setUser, handleSwitch, handleGuest})=>{
             </div>
             {
                 error != "" ?
-                <div className=" bg-red-700 font-jersey absolute w-fit h-fit -bottom-15 border-2 border-red-950 text-center px-1">
+                <div className=" bg-red-700 font-jersey absolute w-fit h-fit -bottom-25 border-2 border-red-950 text-center px-1">
                     <p className="text-2xl text-red-100 text-center">{error}</p>
                 </div>
                 :

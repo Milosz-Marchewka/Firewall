@@ -40,7 +40,7 @@ const AbilitiesMenu = ({type, activeId, ownedAbilities, setIsSkillTreeShowed, sk
                         <></>
                     }
                 </div>
-                <h1 className="mx-auto mb-7 md:text-5xl xl:text-6xl 2xl:text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITES</h1>
+                <h1 className="mx-auto mb-7 md:text-5xl xl:text-6xl 2xl:text-7xl uppercase font-jersey text-red-100 text-shadow-[5px_5px_0px_rgb(0_0_0_/_0.6)]">{type}'s ABILITIES</h1>
             </div>
             <div className="h-full overflow-scroll pb-30">
                 <div className="grid grid-cols-2 gap-2 px-5 pb-1 w-full max-w-full relative">
