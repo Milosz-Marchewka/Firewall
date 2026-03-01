@@ -2,7 +2,6 @@ import {useState, createContext, act, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import AbilitiesMenu from './../ability/AbilitiesMenu.jsx';
 import CharacterSwitch from './CharacterSwitch.jsx';
-import PlayButtons from "./PlayButtons.jsx";
 import Deck from "./Deck.jsx";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Ability from "../ability/Ability.jsx";
@@ -10,6 +9,7 @@ import SkillTreeScreen from "../skillTree/SkillTreeScreen.jsx";
 import Level from "./Level.jsx";
 import Rank from "./Rank.jsx";
 import Character from "./Character.jsx";
+import LobbyButtons from "./LobbyButtons.jsx";
 
 export const CharacterContext = createContext();
 const baseOuterStyles = `screen bg-gradient-to-t from-neutral-950 flex gap-20 `;
@@ -55,7 +55,6 @@ const LobbyScreen = ({user, setUser}) => {
           }
           const abilitydata = await abilityreq.json();
           setAbilities(abilitydata);
-          console.log("AB:", abilitydata);
           
 
         const ownedreq = await fetch(`/api/account/abilities`, {
@@ -66,30 +65,22 @@ const LobbyScreen = ({user, setUser}) => {
             }
         })
         if(!ownedreq.ok){
-            console.log("oops");
-            
+            // ignore
         }
         const ownedtemp = await ownedreq.json();
-        console.log('OWNED RAW FROM /api/account/abilities', ownedtemp);
         setOwnedAbilities(ownedtemp.sort((a, b) => a.rarity - b.rarity));
         })();
       } catch(e){
         navigate("/hello");
       }
       setOuterStyle(baseOuterStyles + characterGradients[characterSelected]);
-      console.log(user);
-      
     }, [characterSelected]);
 
     const handleDragStart = (e) => {
-        console.log('active id', e.active.id);
         setActiveId(prev => (e.active.id));
     }
     
     const handleDragEnd = (e) => {
-        console.log(e.over?.id, e.active?.code);
-        console.log(decks);
-        console.log(abilities);
         const localabilities = [...abilities.attacker, ...abilities.defender];
         if(e.over?.id !== undefined){
             let copyDecks = {...decks};
@@ -121,7 +112,6 @@ const LobbyScreen = ({user, setUser}) => {
     const getAbilitiesById = (id) => {
         const localabilities = [...abilities.attacker, ...abilities.defender];
         let item = localabilities.filter(item => item?.code == id)[0];
-        console.log("ERROR SPOT: " , decks[characterSelected].attacker);
         return item ? item : [...decks[characterSelected].attacker ?? [], decks[characterSelected]].filter(item => item?.code == id)[0];
     }
 
@@ -158,10 +148,10 @@ const LobbyScreen = ({user, setUser}) => {
                                 <Level level={user.level} currentXp={user.levelPoints}/>
                             </div>
                         </div>
-                        <PlayButtons username={user?.username} id={user?.id} onLogout={handleLogout} characterSelected={characterSelected} deck={decks[characterSelected]}/>
+                        <LobbyButtons username={user?.username} id={user?.id} onLogout={handleLogout} characterSelected={characterSelected} deck={decks[characterSelected]}/>
                     </div>
                     <DragOverlay>
-                        {activeId !== null && <Ability data={getAbilitiesById(activeId)} unlocked onClick={console.log("aaa", getAbilitiesById(activeId))}/>}
+                        {activeId !== null && <Ability data={getAbilitiesById(activeId)} unlocked />}
                     </DragOverlay>
                 </DndContext>
             </CharacterContext.Provider>

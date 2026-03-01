@@ -5,7 +5,7 @@ import Button from "./Button";
 import Header from "./Header";
 import Link from "./Link";
 
-const Login = ({setUser, handleGuest, handleSignup})=>{
+const Login = ({setUser, handleGuest, handleSwitch})=>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ const Login = ({setUser, handleGuest, handleSignup})=>{
             setUser(userData);
             navigate("/");
         } catch(e){
-            console.log(e);
+            // ignore
         }
     }
 
@@ -41,8 +41,8 @@ const Login = ({setUser, handleGuest, handleSignup})=>{
             <Input type="text" name="username"  placeholder='Username' value={username} onChange={e => {setUsername(e.target.value); setError("")}} className=""/>
             <Input type="password" name="password" placeholder='Password' value={password} onChange={e => {setPassword(e.target.value); setError("")}} className="" onKeyDown={(e)=>e.code==="Enter" ? handleLogin() : ""}/>
             <Button onClick={handleLogin} children="Login" className="mt-8 bg-yellow-500 hover:bg-yellow-400"/>
-            <div className="flex gap-8 mt-4 font-jersey text-xl">
-                <Link onClick={handleSignup} className={"hover:underline"} children="Create an account"/>
+            <div className="w-full flex justify-center gap-8 mt-4 font-jersey text-xl">
+                <Link onClick={()=>handleSwitch("signup")} className={"hover:underline"} children="Create an account"/>
                 <Link onClick={handleGuest} className={"hover:underline"} children="Continue as Guest"/>
             </div>
             {

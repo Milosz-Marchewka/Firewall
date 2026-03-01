@@ -5,7 +5,7 @@ import { extractToken } from "../../utils/utils";
 import { socket } from "../../socket";
 import "./CharacterSwitch.css";
 
-const PlayButtons = ({username, id, onLogout, characterSelected, deck}) => {
+const LobbyButtons = ({username, id, onLogout, characterSelected, deck}) => {
 
     const [char, charSelected] = useContext(CharacterContext);
     const attackerRef = useRef(null);
@@ -34,7 +34,6 @@ const PlayButtons = ({username, id, onLogout, characterSelected, deck}) => {
                 });
 
                 if (!response.ok) {
-                    console.log(response);
                     throw new Error('Failed to create/find room');
                 }
 
@@ -85,7 +84,6 @@ const PlayButtons = ({username, id, onLogout, characterSelected, deck}) => {
                 {
                     isOptionsVisible ?
                     <div onMouseLeave={()=>{setIsOptionsVisible(false)}} className="absolute bg-neutral-500 w-[105%] h-fit -bottom-2 -left-2 shadow-[8px_8px_0px_rgb(0_0_0)] border-6 border-black/80 text-shadow-[3px_3px_0px_rgb(0_0_0)]">
-                        <div className="text-4xl py-2 border-b-4 border-neutral-900 hover:bg-neutral-400 transition-all">Settings</div>
                         <div
                             className="text-4xl py-2 border-b-4 border-neutral-900 hover:bg-neutral-400 transition-all"
                             onClick={() => {
@@ -115,4 +113,4 @@ const PlayButtons = ({username, id, onLogout, characterSelected, deck}) => {
     );
 }
 
-export default PlayButtons;
+export default LobbyButtons;

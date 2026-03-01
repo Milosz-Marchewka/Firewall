@@ -27,12 +27,6 @@ const RoomScreen = ({user}) => {
     }, [status]);
 
     useEffect(() => {
-        if (roomType === 'play' && players === 2) {
-            setStatus('battle');
-        }
-    }, [roomType, players]);
-
-    useEffect(() => {
         let isCancelled = false;
 
         const startDraftDelayed = () => {
@@ -46,7 +40,6 @@ const RoomScreen = ({user}) => {
 
         const onRoomState = (payload) => {
             if (isCancelled) return;
-            console.log("ROOM_STATE_PAYLOAD:", payload);
             if (payload?.type) {
                 roomTypeRef.current = payload.type;
                 setRoomType(payload.type);
@@ -55,7 +48,7 @@ const RoomScreen = ({user}) => {
                 setPlayers(payload.players);
                 const effectiveType = payload?.type ?? roomTypeRef.current;
                 if (payload.players === 2 && effectiveType === "play"){
-                    setStatus("battle");
+                    setTimeout(() => setStatus("battle"), 3000);
                     return;
                 }
                 if (payload.players === 2) {
@@ -64,14 +57,9 @@ const RoomScreen = ({user}) => {
             }
             setUsernames(payload?.usernames);
             setRanks(payload?.ranks);
-            console.log("USERNAMES_STATE:", payload?.usernames ?? "uh..");
-            
         };
 
         const onRoomReady = (payload) => {
-            console.log("PAYLOAD: ", payload);
-            console.log("ABOVE PAYLOAD STATUS: " , status);
-            
             setUsernames(payload?.usernames);
             setRanks(payload?.ranks);
             if (payload?.type) {
@@ -80,7 +68,7 @@ const RoomScreen = ({user}) => {
             }
             const effectiveType = payload?.type ?? roomTypeRef.current;
             if(effectiveType === "play"){
-                setStatus("battle");
+                setTimeout(() => setStatus("battle"), 3000);
                 return;
             }
 
@@ -122,7 +110,7 @@ const RoomScreen = ({user}) => {
                     setRoomType(ack.type);
                 }
                 if (ack.players === 2 && ack?.type === "play") {
-                    setStatus("battle");
+                    setTimeout(()=>setStatus("battle"), 3000);
                     return;
                 }
                 if (ack.players === 2) startDraftDelayed();
@@ -142,11 +130,7 @@ const RoomScreen = ({user}) => {
             }
         };
     }, [token]);
-
-    // Important: if the user navigates away (browser back button, route change),
-    // explicitly leave the room + disconnect the socket so the server frees the slot.
     useEffect(() => {
-        // Cancel any scheduled leave (React StrictMode mounts/unmounts effects in dev).
         if (leaveTimerRef.current != null) {
             clearTimeout(leaveTimerRef.current);
             leaveTimerRef.current = null;
@@ -170,16 +154,12 @@ const RoomScreen = ({user}) => {
 
         const scheduleLeave = () => {
             if (leaveTimerRef.current != null) return;
-            // Small delay prevents React StrictMode "fake unmount" from instantly leaving.
             leaveTimerRef.current = setTimeout(() => {
                 leaveTimerRef.current = null;
                 doLeaveNow();
             }, 50);
         };
 
-        // pagehide triggers on back/forward cache and tab close in many browsers.
-        // popstate covers browser back/forward within SPA history.
-        // beforeunload is a fallback for full-page navigations.
         window.addEventListener('pagehide', doLeaveNow);
         window.addEventListener('popstate', doLeaveNow);
         window.addEventListener('beforeunload', doLeaveNow);

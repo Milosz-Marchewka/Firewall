@@ -26,10 +26,8 @@ const EntryScreen = ({user, setUser})=>{
 
             const userData = await req.json();
             setUser({
-                id: userData?._id ?? userData?.id ?? null,
-                username: userData?.username || (userData?._id ? `Guest ${userData._id}` : undefined),
-                level: userData?.level ?? 0,
-                levelPoints: userData?.levelPoints ?? 0,
+                ...userData,
+                username: `Guest ${userData._id}`,
             });
 
             navigate("/");
@@ -38,8 +36,9 @@ const EntryScreen = ({user, setUser})=>{
         }
     }
 
-    const handleSignup = ()=>{
-        setShowSignup(!showSignup);
+    const handleSwitch = (arg)=>{
+        if(arg === "login") setShowSignup(false);
+        else setShowSignup(true);
     }
 
     return(
@@ -48,7 +47,7 @@ const EntryScreen = ({user, setUser})=>{
                 <span className='text-red-200'>FIRE</span><span className='text-sky-200'>WALL</span>
             </h1>
             <Character role="defender" className="w-[80%] absolute left-[-20%] top-[-20%] mirrored grayscale opacity-50 z-1 fade-left"/>
-            { showSignup ? <Signup setUser={setUser} handleSignup={handleSignup}/> : <Login setUser={setUser} handleGuest={handleGuest} handleSignup={handleSignup}/> }
+            { showSignup ? <Signup setUser={setUser} handleSwitch={handleSwitch} handleGuest={handleGuest}/> : <Login setUser={setUser} handleGuest={handleGuest} handleSwitch={handleSwitch}/> }
             <Character role="attacker" className="w-[80%] absolute right-[-20%] top-[-20%] grayscale opacity-50 z-1 fade-left"/>
         </div>
     )

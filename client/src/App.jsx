@@ -26,6 +26,8 @@ function App() {
         const data = await res.json();
         if (cancelled) return;
         if (data?.id) {
+          console.log(data);
+          
           setUser(
             data
           );
@@ -39,9 +41,6 @@ function App() {
       cancelled = true;
     };
   }, []);
-
-  console.log("USER: ", user);
-  
 
   return (
     <>

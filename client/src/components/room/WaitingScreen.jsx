@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import Character from "../lobby/Character";
 import Button from "../entryScreen/Button";
 
 const WaitingScreen = ({role, players, usernames, ranks}) =>{
+
+    const navigate = useNavigate();
 
     const defenderName = usernames?.defender || (players < 2 && role !== 'defender' ? '' : 'Defender');
     const attackerName = usernames?.attacker || (players < 2 && role !== 'attacker' ? '' : 'Attacker');
@@ -28,7 +31,10 @@ const WaitingScreen = ({role, players, usernames, ranks}) =>{
             {
                 players < 2 ?
                 <div className="text-white mt-auto w-full flex items-center justify-center mb-3">
-                    <Button className={"w-1/2 bg-neutral-500 text-4xl text-shadow-[2px_2px_0px_rgb(0_0_0_/_0.9)] z-101"}>Leave Room</Button> {/*TODO: implement leave room functionality*/}
+                    {
+                    players < 2 && 
+                        <Button className={"w-1/2 bg-neutral-500 text-4xl text-shadow-[2px_2px_0px_rgb(0_0_0_/_0.9)] z-101"}onClick={()=>navigate("/")}>Leave Room</Button>
+                    }
                 </div>
                 :
                 ""

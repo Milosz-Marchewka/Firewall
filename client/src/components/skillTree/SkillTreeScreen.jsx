@@ -81,7 +81,7 @@ const SkillTreeScreen = ({id, role, switchRole, abilities, ownedAbilities, isSho
                 <div className="py-2 px-5 border-4 border-black bg-amber-300">
                     {skillPoints} skill points available
                 </div>
-                <div className={`${styles.th[role]} w-16 h-16 border-4 border-black flex justify-center items-center cursor-pointer hover:-translate-0.5 hover:shadow-[2px_2px_0px_rgba(0_0_0_/_0.1)]`} onClick={() => {switchRole(role == 'attacker' ? 'defender' : 'attacker'); console.log(role)}}>
+                <div className={`${styles.th[role]} w-16 h-16 border-4 border-black flex justify-center items-center cursor-pointer hover:-translate-0.5 hover:shadow-[2px_2px_0px_rgba(0_0_0_/_0.1)]`} onClick={() => {switchRole(role == 'attacker' ? 'defender' : 'attacker');}}>
                     <img src={role == "attacker" ? changeAttacker : changeDefender} alt="Change Role" className="w-full h-full object-contain pixelart bg-[rgba(0,0,0,0.3)]"/>
                 </div>
             </div>

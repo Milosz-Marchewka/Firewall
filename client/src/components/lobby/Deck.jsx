@@ -29,7 +29,7 @@ const Deck = ({deck, activeId}) => {
                     if(deck[index] === null){
                         return(<AbilitySocket id={index}/>);
                     }else{
-                        return(<Ability data={element} id={element.id ?? null}/>);
+                        return(<Ability data={element} id={element?.id ?? null}/>);
                     }
                 })
             }

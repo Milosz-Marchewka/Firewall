@@ -1,8 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../entryScreen/Button';
 
-// result={{message: "lost", timeElapsed: "5m 32s", numberOfTurns: 20, gainedXP: 150}}
 
+// result={{message: "lost", timeElapsed: "5m 32s", numberOfTurns: 20, gainedXP: 150}}
 const EndScreen = ({result})=>{
+
+    const navigate = useNavigate();
+
     return(
         <div className="screen absolute backdrop-blur-xs top-0 left-0 flex items-center justify-center font-jersey text-white text-center z-101">
             <div className="min-w-100 bg-neutral-800 border-4 border-black p-4 popUp">
@@ -17,7 +21,7 @@ const EndScreen = ({result})=>{
                         :
                         <h2 className={`text-4xl mt-2 ${result.gainedXP <= 0 ? "text-neutral-400" : "text-amber-300"}`}>Gained XP: {result.gainedXP}</h2>
                     }
-                    <Button className={"bg-neutral-500 w-3/4 mt-3"}>Back to lobby</Button>
+                    <Button className={"bg-neutral-500 w-3/4 mt-3"} onClick={()=>navigate("/")}>Back to lobby</Button>
             </div>
         </div>
     )

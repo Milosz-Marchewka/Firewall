@@ -6,7 +6,7 @@ const Ability = ({data = null, unlocked = true, type = "damage", overflow, ...pr
     const {attributes, listeners, setNodeRef} = useDraggable({
         id: data?.code,
     });
-    
+
     return(
         <>
             {

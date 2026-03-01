@@ -7,9 +7,11 @@ const signup = async (req, res) => {
     if([req.body.username, req.body.email, req.body.password].some(f => !f)){
         return res.status(400).send("All fields are required.");
     }
-    if (!validateUsername(req.body.username) || !validateEmail(req.body.email) || !validatePassword(req.body.password)) {
-        return res.status(400).send("Username, email, or password does not match the required format.");
-    }
+
+    if(!validateUsername(req.body.username)) return res.status(400).send("Username must be 3-20 characters long and can only contain letters, numbers, and underscores.");
+    if(!validateEmail(req.body.email)) return res.status(400).send("Invalid email format.");
+    if(!validatePassword(req.body.password)) return res.status(400).send("Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.");
+
     const user = new User({
         username: req.body.username,
         email: req.body.email,
