@@ -10,16 +10,31 @@ const addtoLevel = async (req, res)=>{
         return res.status(400).send("User not found");
     }
 
-    const currentLevel = user.level;
-    const currentProgress = user.levelPoints;
-    const ceil = Math.ceil(1.25*user.level);
-    if(currentProgress + req.body.xp >= ceil){
-        const overflow = ceil - (currentProgress + req.body.xp);
-        user.levelPoints = overflow;
-        user.level = currentLevel + 1;
-    } else {
-        user.levelPoints = currentProgress + req.body.xp;
+    let currentLevel = Number(user.level ?? 0);
+    let currentProgress = Number(user.levelPoints ?? 0);
+    let remainingXp = Number(req.body.xp ?? 0);
+
+    if (!Number.isFinite(remainingXp) || remainingXp <= 0) {
+        return res.status(400).send("XP amount must be positive");
     }
+    while (remainingXp > 0) {
+        const required = Math.max(1, Math.ceil(1.25 * currentLevel));
+        const toLevel = required - currentProgress;
+
+        if (remainingXp >= toLevel) {
+            remainingXp -= toLevel;
+            currentLevel += 1;
+            currentProgress = 0;
+        } else {
+            currentProgress += remainingXp;
+            remainingXp = 0;
+        }
+    }
+
+    user.level = currentLevel;
+    user.levelPoints = currentProgress;
+
+    await user.save();
 
     return res.status(200).json({});
 }

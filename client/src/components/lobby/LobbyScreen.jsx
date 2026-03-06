@@ -32,6 +32,7 @@ const LobbyScreen = ({user, setUser}) => {
     const [ownedAbilities, setOwnedAbilities] = useState([]);
     const [outerStyle, setOuterStyle] = useState(baseOuterStyles);
     const [skillPoints, setSkillPoints] = useState(user?.points || 0);
+    const [authChecked, setAuthChecked] = useState(false);
 
     const navigate = useNavigate();
 
@@ -39,10 +40,39 @@ const LobbyScreen = ({user, setUser}) => {
         setOwnedAbilities(prev => prev.sort((a, b) => a.rarity - b.rarity));
     }, [ownedAbilities]);
 
+    useEffect(() => {
+        let cancelled = false;
+
+        const refreshUser = async () => {
+            try {
+                const res = await fetch("/api/account/auth", {
+                    method: "GET",
+                    credentials: "include",
+                });
+
+                if (!res.ok) return;
+                const data = await res.json();
+                if (cancelled || !data?.id) return;
+                setUser(data);
+                setSkillPoints(data.points ?? 0);
+            } catch {
+                // ignore
+            } finally {
+                if (!cancelled) setAuthChecked(true);
+            }
+        };
+
+        refreshUser();
+        return () => {
+            cancelled = true;
+        };
+    }, [setUser]);
+
     useEffect(()=>{
       try{
         (async()=>{
-            if(!user?._id && !user?.id){
+            if (!authChecked) return;
+            if (!user?._id && !user?.id) {
                 navigate("/hello");
                 return;
             }
@@ -74,7 +104,7 @@ const LobbyScreen = ({user, setUser}) => {
         navigate("/hello");
       }
       setOuterStyle(baseOuterStyles + characterGradients[characterSelected]);
-    }, [characterSelected]);
+    }, [characterSelected, authChecked, user?._id, user?.id]);
 
     const handleDragStart = (e) => {
         setActiveId(prev => (e.active.id));

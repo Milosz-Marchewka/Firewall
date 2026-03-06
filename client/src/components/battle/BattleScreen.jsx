@@ -122,7 +122,8 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
                     message: state.winner === role ? "won" : "lost",
                     timeElapsed: state.timeElapsed,
                     numberOfTurns: state.turnNumber,
-                    gainedXP: state.gainedXP
+                    gainedXP: state.rewards?.[role]?.xp ?? 0,
+                    gainedSkillPoints: state.rewards?.[role]?.points ?? 0,
                 }}/>
             ) : null}
             <div className="w-full h-full relative">

@@ -6,7 +6,8 @@ const Documentation = () => {
     const navigate = useNavigate();
 
     const src = useMemo(() => {
-        return active === 'tech' ? '/technical-docs.html' : '/user-docs.html';
+        return '/404.html';
+        // return active === 'tech' ? '/technical-docs.html' : '/user-docs.html';
     }, [active]);
 
     return (
@@ -39,7 +40,7 @@ const Documentation = () => {
             <div className="flex-1">
                 <iframe
                     title="Documentation"
-                    src={src}
+                    src="/404.html"
                     className="w-full h-full border-0"
                 />
             </div>

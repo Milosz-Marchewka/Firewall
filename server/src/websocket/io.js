@@ -1,5 +1,7 @@
 import { Server } from 'socket.io';
 import Game from '../db/Game.js';
+import User from '../db/User.js';
+import Guest from '../db/Guest.js';
 import { extractRoomToken } from '../utils.js';
 import AbilityCatalog from '../db/Abilities.js';
 import getUsername from '../controllers/accounts/getUsername.js';
@@ -10,6 +12,50 @@ const buildTokenRegex = (token) => new RegExp(`/room/${escapeRegex(token)}/?$`);
 const countPlayers = (game) => (game?.attacker?.id != null ? 1 : 0) + (game?.defender?.id != null ? 1 : 0);
 const roleDoneKey = (role) => (role === 'attacker' ? 'draft.attackerDone' : (role === 'defender' ? 'draft.defenderDone' : null));
 const opponentRole = (role) => (role === 'attacker' ? 'defender' : 'attacker');
+
+const applyXpGain = (account, xp) => {
+    if (!account || !Number.isFinite(xp) || xp <= 0) return;
+    const currentLevel = Number(account.level ?? 0);
+    const currentProgress = Number(account.levelPoints ?? 0);
+    const required = Math.max(1, Math.ceil(1.25 * currentLevel));
+    const nextProgress = currentProgress + xp;
+
+    if (nextProgress >= required) {
+        account.level = currentLevel + 1;
+        account.levelPoints = nextProgress - required;
+    } else {
+        account.levelPoints = nextProgress;
+    }
+};
+
+const awardToAccount = async (id, points, xp) => {
+    if (!id) return;
+
+    const user = await User.findById(id);
+    if (user) {
+        applyXpGain(user, xp);
+        user.points = Number(user.points ?? 0) + points;
+        await user.save();
+        return;
+    }
+
+    const guest = await Guest.findById(id);
+    if (guest) {
+        applyXpGain(guest, xp);
+        guest.points = Number(guest.points ?? 0) + points;
+        await guest.save();
+    }
+};
+
+const awardMatchRewards = async (game, winnerRole, loserRole) => {
+    if (!game || !winnerRole || !loserRole) return;
+    const winnerId = game?.[winnerRole]?.id;
+    const loserId = game?.[loserRole]?.id;
+    await Promise.all([
+        awardToAccount(winnerId, 2, 4),
+        awardToAccount(loserId, 1, 2),
+    ]);
+};
 
 const applyForfeit = (game, loserRole, reason = 'give_up') => {
     if (!game || (loserRole !== 'attacker' && loserRole !== 'defender')) return;
@@ -80,15 +126,37 @@ const toBattleState = (game) => {
     const defenderHp = game?.defender?.stats?.integrity ?? 0;
 
     const finished = game?.status === 'finished' || attackerHp <= 0 || defenderHp <= 0;
-    const winner = finished
-        ? (attackerHp <= 0 && defenderHp <= 0 ? 'draw' : (attackerHp <= 0 ? 'defender' : 'attacker'))
-        : null;
+    let winner = null;
+    if (finished) {
+        if (game?.winner) {
+            winner = game.winner;
+        } else if (attackerHp <= 0 && defenderHp <= 0) {
+            winner = 'draw';
+        } else if (attackerHp <= 0) {
+            winner = 'defender';
+        } else if (defenderHp <= 0) {
+            winner = 'attacker';
+        }
+    }
+
+    const winnerRole = game?.winner ?? null;
+    const loserRole = winnerRole === 'attacker' ? 'defender' : (winnerRole === 'defender' ? 'attacker' : null);
+    const rewards = {
+        attacker: { xp: 0, points: 0 },
+        defender: { xp: 0, points: 0 },
+    };
+
+    if (winnerRole && loserRole) {
+        rewards[winnerRole] = { xp: 4, points: 2 };
+        rewards[loserRole] = { xp: 2, points: 1 };
+    }
 
     return {
         roomId: game._id.toString(),
         status: game.status,
         turnNumber: game.turnNumber,
         currentTurn: game.currentTurn,
+        timeElapsed: game?.timeElapsed ?? 0,
         attacker: {
             hp: attackerHp,
             skipTurns: game?.skipTurns?.attacker ?? 0,
@@ -103,6 +171,7 @@ const toBattleState = (game) => {
         log: (game?.log ?? []).slice(-20),
         finished,
         winner,
+        rewards,
     };
 };
 
@@ -681,14 +750,22 @@ export default function createIo(httpServer) {
                 const attackerHp = game.attacker.stats.persistence ?? 0;
                 const defenderHp = game.defender.stats.integrity ?? 0;
                 if (attackerHp <= 0 || defenderHp <= 0) {
+                    const wasFinished = game.status === 'finished';
+                    const isDraw = attackerHp <= 0 && defenderHp <= 0;
+                    const winnerRole = attackerHp <= 0 ? 'defender' : 'attacker';
+
                     game.status = 'finished';
-                    game.winner = attackerHp <= 0 ? "defender" : "attacker";
+                    if (!isDraw) game.winner = winnerRole;
                     const startTime = socket.data?.startTime instanceof Date ? socket.data.startTime : null;
                     if (startTime) {
                         const elapsedMs = Math.abs(Date.now() - startTime.getTime());
                         game.timeElapsed = Math.floor((elapsedMs / 1000) / 60);
                     } else {
                         game.timeElapsed = 0;
+                    }
+
+                    if (!wasFinished && !isDraw) {
+                        await awardMatchRewards(game, winnerRole, opponentRole(winnerRole));
                     }
                 } else {
                     // Advance turn
@@ -739,6 +816,7 @@ export default function createIo(httpServer) {
 
                 if (game.status !== 'finished') {
                     applyForfeit(game, role, 'give_up');
+                    await awardMatchRewards(game, opponentRole(role), role);
                     await game.save();
                 }
 
@@ -791,6 +869,7 @@ export default function createIo(httpServer) {
                 const opponentId = leavingRole ? game[opponentRole(leavingRole)]?.id : null;
                 if (leavingRole && opponentId && game.status !== 'finished') {
                     applyForfeit(game, leavingRole, 'left_game');
+                    await awardMatchRewards(game, opponentRole(leavingRole), leavingRole);
                 }
 
                 if (leavingRole) {
@@ -864,6 +943,7 @@ export default function createIo(httpServer) {
                 const opponentId = leavingRole ? game[opponentRole(leavingRole)]?.id : null;
                 if (leavingRole && opponentId && game.status !== 'finished') {
                     applyForfeit(game, leavingRole, 'disconnect');
+                    await awardMatchRewards(game, opponentRole(leavingRole), leavingRole);
                 }
 
                 if (leavingRole) {
