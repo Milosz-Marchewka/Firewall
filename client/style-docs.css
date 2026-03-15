@@ -1,0 +1,64 @@
+*{
+    font-family: sans-serif;
+    color: white;
+}
+
+body{
+    margin: 0;
+    background-color: rgb(39, 39, 42);
+    min-height: 100vh;
+    min-width: 100%;
+}
+
+.wrapper{
+    height: fit-content;
+    width: 1500px;
+    margin: 0 auto;
+    background-color: blue;
+    display: flex;
+}
+
+h1{
+    font-size: 40px;
+}
+
+nav{
+    flex: 1;
+    background-color: black;
+    position: relative;
+    padding: 10px;
+}
+
+nav h1{
+    border-bottom: 2px solid white;
+}
+
+.table_of_contents{
+    position: fixed;
+}
+
+.table_of_contents ul{
+    list-style: none;
+    padding-left: 0;
+}
+
+.table_of_contents ul li{
+    padding: 10px;
+}
+
+main{
+    flex: 2;
+    background-color: rgb(37, 37, 37);
+    padding: 10px;
+}
+
+main h2{
+    border-top: 2px solid white;
+    padding-top: 20px;
+}
+
+.screenshot{
+    width: 100%;
+    height: auto;
+    border: 2px solid white
+}

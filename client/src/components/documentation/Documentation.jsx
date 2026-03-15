@@ -6,8 +6,8 @@ const Documentation = () => {
     const navigate = useNavigate();
 
     const src = useMemo(() => {
-        return '/404.html';
-        // return active === 'tech' ? '/technical-docs.html' : '/user-docs.html';
+        // return '/404.html';
+        return active === 'tech' ? '/technical-docs.html' : '/user-docs.html';
     }, [active]);
 
     return (
