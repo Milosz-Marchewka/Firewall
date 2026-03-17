@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewall – Instrukcja użytkownika</title>
+    <link rel="stylesheet" href="style-docs.css">
+</head>
+<body>
+    <div class="wrapper">
+        <nav>
+            <div class="table_of_contents">
+                <h1>Spis treści</h1>
+                <ul>
+                    <li><a href="#introduction">Wprowadzenie</a></li>
+                    <li><a href="#requirements">Wymagania</a></li>
+                    <li><a href="#howtojoin">Jak dołączyć do gry</a></li>
+                    <li><a href="#userinterface">Interfejs użytkownika</a></li>
+                    <li><a href="#gameplaymechanics">Mechaniki gry</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <h1>User Guide</h1>
+
+            <h2 id="introduction">Wprowadzenie</h2>
+            <h3>Przegląd gry</h3>
+            <p>
+            Firewall to przeglądarkowa gra multiplayer oparta na systemie turowym,
+            inspirowana koncepcjami cyberbezpieczeństwa. Podczas rozgrywki gracze
+            wybierają jedną z dwóch ról: hakera lub specjalistę ds. cyberbezpieczeństwa.
+            Każda rola posiada unikalne umiejętności i styl gry.
+            </p>
+
+            <h3>Główne cechy</h3>
+            <p>Gra zawiera następujące elementy:</p>
+            <ul>
+                <li>Szybkie mecze dla krótkich sesji gry</li>
+                <li>Mecze rankingowe dla graczy rywalizacyjnych</li>
+                <li>System rankingowy śledzący postępy gracza</li>
+                <li>Pojedynki PvP z innymi graczami</li>
+                <li>System poziomów postaci</li>
+                <li>Unikalne drzewka umiejętności dla każdej roli</li>
+            </ul>
+
+            <h2 id="requirements">Wymagania</h2>
+            <p>Do gry potrzebujesz:</p>
+            <ul>
+                <li>Nowoczesnej przeglądarki internetowej</li>
+                <li>Aktywnego połączenia internetowego</li>
+                <li>Rozdzielczości ekranu 1920×1080 (zalecane)</li>
+            </ul>
+
+            <h2 id="howtojoin">Jak dołączyć do gry</h2>
+            <p>Możesz zacząć grać na dwa sposoby:</p>
+
+            <h3>Graj jako gość</h3>
+            <p>
+            Możesz zacząć grę bez tworzenia konta, wybierając opcję
+            <strong>"Continue as Guest"</strong>. Umożliwia to wypróbowanie wszystkich podstawowych
+            mechanik gry. Jednak postępy nie zostaną zapisane.
+            </p>
+            <p>
+            Opcja polecana dla nowych graczy, którzy chcą wypróbować grę bez tworzenia konta.
+            </p>
+
+            <h3>Graj jako zarejestrowany użytkownik</h3>
+            <p>
+            Utworzenie konta pozwala na zapisywanie postępów. Aby się zarejestrować,
+            musisz podać nazwę użytkownika, adres e-mail i hasło.
+            </p>
+
+            <h2 id="userinterface">Interfejs użytkownika</h2>
+            <p>
+            Ta sekcja przedstawia interfejs gry. Zrzuty ekranu pokazują interfejs z perspektywy hakera.
+            Interfejs specjalisty ds. cyberbezpieczeństwa jest bardzo podobny.
+            </p>
+            <img src="../docs-img/welcome-screen-1.png" alt="Welcome screen" class="screenshot">
+            <em>Welcome screen – login form</em>
+            <p>
+            This screen appears when the game is launched. From here you can log in,
+            create a new account, or select the <strong>"Continue as Guest"</strong>
+            option to play without registering.
+            </p>
+            <img src="../docs-img/lobby-screen-1.png" alt="Lobby screen" class="screenshot">
+            <em>Lobby screen</em>
+            <p>The lobby is the main hub where players can:</p>
+            <ul>
+                <li>Select the role they want to play</li>
+                <li>Manage their abilities</li>
+                <li>Select a deck for each role</li>
+                <li>View their rank (displayed below the character image)</li>
+                <li>View their level (displayed below the rank and username)</li>
+                <li>Start a quick match or a ranked match</li>
+                <li>Open the skill tree (top-left corner button)</li>
+            </ul>
+            <p>
+            To join a ranked match, you must first complete your deck configuration.
+            </p>
+            <p>
+            The logout option is available in the <strong>OPTIONS</strong> menu.
+            </p>
+            <img src="../docs-img/skilltree-screen-1.png" alt="Skill tree screen" class="screenshot">
+            <em>Skill tree screen</em>
+            <p>
+            The skill tree allows players to unlock new abilities using skill
+            points earned by leveling up.
+            </p>
+            <p>
+            Abilities are arranged in a grid consisting of four columns
+            (ability categories) and six rows (ability tiers).
+            </p>
+            <p>
+            To unlock an ability, click on the desired ability and confirm the purchase.
+            If you have enough skill points, the ability will be unlocked.
+            </p>
+            <ul>
+                <li>Unavailable abilities appear fully grayed out.</li>
+                <li>Available but not yet purchased abilities appear slightly grayed out.</li>
+                <li>Purchased abilities are marked with a border.</li>
+            </ul>
+            <p><a href="#abilities">Click here</a> to learn more about abilities.</p>
+            <img src="../docs-img/battle-screen-1.png" alt="Battle screen" class="screenshot">
+            <em>Battle screen</em>
+            <p>
+            The battle screen is where matches take place.
+            </p>
+            <ul>
+                <li>Your selected abilities are displayed at the bottom of the screen in your deck.</li>
+                <li>Each ability has a cooldown period after being used.</li>
+                <li>The cooldown timer is displayed as a gray bar on the ability tile.</li>
+                <li>Your character appears on the left side of the screen and the opponent on the right.</li>
+                <li>Health bars, usernames, and ranks are displayed below the characters.</li>
+                <li>The current turn number and active player are shown at the top center of the screen.</li>
+                <li>The <strong>Give Up</strong> button in the top-left corner allows you to surrender the match.</li>
+                <li>The opponent’s last used ability is displayed in the bottom-right corner.</li>
+            </ul>
+            <p><a href="#gameplaymechanics">Click here</a> to learn more about gameplay mechanics.</p>
+            <img src="../docs-img/end-screen-1.png" alt="End screen" class="screenshot">
+            <em>End screen</em>
+            <p>
+            This screen appears at the end of a match. It displays the match results, including:
+            </p>
+            <ul>
+                <li>Whether you won or lost the match.</li>
+                <li>Total time elapsed during the match.</li>
+                <li>Number of turns played.</li>
+                <li>Experience points earned.</li>
+                <li>Skill points earned.</li>
+            </ul>
+            <p>
+            To return to the lobby, click the <strong>"Back to Lobby"</strong> button.
+            </p>
+
+            <h2 id="gameplaymechanics">Gameplay Mechanics</h2>
+
+            <h3>Game Objective</h3>
+            <p>
+            The objective of the game is to defeat your opponent by reducing their health to zero.
+            </p>
+
+            <h3>Battle</h3>
+            <p>
+            Each player starts the match with 20 health points. For the hacker role,
+            these points are called <strong>PERSISTENCE</strong>, while for the
+            cybersecurity specialist role they are called <strong>INTEGRITY</strong>.
+            </p>
+            <p>
+            The match always begins with the attacking role — the hacker.
+            </p>
+            <p>
+            Players take turns performing actions using abilities from the deck
+            they selected earlier.
+            </p>
+            <p>
+            The match ends when one player's health reaches zero or when a player
+            decides to surrender.
+            </p>
+
+            <h3>Game Modes</h3>
+            <p>
+            All game modes share the same objective and battle system. The only
+            difference is how the deck is created and whether the match affects
+            the player’s rank.
+            </p>
+
+            <h4>Quick Match (Unranked)</h4>
+            <p>
+            In this mode, players can quickly find opponents and play matches
+            without affecting their rank.
+            </p>
+            <p>
+            The deck is created using a <strong>draft system</strong>. After
+            matchmaking is completed, the player enters a draft phase where
+            their deck is assembled.
+            </p>
+            <p>
+            During the draft, the player goes through four rounds of choices.
+            In each round, two random abilities are presented, and the player
+            must choose one of them.
+            </p>
+            <p>
+            The player does not know which abilities will appear in later rounds,
+            so each choice must be made without knowing future options.
+            </p>
+            <p>
+            In this mode, all abilities are available during the draft,
+            including those that the player has not yet unlocked in the
+            skill tree.
+            </p>
+            <p>
+            Quick Match is a good mode for experimenting with different abilities,
+            testing new strategies, and learning the game mechanics.
+            </p>
+
+            <h4>Ranked Match</h4>
+            <p>
+            In this mode, players compete against others to gain experience
+            and improve their rank.
+            </p>
+            <p>
+            Players enter the match with a deck that was previously configured
+            in the lobby.
+            </p>
+            <p>
+            The deck consists of four abilities selected from those the player
+            has unlocked in the skill tree.
+            </p>
+
+            <h3 id="abilities">Abilities</h3>
+            <p>
+            Abilities are actions that your character can perform during battle.
+            </p>
+            <p>
+            There are three types of ability effects:
+            </p>
+            <ul>
+                <li><strong>Damage</strong> <img src="../docs-img/damageIcon.png" alt="Damage Icon"> – These abilities deal damage to the opponent and reduce their health.</li>
+                <li><strong>Healing</strong> <img src="../docs-img/healIcon.png" alt="Healing Icon"> – These abilities restore your health.</li>
+                <li><strong>Freeze</strong> <img src="../docs-img/freezeIcon.png" alt="Freeze Icon"> – These abilities prevent the opponent from performing actions for a number of turns.</li>
+            </ul>
+            <p>
+            The type of effect is indicated by an icon associated with the ability.
+            </p>
+            <p>
+            Each ability also has a cooldown <img src="../docs-img/cooldownIcon.png" alt="Cooldown Icon"> period after it is used.
+            </p>
+
+            <h3>Healing Override</h3>
+            <p>
+            If a healing ability is used while the player's health is already
+            at the maximum value, a special effect is applied instead.
+            </p>
+            <p>
+            The effect depends on the player's role.
+            </p>
+            <ul>
+                <li>
+                For the <strong>HACKER</strong> role, the healing ability grants a damage boost to the next ability that deals damage.
+                </li>
+
+                <li>
+                For the <strong>CYBERSECURITY SPECIALIST</strong> role, the healing ability grants additional health points, allowing the player to exceed the normal limit of 20 health points.
+                </li>
+            </ul>
+
+            <h3>Skill Tree</h3>
+            <p>
+            The skill tree allows you to unlock new abilities.
+            </p>
+            <p>
+            Abilities are organized into categories and tiers,
+            which determine their availability and progression
+            within the skill tree.
+            </p>
+            <p>
+            To unlock an ability, you must spend skill points
+            earned by leveling up.
+            </p>
+            <p>
+            The following conditions must be met to unlock new abilities:
+            </p>
+            <ul>
+                <li>The player must have enough available skill points.</li>
+                <li>The player must unlock the previous tier of abilities in the same category.</li>
+                <li>If no ability is available to unlock in the previous tier of the selected category, the player must first unlock an ability in that tier in a different category.</li>
+            </ul>
+            <h3>Ranking system</h3>
+            <p>
+            The ranking system is designed to reflect a player's progress in the game. Players rank up with gaining new levels.
+            </p>
+            <p>There are 5 rank tiers in the game.</p>
+            <ul>
+                <li>Noob: 0-4 level</li>
+                <li>Beginner: 5-9 level</li>
+                <li>Adept: 10-19 level</li>
+                <li>Intermediate: 20-34 level</li>
+                <li>Advanced: 35-49 level</li>
+                <li>Expert: 50+ level</li>
+            </ul>
+        </main>
+    </div>
+</body>
+</html>
