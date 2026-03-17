@@ -15,16 +15,42 @@ const opponentRole = (role) => (role === 'attacker' ? 'defender' : 'attacker');
 
 const applyXpGain = (account, xp) => {
     if (!account || !Number.isFinite(xp) || xp <= 0) return;
-    const currentLevel = Number(account.level ?? 0);
-    const currentProgress = Number(account.levelPoints ?? 0);
-    const required = Math.max(1, Math.ceil(1.25 * currentLevel));
-    const nextProgress = currentProgress + xp;
+    const SKILL_POINTS_PER_LEVEL = 1;
 
-    if (nextProgress >= required) {
-        account.level = currentLevel + 1;
-        account.levelPoints = nextProgress - required;
-    } else {
-        account.levelPoints = nextProgress;
+    let currentLevel = Number(account.level ?? 0);
+    let currentProgress = Number(account.levelPoints ?? 0);
+    let remainingXp = Number(xp ?? 0);
+    let levelsGained = 0;
+
+    if (!Number.isFinite(currentLevel) || currentLevel < 0) currentLevel = 0;
+    if (!Number.isFinite(currentProgress) || currentProgress < 0) currentProgress = 0;
+    for (let i = 0; i < 100; i++) {
+        const required = Math.max(1, Math.ceil(1.25 * currentLevel));
+        if (currentProgress < required) break;
+        currentProgress -= required;
+        currentLevel += 1;
+        levelsGained += 1;
+    }
+
+    while (remainingXp > 0) {
+        const required = Math.max(1, Math.ceil(1.25 * currentLevel));
+        const toLevel = required - currentProgress;
+
+        if (remainingXp >= toLevel) {
+            remainingXp -= toLevel;
+            currentLevel += 1;
+            currentProgress = 0;
+            levelsGained += 1;
+        } else {
+            currentProgress += remainingXp;
+            remainingXp = 0;
+        }
+    }
+
+    account.level = currentLevel;
+    account.levelPoints = currentProgress;
+    if (levelsGained > 0) {
+        account.points = Number(account.points ?? 0) + (levelsGained * SKILL_POINTS_PER_LEVEL);
     }
 };
 
@@ -49,11 +75,13 @@ const awardToAccount = async (id, points, xp) => {
 
 const awardMatchRewards = async (game, winnerRole, loserRole) => {
     if (!game || !winnerRole || !loserRole) return;
+
+    const isQuickplay = game?.type === 'quickplay';
     const winnerId = game?.[winnerRole]?.id;
     const loserId = game?.[loserRole]?.id;
     await Promise.all([
-        awardToAccount(winnerId, 2, 4),
-        awardToAccount(loserId, 1, 2),
+        awardToAccount(winnerId, 0, isQuickplay ? 0 : 4),
+        awardToAccount(loserId, 0, isQuickplay ? 0 : 2),
     ]);
 };
 
@@ -87,7 +115,6 @@ const tickCooldownsForRole = (game, role) => {
 };
 
 const autoSkipUntilPlayable = (game, maxSteps = 20) => {
-    // Returns true if the game state was changed.
     let changed = false;
 
     for (let i = 0; i < maxSteps; i++) {
@@ -97,15 +124,12 @@ const autoSkipUntilPlayable = (game, maxSteps = 20) => {
         const current = game.currentTurn;
         if (current !== 'attacker' && current !== 'defender') break;
 
-        // If the current player has something to do, stop.
         if (getUsableAbilityCount(game, current) > 0) break;
 
-        // If neither side has abilities at all, don't spin forever.
         const attackerCount = (game?.attacker?.abilities ?? []).length;
         const defenderCount = (game?.defender?.abilities ?? []).length;
         if (attackerCount === 0 && defenderCount === 0) break;
 
-        // Advance turn (this is essentially an auto-pass).
         let next = opponentRole(current);
         if ((game.skipTurns?.[next] ?? 0) > 0) {
             game.skipTurns[next] = Math.max(0, (game.skipTurns[next] ?? 0) - 1);
@@ -147,8 +171,9 @@ const toBattleState = (game) => {
     };
 
     if (winnerRole && loserRole) {
-        rewards[winnerRole] = { xp: 4, points: 2 };
-        rewards[loserRole] = { xp: 2, points: 1 };
+        const isQuickplay = game?.type === 'quickplay';
+        rewards[winnerRole] = { xp: isQuickplay ? 0 : 4, points: 0 };
+        rewards[loserRole] = { xp: isQuickplay ? 0 : 2, points: 0 };
     }
 
     return {
@@ -212,7 +237,6 @@ const releaseSocketFromRoom = async (io, socket, id, roomId) => {
             updated = null;
         }
     } catch {
-        // ignore
     }
 
     try {
@@ -226,7 +250,6 @@ const releaseSocketFromRoom = async (io, socket, id, roomId) => {
             });
         }
     } catch {
-        // ignore
     }
 
     if (socket.data?.roomId === roomId) {
@@ -271,18 +294,13 @@ export default function createIo(httpServer) {
 
                 const roomId = game._id.toString();
 
-                // If this socket is still associated with another room (e.g. browser back button
-                // navigating away without a clean leave), release that old room before joining.
                 if (socket.data?.roomId && socket.data.roomId !== roomId && raw?.id) {
                     await releaseSocketFromRoom(io, socket, raw.id, socket.data.roomId);
                 }
 
-                // If this socket was already assigned a slot in this game, treat this as a re-join.
-                // This happens in dev due to React StrictMode double-invoking effects.
                 if (game.attacker?.id === raw?.id || game.defender?.id === raw?.id) {
                     const role = game.attacker?.id === raw?.id ? 'attacker' : 'defender';
 
-                    // If the socket was previously in another room, leave it.
                     if (socket.data?.roomId && socket.data.roomId !== roomId) {
                         socket.leave(socket.data.roomId);
                     }
@@ -364,9 +382,7 @@ export default function createIo(httpServer) {
                     { new: true }
                 );
 
-                // Slot was taken by a competing join.
                 if (!updated) {
-                    // Retry once with the latest DB state (the other slot might still be free).
                     const latest = await Game.findById(game._id);
                     if (!latest) {
                         socket.leave(roomId);
@@ -475,7 +491,6 @@ export default function createIo(httpServer) {
             }
         });
 
-        // Get current draft completion flags for the room this socket is in.
         socket.on('draft-get', async (_payload, ack) => {
             try {
                 const roomId = socket.data?.roomId;
@@ -504,7 +519,6 @@ export default function createIo(httpServer) {
             }
         });
 
-        // Mark this player's draft as completed.
         socket.on('draft-done', async (_payload, ack) => {
             try {
                 const roomId = socket.data?.roomId;
@@ -550,7 +564,6 @@ export default function createIo(httpServer) {
             }
         });
 
-        // Persist a draft pick into the Game document so battle can use it.
         socket.on('draft-pick', async (payload, ack) => {
             try {
                 const roomId = socket.data?.roomId;
@@ -574,9 +587,7 @@ export default function createIo(httpServer) {
                 const updated = await Game.findOneAndUpdate(
                     {
                         _id: roomId,
-                        // limit to 4 picks
                         [`${path}.3`]: { $exists: false },
-                        // avoid duplicates
                         [`${path}.code`]: { $ne: code },
                     },
                     {
@@ -693,7 +704,6 @@ export default function createIo(httpServer) {
                     return;
                 }
 
-                // Put ability on cooldown
                 ability.currentCooldown = ability.cooldown ?? 0;
 
                 const other = opponentRole(role);
@@ -746,7 +756,6 @@ export default function createIo(httpServer) {
                     },
                 });
 
-                // Win check
                 const attackerHp = game.attacker.stats.persistence ?? 0;
                 const defenderHp = game.defender.stats.integrity ?? 0;
                 if (attackerHp <= 0 || defenderHp <= 0) {
@@ -768,7 +777,6 @@ export default function createIo(httpServer) {
                         await awardMatchRewards(game, winnerRole, opponentRole(winnerRole));
                     }
                 } else {
-                    // Advance turn
                     let next = opponentRole(role);
                     if ((game.skipTurns?.[next] ?? 0) > 0) {
                         game.skipTurns[next] = Math.max(0, (game.skipTurns[next] ?? 0) - 1);
@@ -777,10 +785,8 @@ export default function createIo(httpServer) {
                     game.currentTurn = next;
                     game.turnNumber = (game.turnNumber ?? 1) + 1;
 
-                    // Cooldown tick happens when a player gets a turn.
                     tickCooldownsForRole(game, next);
 
-                    // If the next player still can't act, auto-skip until someone can.
                     autoSkipUntilPlayable(game);
                 }
 
@@ -962,7 +968,6 @@ export default function createIo(httpServer) {
                     await Game.deleteOne({ _id: roomId });
                 }
             } catch {
-                // ignore disconnect cleanup errors
             }
 
             socket.to(roomId).emit('player-left', { roomId });

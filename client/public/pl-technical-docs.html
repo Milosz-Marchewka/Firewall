@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Firewall – Dokumentacja techniczna</title>
+  <link rel="stylesheet" href="style-docs.css">
+</head>
+<body>
+  <div class="wrapper">
+        <nav>
+            <div class="table_of_contents">
+                <h1>Spis treści</h1>
+                <ul>
+                    <li><a href="#introduction">Wprowadzenie</a></li>
+                    <li><a href="#requirements">Wymagania</a></li>
+                    <li><a href="#howtojoin">Uruchomienie lokalne</a></li>
+                    <li><a href="#userinterface">Architektura frontendu</a></li>
+                    <li><a href="#gameplaymechanics">Serwer i logika gry</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <h1>Dokumentacja techniczna</h1>
+
+            <h2 id="introduction">Wprowadzenie</h2>
+            <h3>Opis projektu</h3>
+            <p>
+            Firewall to przeglądarkowa, turowa gra wieloosobowa z frontendem w React (Vite)
+            oraz backendem w Node.js/Express. Dane trwałe są przechowywane w MongoDB,
+            a stan rozgrywki w czasie rzeczywistym jest synchronizowany przez Socket.IO.
+            </p>
+            <p>
+            Dokument opisuje szczegóły implementacyjne: strukturę repozytorium, przepływ danych w runtime,
+            trasy API, zdarzenia WebSocket oraz sposób rozwiązywania tur i umiejętności po stronie serwera.
+            </p>
+
+            <h3>Technologie</h3>
+            <ul>
+                <li><strong>Klient</strong>: React + Vite + TailwindCSS</li>
+                <li><strong>Serwer</strong>: Node.js + Express</li>
+                <li><strong>Realtime</strong>: Socket.IO</li>
+                <li><strong>Baza danych</strong>: MongoDB + Mongoose</li>
+                <li><strong>Autoryzacja</strong>: JWT w ciasteczku <strong>httpOnly</strong></li>
+            </ul>
+
+            <h3>Struktura repozytorium</h3>
+            <p>Projekt jest podzielony na dwa główne foldery:</p>
+            <ul>
+                <li><strong>client/</strong> — interfejs w React, zasoby i klient Socket.IO</li>
+                <li><strong>server/</strong> — trasy/kontrolery Express, serwer Socket.IO i modele Mongoose</li>
+            </ul>
+            <p>
+            Kluczowe punkty wejścia to m.in. <strong>client/src/main.jsx</strong> (bootstrap klienta),
+            <strong>client/src/App.jsx</strong> (routing) oraz <strong>server/index.js</strong>
+            (uruchomienie Express + Socket.IO).
+            </p>
+
+            <h2 id="requirements">Wymagania</h2>
+            <h3>Uruchomienie (dla graczy)</h3>
+            <ul>
+                <li>Nowoczesna przeglądarka internetowa</li>
+                <li>Aktywne połączenie z internetem</li>
+                <li>Rozdzielczość 1920×1080 (zalecane)</li>
+            </ul>
+
+            <h3>Development (lokalnie)</h3>
+            <ul>
+                <li>Node.js + npm (zalecana wersja LTS)</li>
+                <li>Działająca instancja MongoDB</li>
+                <li>Wolne porty <strong>5173</strong> (client) i <strong>5000</strong> (server)</li>
+            </ul>
+
+            <h3>Zmienne środowiskowe</h3>
+            <p>
+            Backend wczytuje zmienne środowiskowe przez dotenv i wymaga przynajmniej:
+            </p>
+            <ul>
+                <li><strong>URI</strong> — connection string do MongoDB (używane w server/src/db/Connection.js)</li>
+                <li><strong>JWT_SECRET</strong> — sekret do podpisywania/weryfikacji tokenów</li>
+            </ul>
+            <p>
+            Dodatkowo można ustawić <strong>URL_BASE</strong> (generowanie linków do pokoju)
+            oraz <strong>NODE_ENV</strong> (wpływa m.in. na flagę <strong>secure</strong> ciasteczek).
+            </p>
+
+            <h2 id="howtojoin">Uruchomienie lokalne</h2>
+            <h3>Uruchomienie lokalne (zalecane)</h3>
+            <p>
+            Klient komunikuje się z serwerem przez REST (<strong>/api</strong>) oraz Socket.IO.
+            W trybie developerskim Vite przekierowuje wywołania <strong>/api</strong> do <strong>http://localhost:5000</strong>.
+            </p>
+            <ul>
+                <li>
+                <strong>1) Uruchom MongoDB</strong><br>
+                Upewnij się, że MongoDB działa i masz poprawny connection string.
+                </li>
+                <li>
+                <strong>2) Uruchom serwer</strong><br>
+                W <strong>server/</strong>: zainstaluj zależności, utwórz plik <strong>.env</strong> z
+                <strong>URI</strong> i <strong>JWT_SECRET</strong>, a następnie uruchom <strong>node index.js</strong>
+                (lub <strong>npx nodemon index.js</strong> dla auto-reload). Serwer nasłuchuje na porcie <strong>5000</strong>.
+                </li>
+                <li>
+                <strong>3) Uruchom klienta</strong><br>
+                W <strong>client/</strong>: uruchom <strong>npm run dev</strong>. Vite startuje na porcie <strong>5173</strong>.
+                </li>
+                <li>
+                <strong>4) Otwórz aplikację</strong><br>
+                Wejdź na <strong>http://localhost:5173</strong>.
+                </li>
+            </ul>
+
+            <h3>Konta (Gość vs zarejestrowany)</h3>
+            <p>
+            Autoryzacja jest oparta o ciasteczka. Endpointy signup/login/guest ustawiają ciasteczko <strong>auth</strong>
+            (JWT). Klient sprawdza bieżącą sesję przez <strong>GET /api/account/auth</strong>.
+            </p>
+            <ul>
+                <li><strong>Gość</strong>: tworzy rekord Guest i ustawia krótką sesję (ok. 24h).</li>
+                <li><strong>Zarejestrowany</strong>: tworzy rekord User i ustawia dłuższą sesję (ok. 7 dni).</li>
+            </ul>
+
+            <h2 id="userinterface">Architektura frontendu</h2>
+            <h3>Punkty wejścia klienta</h3>
+            <p>
+            Aplikacja React jest bootstrappowana w <strong>client/src/main.jsx</strong>, a routing znajduje się w
+            <strong>client/src/App.jsx</strong>. Kluczowe trasy to lobby (<strong>/</strong>), ekran wejścia/logowania
+            (<strong>/hello</strong>), pokoje (<strong>/room/:token</strong>) oraz dokumentacja (<strong>/documentation</strong>).
+            </p>
+
+            <h3>Wywołania REST</h3>
+            <p>
+            UI korzysta z wywołań <strong>fetch</strong> do endpointów <strong>/api</strong>. W dev są one proxy’owane przez Vite.
+            Walidacja sesji używa <strong>credentials: "include"</strong>, aby wysłać ciasteczko JWT.
+            </p>
+
+            <h3>Aktualizacje w czasie rzeczywistym (Socket.IO)</h3>
+            <p>
+            Klient tworzy pojedynczą instancję Socket.IO w <strong>client/src/socket.js</strong>
+            z <strong>autoConnect: false</strong>. Poszczególne ekrany łączą się w razie potrzeby i subskrybują
+            zdarzenia dla stanu pokoju, draftu i walki.
+            </p>
+
+            <h2 id="gameplaymechanics">Serwer i logika gry</h2>
+            <h3>Architektura serwera</h3>
+            <p>
+            Backend uruchamiany jest z <strong>server/index.js</strong>. Montuje trasy REST pod <strong>/api</strong>
+            oraz podłącza Socket.IO (server/src/websocket/io.js) do tego samego serwera HTTP.
+            Stan gry jest przechowywany w MongoDB w dokumencie <strong>Game</strong>.
+            </p>
+
+            <h3>HTTP API (REST)</h3>
+            <p>
+            Trasy gry są zdefiniowane w <strong>server/src/routes/GameRoutes.js</strong>, a trasy kont w
+            <strong>server/src/routes/AccountRoutes.js</strong>.
+            </p>
+            <ul>
+                <li><strong>POST /api/play</strong> — utworzenie/znalezienie pokoju (quickplay lub play)</li>
+                <li><strong>POST /api/room</strong> oraz <strong>GET /api/room/:url</strong> — tworzenie/wyszukiwanie pokoju</li>
+                <li><strong>GET /api/abilities</strong> — lista umiejętności (filtrowana po roli)</li>
+                <li><strong>POST /api/buyAbility</strong> — zakup/odblokowanie umiejętności</li>
+                <li><strong>GET /api/endData</strong> — dane do ekranu końcowego</li>
+                <li><strong>POST /api/account/signup</strong>, <strong>/login</strong>, <strong>/guest</strong>, <strong>/logout</strong></li>
+                <li><strong>GET /api/account/auth</strong> — walidacja sesji (wymaga ciasteczka auth)</li>
+                <li><strong>POST /api/account/abilities</strong> — pobranie posiadanych umiejętności</li>
+            </ul>
+
+            <h3>WebSockets (Pokój → Draft → Walka)</h3>
+            <p>
+            Serwer Socket.IO jest zaimplementowany w <strong>server/src/websocket/io.js</strong>. Główny przepływ wygląda tak:
+            </p>
+            <ul>
+                <li><strong>join-room</strong> → serwer przypisuje rolę (attacker/defender) i roomId</li>
+                <li><strong>room-state</strong> + <strong>room-ready</strong> → broadcast stanu pokoju i gotowości</li>
+                <li><strong>draft-*</strong> → synchronizacja wyborów i ukończenia draftu</li>
+                <li><strong>battle-*</strong> → pobieranie i aktualizacja kanonicznego stanu walki</li>
+                <li><strong>leave-room</strong> / <strong>disconnect</strong> → zwolnienie slotu gracza i powiadomienie przeciwnika</li>
+            </ul>
+
+            <h3 id="abilities">Rozwiązywanie umiejętności</h3>
+            <p>
+            Umiejętności są przechowywane jako metadane w kolekcji <strong>Ability</strong> i kopiowane do
+            dokumentu <strong>Game</strong> jako talia do walki (z dodatkowym polem <strong>currentCooldown</strong>).
+            </p>
+            <p>
+            Gdy klient wysyła <strong>battle-use</strong>, serwer waliduje turę i cooldown, stosuje efekt,
+            aktualizuje log, przesuwa turę, zdejmuje cooldowny i emituje nowy <strong>battle-state</strong>.
+            </p>
+            <ul>
+                <li><strong>damage</strong> — odejmuje HP przeciwnikowi (defender: integrity, attacker: persistence)</li>
+                <li><strong>heal</strong> — przywraca HP; szczegóły w sekcji „Nadpisanie leczenia”</li>
+                <li><strong>freeze</strong> — zwiększa <strong>skipTurns</strong> przeciwnika</li>
+            </ul>
+
+            <h3>Nadpisanie leczenia</h3>
+            <p>
+            Serwer implementuje zachowanie „overflow” zależnie od roli, gdy leczenie miałoby przekroczyć 20 HP:
+            </p>
+            <ul>
+                <li>
+                <strong>Attacker</strong>: nadmiar leczenia jest zamieniany na statystykę <strong>overflow</strong> (zmniejszoną o połowę),
+                która jest dodawana jako bonus do kolejnej umiejętności zadającej obrażenia.
+                </li>
+                <li>
+                <strong>Defender</strong>: nadmiar leczenia pozwala tymczasowo przekroczyć 20 HP (również zmniejszone o połowę).
+                </li>
+            </ul>
+
+            <h3>Trwałość danych i nagrody</h3>
+            <p>
+            Konta graczy są przechowywane w MongoDB jako <strong>User</strong> (zarejestrowany) lub <strong>Guest</strong> (gość).
+            Po zakończeniu meczu serwer przyznaje XP i punkty umiejętności oraz aktualizuje pola <strong>level</strong>
+            i <strong>levelPoints</strong>.
+            </p>
+        </main>
+    </div>
+</body>
+</html>
