@@ -25,9 +25,6 @@ const EndScreen = ({result})=>{
                     <h2 className={`text-4xl mt-2 ${result.gainedXP <= 0 ? "text-neutral-400" : "text-amber-300"}`}>
                         Gained XP: {result.gainedXP}
                     </h2>
-                    <h2 className={`text-3xl mt-1 ${result.gainedSkillPoints <= 0 ? "text-neutral-400" : "text-amber-300"}`}>
-                        Skill points gained: {result.gainedSkillPoints}
-                    </h2>
                     <Button className={"bg-neutral-500 w-3/4 mt-3"} onClick={()=>navigate("/")}>Back to lobby</Button>
             </div>
         </div>
