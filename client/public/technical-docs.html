@@ -3,330 +3,222 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cyber Project – Technical Documentation</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #0b0f14;
-      --panel: #101826;
-      --text: #e7eef7;
-      --muted: #a9b6c7;
-      --accent: #49e2a0;
-      --accent-2: #62a8ff;
-      --border: #1c2a40;
-      --code: #0f172a;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    header {
-      padding: 32px 20px 8px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, #0c1320 0%, #0b0f14 100%);
-    }
-    header h1 { margin: 0 0 8px; font-size: 28px; }
-    header p { margin: 0; color: var(--muted); }
-
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 20px 60px;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 24px;
-    }
-    nav {
-      position: sticky;
-      top: 16px;
-      align-self: start;
-      padding: 16px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      border-radius: 10px;
-    }
-    nav h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 8px; }
-    nav a {
-      display: block;
-      padding: 6px 0;
-      color: var(--text);
-      text-decoration: none;
-    }
-    nav a:hover { color: var(--accent); }
-
-    section {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    section:last-child { border-bottom: none; }
-    h2 { margin: 0 0 8px; font-size: 22px; }
-    h3 { margin: 18px 0 6px; font-size: 18px; color: var(--accent-2); }
-    p, li { color: var(--text); }
-
-    code, pre {
-      font-family: "Cascadia Code", "Fira Code", monospace;
-      background: var(--code);
-      color: #dbeafe;
-    }
-    code { padding: 2px 6px; border-radius: 6px; }
-    pre {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0 0;
-    }
-    th, td {
-      text-align: left;
-      padding: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-    th { color: var(--muted); font-weight: 600; }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 10px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 12px;
-      color: var(--muted);
-      margin-right: 6px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin: 8px 0;
-    }
-
-    @media (max-width: 900px) {
-      main { grid-template-columns: 1fr; }
-      nav { position: relative; }
-    }
-  </style>
+    <title>Firewall – Technical Documentation</title>
+  <link rel="stylesheet" href="style-docs.css">
 </head>
 <body>
-  <header>
-    <h1>Cyber Project – Technical Documentation</h1>
-    <p>Architecture, data flow, and operational guide for the Cyber client/server stack.</p>
-  </header>
+  <div class="wrapper">
+        <nav>
+            <div class="table_of_contents">
+                <h1>Table of Contents</h1>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#requirements">Requirements</a></li>
+                    <li><a href="#howtojoin">Local Development</a></li>
+                    <li><a href="#userinterface">Frontend Architecture</a></li>
+                    <li><a href="#gameplaymechanics">Server &amp; Game Logic</a></li>
+                </ul>
+            </div>
+        </nav>
 
-  <main>
-    <nav>
-      <h2>Contents</h2>
-      <a href="#overview">Overview</a>
-      <a href="#stack">Tech Stack</a>
-      <a href="#structure">Repository Structure</a>
-      <a href="#architecture">System Architecture</a>
-      <a href="#data-flow">Runtime Data Flow</a>
-      <a href="#api">HTTP API</a>
-      <a href="#ws">WebSockets</a>
-      <a href="#db">Database</a>
-      <a href="#auth">Auth & Sessions</a>
-      <a href="#gameplay">Game Logic</a>
-      <a href="#config">Configuration</a>
-      <a href="#local-dev">Local Development</a>
-      <a href="#deploy">Deployment Notes</a>
-      <a href="#testing">Testing & Diagnostics</a>
-      <a href="#security">Security Notes</a>
-    </nav>
+        <main>
+            <h1>Technical Documentation</h1>
 
-    <div>
-      <section id="overview">
-        <h2>Overview</h2>
-        <p>
-          The Cyber project is a real-time multiplayer game experience built with a React client and a Node.js server.
-          Gameplay, matchmaking, and ability execution run on the server, while the client renders UI and syncs game state
-          via REST endpoints and WebSockets.
-        </p>
-        <div class="card">
-          <span class="badge">Client</span>
-          <span class="badge">Server</span>
-          <span class="badge">WebSocket</span>
-          <span class="badge">MongoDB</span>
-        </div>
-      </section>
+            <h2 id="introduction">Introduction</h2>
+            <h3>Project Overview</h3>
+            <p>
+            Firewall is a browser-based, turn-based multiplayer game with a React (Vite)
+            frontend and a Node.js/Express backend. Persistent data is stored in MongoDB,
+            and real-time gameplay state is synchronized using Socket.IO.
+            </p>
+            <p>
+            This document focuses on implementation details: repository layout, runtime
+            data flow, API routes, WebSocket events, and how the server resolves abilities
+            and turns.
+            </p>
 
-      <section id="stack">
-        <h2>Tech Stack</h2>
-        <table>
-          <thead>
-            <tr><th>Layer</th><th>Technology</th><th>Notes</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Client</td><td>React + Vite</td><td>SPA with component-driven UI.</td></tr>
-            <tr><td>Server</td><td>Node.js + Express</td><td>REST API and core game logic.</td></tr>
-            <tr><td>Realtime</td><td>Socket.IO</td><td>Game state sync & lobby events.</td></tr>
-            <tr><td>DB</td><td>MongoDB</td><td>Accounts, abilities, game records.</td></tr>
-          </tbody>
-        </table>
-      </section>
+            <h3>Tech Stack</h3>
+            <ul>
+                <li><strong>Client</strong>: React + Vite + TailwindCSS</li>
+                <li><strong>Server</strong>: Node.js + Express</li>
+                <li><strong>Realtime</strong>: Socket.IO</li>
+                <li><strong>Database</strong>: MongoDB via Mongoose</li>
+                <li><strong>Auth</strong>: JWT stored in an <strong>httpOnly</strong> cookie</li>
+            </ul>
 
-      <section id="structure">
-        <h2>Repository Structure</h2>
-        <pre><code>client/
-  src/
-    App.jsx
-    main.jsx
-    socket.js
-    components/
-    utils/
-server/
-  index.js
-  src/
-    controllers/
-    db/
-    routes/
-    websocket/
-</code></pre>
-        <p>
-          The client folder contains UI, assets, and socket bindings. The server folder hosts API routes, DB models,
-          and gameplay logic under controllers.
-        </p>
-      </section>
+            <h3>Repository Structure</h3>
+            <p>The project is split into two main folders:</p>
+            <ul>
+                <li><strong>client/</strong> — React UI, assets, and the Socket.IO client binding</li>
+                <li><strong>server/</strong> — Express routes/controllers, Socket.IO server, and Mongoose models</li>
+            </ul>
+            <p>
+            Important entry points include <strong>client/src/main.jsx</strong> (client bootstrap),
+            <strong>client/src/App.jsx</strong> (routing), and <strong>server/index.js</strong>
+            (Express + Socket.IO server startup).
+            </p>
 
-      <section id="architecture">
-        <h2>System Architecture</h2>
-        <div class="card">
-          <strong>Client:</strong> React SPA communicates with the server via REST for setup/lookup and Socket.IO for live game updates.
-        </div>
-        <div class="card">
-          <strong>Server:</strong> Express routes handle account/game endpoints. Socket.IO handles rooms, battle events,
-          turn updates, and broadcasts.
-        </div>
-        <div class="card">
-          <strong>Database:</strong> MongoDB stores users, guests, abilities, and persistent game state.
-        </div>
-      </section>
+            <h2 id="requirements">Requirements</h2>
+            <h3>Runtime (Players)</h3>
+            <ul>
+                <li>A modern web browser</li>
+                <li>An active internet connection</li>
+                <li>A screen resolution of 1920×1080 (recommended)</li>
+            </ul>
 
-      <section id="data-flow">
-        <h2>Runtime Data Flow</h2>
-        <ol>
-          <li>Client initializes and establishes Socket.IO connection.</li>
-          <li>Client uses REST endpoints to authenticate/initialize.</li>
-          <li>Server assigns lobby/room and pushes state updates through WebSocket events.</li>
-          <li>Client renders state; player actions are emitted as socket events.</li>
-          <li>Server validates actions, applies ability effects, and persists state to MongoDB.</li>
-        </ol>
-      </section>
+            <h3>Development (Local Setup)</h3>
+            <ul>
+                <li>Node.js + npm (LTS recommended)</li>
+                <li>A running MongoDB instance</li>
+                <li>Ports <strong>5173</strong> (client) and <strong>5000</strong> (server) available</li>
+            </ul>
 
-      <section id="api">
-        <h2>HTTP API</h2>
-        <p>Primary route groups are defined in the server routes folder:</p>
-        <ul>
-          <li><strong>AccountRoutes</strong> — account creation, login, guest flow.</li>
-          <li><strong>GameRoutes</strong> — game start, game state fetch, ability metadata.</li>
-        </ul>
-        <p>
-          API endpoints are defined under server/src/routes and route handlers live in server/src/controllers.
-          Review the controller files for request/response schema.
-        </p>
-      </section>
+            <h3>Environment Variables</h3>
+            <p>
+            The backend reads environment variables using dotenv and expects at minimum:
+            </p>
+            <ul>
+                <li><strong>URI</strong> — MongoDB connection string (used by server/src/db/Connection.js)</li>
+                <li><strong>JWT_SECRET</strong> — secret used to sign/verify auth tokens</li>
+            </ul>
+            <p>
+            Optional variables include <strong>URL_BASE</strong> (used when generating room URLs)
+            and <strong>NODE_ENV</strong> (affects cookie <strong>secure</strong> settings).
+            </p>
 
-      <section id="ws">
-        <h2>WebSockets</h2>
-        <p>
-          Real-time functionality is provided by Socket.IO. The server defines WebSocket events in server/src/websocket/io.js.
-          The client uses a dedicated socket module in client/src/socket.js.
-        </p>
-        <h3>Common Event Flow</h3>
-        <ul>
-          <li><strong>connect</strong> → client joins the lobby.</li>
-          <li><strong>room:join</strong> → server assigns a room.</li>
-          <li><strong>game:state</strong> → server broadcasts canonical state.</li>
-          <li><strong>action:cast</strong> → client submits an ability.</li>
-          <li><strong>game:update</strong> → server publishes resolved effects.</li>
-        </ul>
-      </section>
+            <h2 id="howtojoin">Local Development</h2>
+            <h3>Local Development (Recommended)</h3>
+            <p>
+            The client talks to the server through REST (<strong>/api</strong>) and Socket.IO.
+            During development, Vite proxies <strong>/api</strong> calls to <strong>http://localhost:5000</strong>.
+            </p>
+            <ul>
+                <li>
+                <strong>1) Start MongoDB</strong><br>
+                Ensure MongoDB is running and you have a valid connection string.
+                </li>
+                <li>
+                <strong>2) Start the server</strong><br>
+                In <strong>server/</strong>: install dependencies, create a <strong>.env</strong> containing
+                <strong>URI</strong> and <strong>JWT_SECRET</strong>, then run <strong>node index.js</strong>
+                (or <strong>npx nodemon index.js</strong> for auto-reload). The server listens on <strong>5000</strong>.
+                </li>
+                <li>
+                <strong>3) Start the client</strong><br>
+                In <strong>client/</strong>: run <strong>npm run dev</strong>. Vite starts on <strong>5173</strong>.
+                </li>
+                <li>
+                <strong>4) Open the app</strong><br>
+                Navigate to <strong>http://localhost:5173</strong>.
+                </li>
+            </ul>
 
-      <section id="db">
-        <h2>Database</h2>
-        <p>MongoDB collections are defined in server/src/db:</p>
-        <ul>
-          <li><strong>User</strong> — registered accounts and profile data.</li>
-          <li><strong>Guest</strong> — ephemeral user profiles.</li>
-          <li><strong>Game</strong> — game session state.</li>
-          <li><strong>Abilities</strong> — ability definitions and metadata.</li>
-        </ul>
-      </section>
+            <h3>Accounts (Guest vs Registered)</h3>
+            <p>
+            Authentication is cookie-based. Signup/login/guest endpoints set an <strong>auth</strong>
+            cookie (JWT). The client checks the current session via <strong>GET /api/account/auth</strong>.
+            </p>
+            <ul>
+                <li><strong>Guest</strong>: creates a Guest record and sets a short-lived JWT (24h).</li>
+                <li><strong>Registered</strong>: creates a User record and sets a longer-lived JWT (7 days).</li>
+            </ul>
 
-      <section id="auth">
-        <h2>Auth & Sessions</h2>
-        <p>
-          Account logic is handled via AccountRoutes. Guest sessions are supported via the Guest model.
-          The server should validate player ownership for any game action.
-        </p>
-      </section>
+            <h2 id="userinterface">Frontend Architecture</h2>
+            <h3>Client Entry Points</h3>
+            <p>
+            The React app is bootstrapped in <strong>client/src/main.jsx</strong> and routed in
+            <strong>client/src/App.jsx</strong>. Key routes include the lobby (<strong>/</strong>),
+            entry/login (<strong>/hello</strong>), rooms (<strong>/room/:token</strong>), and documentation
+            (<strong>/documentation</strong>).
+            </p>
 
-      <section id="gameplay">
-        <h2>Game Logic</h2>
-        <p>
-          Gameplay and ability resolution live under server/src/controllers/abilities and server/src/controllers/room.
-          Each ability handler validates preconditions, applies status changes, and queues broadcast updates.
-        </p>
-      </section>
+            <h3>REST Calls</h3>
+            <p>
+            The UI uses <strong>fetch</strong> calls against <strong>/api</strong> endpoints. In dev,
+            these calls are proxied by Vite to the backend. Session validation uses
+            <strong>credentials: "include"</strong> so the JWT cookie is sent.
+            </p>
 
-      <section id="config">
-        <h2>Configuration</h2>
-        <ul>
-          <li>Client config is primarily in client/vite.config.js.</li>
-          <li>Server configuration lives in server/index.js and server/src/utils.js.</li>
-          <li>Database connection is defined in server/src/db/Connection.js.</li>
-        </ul>
-      </section>
+            <h3>Realtime UI Updates (Socket.IO)</h3>
+            <p>
+            The client creates a single shared Socket.IO instance in <strong>client/src/socket.js</strong>
+            with <strong>autoConnect: false</strong>. Screens connect when needed and subscribe to
+            events for room state, draft, and battle updates.
+            </p>
 
-      <section id="local-dev">
-        <h2>Local Development</h2>
-        <ol>
-          <li>Install dependencies in client and server folders.</li>
-          <li>Start MongoDB locally.</li>
-          <li>Run the server, then run the client.</li>
-        </ol>
-        <p>
-          The client runs on a Vite dev server and proxies requests to the API.
-        </p>
-      </section>
+            <h2 id="gameplaymechanics">Server &amp; Game Logic</h2>
+            <h3>Server Architecture</h3>
+            <p>
+            The backend is started from <strong>server/index.js</strong>. It mounts REST routes under
+            <strong>/api</strong> and attaches Socket.IO (server/src/websocket/io.js) to the same HTTP server.
+            Game state is stored in MongoDB in a <strong>Game</strong> document.
+            </p>
 
-      <section id="deploy">
-        <h2>Deployment Notes</h2>
-        <ul>
-          <li>Build the client into static assets and host behind a CDN or static server.</li>
-          <li>Host the Node.js server separately with environment variables for DB and ports.</li>
-          <li>Ensure Socket.IO can connect across environments (CORS, HTTPS).</li>
-        </ul>
-      </section>
+            <h3>HTTP API (REST)</h3>
+            <p>
+            Game routes are defined in <strong>server/src/routes/GameRoutes.js</strong> and account routes in
+            <strong>server/src/routes/AccountRoutes.js</strong>.
+            </p>
+            <ul>
+                <li><strong>POST /api/play</strong> — create/find a room (quickplay or play)</li>
+                <li><strong>POST /api/room</strong> and <strong>GET /api/room/:url</strong> — room creation/lookup</li>
+                <li><strong>GET /api/abilities</strong> — list abilities (filtered by role)</li>
+                <li><strong>POST /api/buyAbility</strong> — purchase/unlock an ability</li>
+                <li><strong>GET /api/endData</strong> — end-screen summary data</li>
+                <li><strong>POST /api/account/signup</strong>, <strong>/login</strong>, <strong>/guest</strong>, <strong>/logout</strong></li>
+                <li><strong>GET /api/account/auth</strong> — validate session (requires auth cookie)</li>
+                <li><strong>POST /api/account/abilities</strong> — fetch owned abilities</li>
+            </ul>
 
-      <section id="testing">
-        <h2>Testing & Diagnostics</h2>
-        <ul>
-          <li>Use server logs to trace ability resolution and room events.</li>
-          <li>Check browser console for socket connection issues.</li>
-          <li>MongoDB logs help track persistence and performance.</li>
-        </ul>
-      </section>
+            <h3>WebSockets (Room → Draft → Battle)</h3>
+            <p>
+            The Socket.IO server is implemented in <strong>server/src/websocket/io.js</strong>. The main flow is:
+            </p>
+            <ul>
+                <li><strong>join-room</strong> → server assigns the socket a role (attacker/defender) and a roomId</li>
+                <li><strong>room-state</strong> + <strong>room-ready</strong> → broadcast lobby/room readiness</li>
+                <li><strong>draft-*</strong> events → synchronize quickplay draft completion and picks</li>
+                <li><strong>battle-*</strong> events → retrieve and update canonical battle state</li>
+                <li><strong>leave-room</strong> / <strong>disconnect</strong> → release player slot and notify opponent</li>
+            </ul>
 
-      <section id="security">
-        <h2>Security Notes</h2>
-        <ul>
-          <li>Validate all client input on the server.</li>
-          <li>Rate-limit account endpoints.</li>
-          <li>Restrict socket event payloads to known schemas.</li>
-          <li>Never expose secrets in client code.</li>
-        </ul>
-      </section>
+            <h3 id="abilities">Ability Resolution</h3>
+            <p>
+            Abilities are persisted as metadata in the <strong>Ability</strong> collection and copied into the
+            current <strong>Game</strong> document as a player’s battle deck (with an added <strong>currentCooldown</strong> field).
+            </p>
+            <p>
+            When the client emits <strong>battle-use</strong>, the server validates turn ownership and cooldown,
+            applies the effect, updates the game log, advances the turn, ticks cooldowns, and emits a new
+            <strong>battle-state</strong>.
+            </p>
+            <ul>
+                <li><strong>damage</strong> — subtracts HP from the opponent (defender: integrity, attacker: persistence)</li>
+                <li><strong>heal</strong> — restores HP; see “Healing Override” for overflow behavior</li>
+                <li><strong>freeze</strong> — increments <strong>skipTurns</strong> for the opponent role</li>
+            </ul>
+
+            <h3>Healing Override</h3>
+            <p>
+            The server implements role-specific overflow behavior when a heal would exceed 20 HP:
+            </p>
+            <ul>
+                <li>
+                <strong>Attacker</strong>: extra healing is converted into an <strong>overflow</strong> stat (reduced by half)
+                that is added as a bonus to the next damage ability.
+                </li>
+                <li>
+                <strong>Defender</strong>: extra healing allows temporary HP above 20 (also reduced by half).
+                </li>
+            </ul>
+
+            <h3>Persistence & Rewards</h3>
+            <p>
+            Player accounts are stored in MongoDB as either <strong>User</strong> (registered) or <strong>Guest</strong>.
+            When a match ends, the server awards XP and skill points and updates <strong>level</strong> and
+            <strong>levelPoints</strong> accordingly.
+            </p>
+        </main>
     </div>
-  </main>
 </body>
 </html>
