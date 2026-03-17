@@ -15,7 +15,7 @@ const accountRoutes = Router();
 const normalizeLevelState = async (account) => {
     if (!account) return { changed: false };
 
-    const SKILL_POINTS_PER_LEVEL = 1;
+    const skillPointsForLevel = (level) => Math.max(1, Math.floor(level / 10) + 1);
     let level = Number(account.level ?? 0);
     let progress = Number(account.levelPoints ?? 0);
     let points = Number(account.points ?? 0);
@@ -24,22 +24,22 @@ const normalizeLevelState = async (account) => {
     if (!Number.isFinite(progress) || progress < 0) progress = 0;
     if (!Number.isFinite(points) || points < 0) points = 0;
 
-    let levelsGained = 0;
+    let pointsEarned = 0;
     for (let i = 0; i < 100; i++) {
         const required = Math.max(1, Math.ceil(1.25 * level));
         if (progress < required) break;
         progress -= required;
         level += 1;
-        levelsGained += 1;
+        pointsEarned += skillPointsForLevel(level);
     }
 
     const changed = level !== Number(account.level ?? 0)
         || progress !== Number(account.levelPoints ?? 0)
         || points !== Number(account.points ?? 0)
-        || levelsGained > 0;
+        || pointsEarned > 0;
 
-    if (levelsGained > 0) {
-        points += (levelsGained * SKILL_POINTS_PER_LEVEL);
+    if (pointsEarned > 0) {
+        points += pointsEarned;
     }
 
     const shouldPersist = level !== Number(account.level ?? 0)

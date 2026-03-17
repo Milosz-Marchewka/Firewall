@@ -13,14 +13,15 @@ const countPlayers = (game) => (game?.attacker?.id != null ? 1 : 0) + (game?.def
 const roleDoneKey = (role) => (role === 'attacker' ? 'draft.attackerDone' : (role === 'defender' ? 'draft.defenderDone' : null));
 const opponentRole = (role) => (role === 'attacker' ? 'defender' : 'attacker');
 
+const skillPointsForLevel = (level) => Math.max(1, Math.floor(level / 10) + 1);
+
 const applyXpGain = (account, xp) => {
     if (!account || !Number.isFinite(xp) || xp <= 0) return;
-    const SKILL_POINTS_PER_LEVEL = 1;
 
     let currentLevel = Number(account.level ?? 0);
     let currentProgress = Number(account.levelPoints ?? 0);
     let remainingXp = Number(xp ?? 0);
-    let levelsGained = 0;
+    let pointsEarned = 0;
 
     if (!Number.isFinite(currentLevel) || currentLevel < 0) currentLevel = 0;
     if (!Number.isFinite(currentProgress) || currentProgress < 0) currentProgress = 0;
@@ -29,7 +30,7 @@ const applyXpGain = (account, xp) => {
         if (currentProgress < required) break;
         currentProgress -= required;
         currentLevel += 1;
-        levelsGained += 1;
+        pointsEarned += skillPointsForLevel(currentLevel);
     }
 
     while (remainingXp > 0) {
@@ -40,7 +41,7 @@ const applyXpGain = (account, xp) => {
             remainingXp -= toLevel;
             currentLevel += 1;
             currentProgress = 0;
-            levelsGained += 1;
+            pointsEarned += skillPointsForLevel(currentLevel);
         } else {
             currentProgress += remainingXp;
             remainingXp = 0;
@@ -49,8 +50,8 @@ const applyXpGain = (account, xp) => {
 
     account.level = currentLevel;
     account.levelPoints = currentProgress;
-    if (levelsGained > 0) {
-        account.points = Number(account.points ?? 0) + (levelsGained * SKILL_POINTS_PER_LEVEL);
+    if (pointsEarned > 0) {
+        account.points = Number(account.points ?? 0) + pointsEarned;
     }
 };
 
