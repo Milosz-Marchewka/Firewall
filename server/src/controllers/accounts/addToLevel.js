@@ -13,6 +13,19 @@ const addtoLevel = async (req, res)=>{
     let currentLevel = Number(user.level ?? 0);
     let currentProgress = Number(user.levelPoints ?? 0);
     let remainingXp = Number(req.body.xp ?? 0);
+    let levelsGained = 0;
+
+    const SKILL_POINTS_PER_LEVEL = 1;
+
+    if (!Number.isFinite(currentLevel) || currentLevel < 0) currentLevel = 0;
+    if (!Number.isFinite(currentProgress) || currentProgress < 0) currentProgress = 0;
+    for (let i = 0; i < 100; i++) {
+        const required = Math.max(1, Math.ceil(1.25 * currentLevel));
+        if (currentProgress < required) break;
+        currentProgress -= required;
+        currentLevel += 1;
+        levelsGained += 1;
+    }
 
     if (!Number.isFinite(remainingXp) || remainingXp <= 0) {
         return res.status(400).send("XP amount must be positive");
@@ -25,6 +38,7 @@ const addtoLevel = async (req, res)=>{
             remainingXp -= toLevel;
             currentLevel += 1;
             currentProgress = 0;
+            levelsGained += 1;
         } else {
             currentProgress += remainingXp;
             remainingXp = 0;
@@ -33,6 +47,9 @@ const addtoLevel = async (req, res)=>{
 
     user.level = currentLevel;
     user.levelPoints = currentProgress;
+    if (levelsGained > 0) {
+        user.points = Number(user.points ?? 0) + (levelsGained * SKILL_POINTS_PER_LEVEL);
+    }
 
     await user.save();
 

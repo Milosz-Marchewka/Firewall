@@ -3,12 +3,35 @@ import { useNavigate } from 'react-router-dom';
 
 const Documentation = () => {
     const [active, setActive] = useState('user');
+    const [lang, setLang] = useState('en');
     const navigate = useNavigate();
 
     const src = useMemo(() => {
-        // return '/404.html';
-        return active === 'tech' ? '/technical-docs.html' : '/user-docs.html';
-    }, [active]);
+        const prefix = lang === 'pl' ? '/pl-' : '/';
+        return active === 'tech' ? `${prefix}technical-docs.html` : `${prefix}user-docs.html`;
+    }, [active, lang]);
+
+    const labels = useMemo(() => {
+        if (lang === 'pl') {
+            return {
+                title: 'Dokumentacja',
+                user: 'Poradnik',
+                tech: 'Techniczna',
+                back: 'Wróć',
+                en: 'EN',
+                pl: 'PL',
+            };
+        }
+
+        return {
+            title: 'Documentation',
+            user: 'User Guide',
+            tech: 'Technical Docs',
+            back: 'Back',
+            en: 'EN',
+            pl: 'PL',
+        };
+    }, [lang]);
 
     return (
         <div className="screen bg-neutral-900 text-white flex flex-col">
@@ -18,22 +41,34 @@ const Documentation = () => {
                         className="font-jersey text-3xl px-4 py-2 bg-neutral-700 border-4 border-black/80 hover:bg-neutral-600"
                         onClick={() => navigate('/')}
                     >
-                        Back
+                        {labels.back}
                     </button>
-                    <h1 className="font-jersey text-4xl">Documentation</h1>
+                    <h1 className="font-jersey text-4xl">{labels.title}</h1>
                 </div>
                 <div className="flex gap-3">
                     <button
                         className={`font-jersey text-3xl px-4 py-2 border-4 border-black/80 ${active === 'user' ? 'bg-amber-500' : 'bg-neutral-700 hover:bg-neutral-600'}`}
                         onClick={() => setActive('user')}
                     >
-                        User Guide
+                        {labels.user}
                     </button>
                     <button
                         className={`font-jersey text-3xl px-4 py-2 border-4 border-black/80 ${active === 'tech' ? 'bg-amber-500' : 'bg-neutral-700 hover:bg-neutral-600'}`}
                         onClick={() => setActive('tech')}
                     >
-                        Technical Docs
+                        {labels.tech}
+                    </button>
+                    <button
+                        className={`font-jersey text-3xl px-4 py-2 border-4 border-black/80 ${lang === 'en' ? 'bg-amber-500' : 'bg-neutral-700 hover:bg-neutral-600'}`}
+                        onClick={() => setLang('en')}
+                    >
+                        {labels.en}
+                    </button>
+                    <button
+                        className={`font-jersey text-3xl px-4 py-2 border-4 border-black/80 ${lang === 'pl' ? 'bg-amber-500' : 'bg-neutral-700 hover:bg-neutral-600'}`}
+                        onClick={() => setLang('pl')}
+                    >
+                        {labels.pl}
                     </button>
                 </div>
             </div>
