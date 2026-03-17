@@ -40,7 +40,7 @@ const Documentation = () => {
             <div className="flex-1">
                 <iframe
                     title="Documentation"
-                    src="/404.html"
+                    src={src}
                     className="w-full h-full border-0"
                 />
             </div>
