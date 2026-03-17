@@ -142,8 +142,8 @@ const BattleScreen = ({ token, role, usernames, ranks}) => {
             onClick={handleGiveUp} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleGiveUp(); }}>
                 <h2 className="text-shadow-[3px_3px_0px_rgb(0_0_0)]">&lt; Give up</h2>
             </div>
-            <div className={`absolute bottom-0 right-0 bg-neutral-600 font-jersey text-white m-12 border-5 border-neutral-800 shadow-[5px_5px_0px_rgb(0_0_0)] pointer-events-none`}>
-                <h2 className='text-4xl text-shadow-[3px_3px_0px_rgb(0_0_0)] p-4 bg-neutral-700 border-b-7 border-neutral-800'>Opponent used {lastOpponentAbilityName}!</h2>
+            <div className={`absolute bottom-0 right-0 bg-neutral-600 font-jersey text-white m-12 border-5 border-neutral-800 shadow-[5px_5px_0px_rgb(0_0_0)] pointer-events-none w-110`}>
+                <h2 className='text-4xl text-shadow-[3px_3px_0px_rgb(0_0_0)] p-4 bg-neutral-700 border-b-7 border-neutral-800 text-center'>Opponent used {lastOpponentAbilityName}!</h2>
                 {lastOpponentAbilityData ? <Ability data={lastOpponentAbilityData} /> : null}
             </div>
         </div>
